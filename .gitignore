@@ -1,0 +1,12 @@
+# execution artefacts
+*.pyc
+.coverage
+
+# dist artefacts
+build/
+dist/
+ovh.egg-info/
+*.egg
+
+# documentation artefacts
+docs/_build

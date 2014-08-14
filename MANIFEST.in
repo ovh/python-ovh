@@ -1,0 +1,5 @@
+include *.ini *.cfg *.rst
+recursive-include ovh *.py
+recursive-include docs *.py *.rst *.png Makefile make.bat
+recursive-include tests *.py
+prune docs/_build
