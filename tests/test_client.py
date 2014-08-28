@@ -38,6 +38,13 @@ from ovh.exceptions import (
     InvalidKey,
 )
 
+M_ENVIRON = {
+    'OVH_ENDPOINT': 'runabove-ca',
+    'OVH_APPLICATION_KEY': 'application key from environ',
+    'OVH_APPLICATION_SECRET': 'application secret from environ',
+    'OVH_CONSUMER_KEY': 'consumer key from from environ',
+}
+
 APPLICATION_KEY = 'fake application key'
 APPLICATION_SECRET = 'fake application secret'
 CONSUMER_KEY = 'fake consumer key'
@@ -70,6 +77,15 @@ class testClient(unittest.TestCase):
 
         # invalid region
         self.assertRaises(InvalidRegion, Client, ENDPOINT_BAD, '', '', '')
+
+    def test_init_from_config(self):
+        with mock.patch.dict('os.environ', M_ENVIRON):
+            api = Client()
+
+        self.assertEqual('https://api.runabove.com/1.0',      api._endpoint)
+        self.assertEqual(M_ENVIRON['OVH_APPLICATION_KEY'],    api._application_key)
+        self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], api._application_secret)
+        self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       api._consumer_key)
 
     @mock.patch.object(Client, 'call')
     def test_time_delta(self, m_call):
@@ -245,9 +261,20 @@ class testClient(unittest.TestCase):
         m_time_delta.reset_mock()
         m_req.reset_mock()
 
+        # Overwrite configuration to avoid interfering with any local config
+        from ovh.client import config
+        from ConfigParser import RawConfigParser
+
+        self._orig_config = config.config
+        config.config = RawConfigParser()
+
         # errors
-        api = Client(ENDPOINT, APPLICATION_KEY, None, CONSUMER_KEY)
-        self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, True)
-        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, None)
-        self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, True)
+        try:
+            api = Client(ENDPOINT, APPLICATION_KEY, None, CONSUMER_KEY)
+            self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, True)
+            api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, None)
+            self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, True)
+        finally:
+            # Restore configuration
+            config.config = self._orig_config
 

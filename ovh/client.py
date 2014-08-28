@@ -41,6 +41,7 @@ import json
 from requests import request
 from requests.exceptions import RequestException
 
+from .config import config
 from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
@@ -60,11 +61,11 @@ class Client(object):
     signing logic along with some nice tools helping with key generation.
 
     All low level request logic including signing and error handling takes place
-    in :py:func:``Client.call`` function. Convenient wrappers
-    :py:func:``Client.get`` :py:func:``Client.post``, :py:func:``Client.put``,
-    :py:func:``Client.delete`` should be used instead. :py:func:``Client.post``,
-    :py:func:``Client.put`` both accept arbitrary list of keyword arguments
-    mapped to ``data`` param of :py:func:``Client.call``.
+    in :py:func:`Client.call` function. Convenient wrappers
+    :py:func:`Client.get` :py:func:`Client.post`, :py:func:`Client.put`,
+    :py:func:`Client.delete` should be used instead. :py:func:`Client.post`,
+    :py:func:`Client.put` both accept arbitrary list of keyword arguments
+    mapped to ``data`` param of :py:func:`Client.call`.
 
     Example usage:
 
@@ -86,8 +87,8 @@ class Client(object):
 
     """
 
-    def __init__(self, endpoint, application_key, application_secret,
-                 consumer_key=None):
+    def __init__(self, endpoint=None, application_key=None,
+                 application_secret=None, consumer_key=None):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -96,21 +97,43 @@ class Client(object):
         ``consumer_key`` uniquely identifies your application's end user without
         requiring his personal password.
 
+        If any of ``endpoint``, ``application_key``, ``application_secret``
+        or ``consumer_key`` is not provided, this client will attempt to locate
+        from them from environment, ~/.ovh.cfg or /etc/ovh.cfg.
+
+        See :py:mod:`ovh.config` for more informations on supported
+        configuration mechanisms.
+
         :param str endpoint: API endpoint to use. Valid values in ``ENDPOINTS``
         :param str application_key: Application key as provided by OVH
         :param str application_secret: Application secret key as provided by OVH
         :param str consumer_key: uniquely identifies
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
+        # load endpoint
+        if endpoint is None:
+            endpoint = config.get('default', 'endpoint')
+
         try:
             self._endpoint = ENDPOINTS[endpoint]
         except KeyError:
-            raise InvalidRegion("Unknow region %s. Valid regions: %s",
+            raise InvalidRegion("Unknow endpoint %s. Valid endpoints: %s",
                                 endpoint, ENDPOINTS.keys())
 
+        # load keys
+        if application_key is None:
+            application_key = config.get(endpoint, 'application_key')
         self._application_key = application_key
+
+        if application_secret is None:
+            application_secret = config.get(endpoint, 'application_secret')
         self._application_secret = application_secret
+
+        if consumer_key is None:
+            consumer_key = config.get(endpoint, 'consumer_key')
         self._consumer_key = consumer_key
+
+        # lazy load time delta
         self._time_delta = None
 
     ## high level API
@@ -132,7 +155,7 @@ class Client(object):
         :rtype: int
         """
         if self._time_delta is None:
-            server_time = self.get('/auth/time', need_auth=False)
+            server_time = self.get('/auth/time', _need_auth=False)
             self._time_delta = server_time - int(time.time())
         return self._time_delta
 
@@ -189,28 +212,28 @@ class Client(object):
         :returns: dict with ``consumerKey`` and ``validationUrl`` keys
         :rtype: dict
         """
-        res = self.post('/auth/credential', need_auth=False,
+        res = self.post('/auth/credential', _need_auth=False,
                         accessRules=access_rules, redirection=redirect_url)
         self._consumer_key = res['consumerKey']
         return res
 
     ## API shortcuts
 
-    def get(self, target, need_auth=True):
-        """'GET' :py:func:``Client.call`` wrapper"""
-        return self.call('GET', target, None, need_auth)
+    def get(self, _target, _need_auth=True):
+        """'GET' :py:func:`Client.call` wrapper"""
+        return self.call('GET', _target, None, _need_auth)
 
-    def put(self, target, need_auth=True, **kwargs):
-        """'PUT' :py:func:``Client.call`` wrapper"""
-        return self.call('PUT', target, kwargs, need_auth)
+    def put(self, _target, _need_auth=True, **kwargs):
+        """'PUT' :py:func:`Client.call` wrapper"""
+        return self.call('PUT', _target, kwargs, _need_auth)
 
-    def post(self, target, need_auth=True, **kwargs):
-        """'POST' :py:func:``Client.call`` wrapper"""
-        return self.call('POST', target, kwargs, need_auth)
+    def post(self, _target, _need_auth=True, **kwargs):
+        """'POST' :py:func:`Client.call` wrapper"""
+        return self.call('POST', _target, kwargs, _need_auth)
 
-    def delete(self, target, need_auth=True):
-        """'DELETE' :py:func:``Client.call`` wrapper"""
-        return self.call('DELETE', target, None, need_auth)
+    def delete(self, _target, _need_auth=True):
+        """'DELETE' :py:func:`Client.call` wrapper"""
+        return self.call('DELETE', _target, None, _need_auth)
 
     ## low level helpers
 
@@ -295,4 +318,3 @@ class Client(object):
             raise NetworkError()
         else:
             raise APIError(json_result.get('message'))
-

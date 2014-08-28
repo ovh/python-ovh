@@ -33,7 +33,6 @@ credential creation and requests signing.
     # Print nice welcome message
     print "Welcome", client.get('/me')['firstname']
 
-
 Installation
 ============
 
@@ -53,8 +52,8 @@ Alternatively, you may get latest development version directly from Git.
 Example Usage
 =============
 
-Login as a user
----------------
+Use the API on behalf of a user
+-------------------------------
 
 1. Create an application
 ************************
@@ -63,24 +62,50 @@ To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
 to register your application. Depending the API you plan yo use, visit:
 
-* `OVH Europe <https://eu.api.ovh.com/createApp/>`_
-* `OVH North-America <https://ca.api.ovh.com/createApp/>`_
-* `RunAbove <https://api.runabove.com/createApp/>`_
+- `OVH Europe <https://eu.api.ovh.com/createApp/>`_
+- `OVH North-America <https://ca.api.ovh.com/createApp/>`_
+- `RunAbove <https://api.runabove.com/createApp/>`_
 
 Once created, you will obtain an **application key (AK)** and an **application
 secret (AS)**.
 
-2. Authorize your application to access a customer account
+2. Configure your application
+*****************************
+
+The easiest and safest way to use your application's credentials is create an
+``ovh.conf`` configuration file in application's working directory. Here is how
+it looks like:
+
+.. code:: ini
+
+    [default]
+    ; general configuration: default endpoint
+    endpoint=ovh-eu
+
+    [ovh-eu]
+    ; configuration specific to 'ovh-eu' endpoint
+    application_key=my_app_key
+    application_secret=my_application_secret
+    ; uncomment following line when writing a script application
+    ; with a single consumer key.
+    ;consumer_key=my_consumer_key
+
+Depending on the API you want to use, you may set the ``endpoint`` to:
+
+* ``ovh-eu`` for OVH Europe API
+* ``ovh-ca`` for OVH North-America API
+* ``runabove-ca`` for RunAbove API
+
+See Configuration_ for more inforamtions on available configuration mechanisms.
+
+.. note:: When using a versioning system, make sure to add ``ovh.conf`` to ignored
+          files. It contains confidential/security-sensitive informations!
+
+3. Authorize your application to access a customer account
 **********************************************************
 
 To allow your application to access a customer account using the API on your
 behalf, you need a **consumer key (CK)**.
-
-Depending the API you want to use, you need to specify an API endpoint:
-
-* OVH Europe: ``ovh-eu``
-* OVH North-America: ``ovh-ca``
-* RunAbove: ``runabove-ca``
 
 Here is a sample code you can use to allow your application to access a
 customer's informations:
@@ -91,16 +116,8 @@ customer's informations:
 
     import ovh
 
-    EDPOINT = '<endpoint>' # one of 'ovh-eu', 'ovh-ca', 'runabove-ca'
-    APPLICATION_KEY = '<application key>'
-    APPLICATION_SECRET = '<application secret>'
-
-    # create a client without a consumerKey
-    client = ovh.Client(
-        endpoint='ovh-eu',
-        application_key=APPLICATION_KEY,
-        application_secret=APPLICATION_SECRET,
-    )
+    # create a client using configuration
+    client = ovh.Client()
 
     # Request RO, /me API access
     access_rules = [
@@ -121,7 +138,7 @@ customer's informations:
 Returned ``consumerKey`` should then be kept to avoid re-authenticating your
 end-user on each use.
 
-Note: to request full and unlimited access to the API, you may use wildcards:
+.. note:: To request full and unlimited access to the API, you may use wildcards:
 
 .. code:: python
 
@@ -132,9 +149,15 @@ Note: to request full and unlimited access to the API, you may use wildcards:
         {'method': 'DELETE', 'path': '/*'}
     ]
 
-
 Grab bill list
 --------------
+
+Let's say you want to integrate OVH bills into your own billing system, you
+could just script around the ``/me/bills`` endpoints and even get the details
+of each bill lines using ``/me/bill/{billId}/details/{billDetailId}``.
+
+This example assumes an existing Configuration_ with valid ``application_key``,
+``application_secret`` and ``consumer_key``.
 
 .. code:: python
 
@@ -142,27 +165,8 @@ Grab bill list
 
     import ovh
 
-    APPLICATION_KEY = '<application key>'
-    APPLICATION_SECRET = '<application secret>'
-
-    # create a client without a consumerKey
-    client = ovh.Client(
-        endpoint='ovh-eu',
-        application_key=APPLICATION_KEY,
-        application_secret=APPLICATION_SECRET,
-    )
-
-    # Request RO, /me/bill API access
-    access_rules = [
-        {'method': 'GET', 'path': '/me/bill'},
-        {'method': 'GET', 'path': '/me/bill/*'},
-    ]
-
-    # Request token
-    validation = client.request_consumerkey(access_rules)
-
-    print "Please visit", validation['validationUrl'], "to authenticate"
-    raw_input("and press Enter to continue...")
+    # create a client
+    client = ovh.Client()
 
     # Grab bill list
     bills = client.get('/me/bill')
@@ -178,24 +182,21 @@ Grab bill list
 Enable network burst in SBG1
 ----------------------------
 
+'Network burst' is a free service but is opt-in. What if you have, say, 10
+servers in ``SBG-1`` datacenter? You certainely don't want to activate it
+manually for each servers. You could take advantage of a code like this.
+
+This example assumes an existing Configuration_ with valid ``application_key``,
+``application_secret`` and ``consumer_key``.
+
 .. code:: python
 
     # -*- encoding: utf-8 -*-
 
     import ovh
 
-    # visit https://api.ovh.com/createApp/ to create your application's credentials
-    APPLICATION_KEY = '<application key>'
-    APPLICATION_SECRET = '<application secret>'
-    CONSUMER_KEY = '<consumer key (see above)>'
-
     # create a client
-    client = ovh.Client(
-        endpoint='ovh-eu',
-        application_key=APPLICATION_KEY,
-        application_secret=APPLICATION_SECRET,
-        consumer_key=CONSUMER_KEY,
-    )
+    client = ovh.Client()
 
     # get list of all server names
     servers = client.get('/dedicated/server/')
@@ -211,6 +212,9 @@ Enable network burst in SBG1
 List Runabove's instance
 ------------------------
 
+This example assumes an existing Configuration_ with valid ``application_key``,
+``application_secret`` and ``consumer_key``.
+
 .. code:: python
 
     # -*- encoding: utf-8 -*-
@@ -219,17 +223,7 @@ List Runabove's instance
     from tabulate import tabulate
 
     # visit https://api.runabove.com/createApp/ to create your application's credentials
-    APPLICATION_KEY = '<application key>'
-    APPLICATION_SECRET = '<application secret>'
-    CONSUMER_KEY = '<consumer key (see above)>'
-
-    # create a client
-    client = ovh.Client(
-        endpoint='runabove-ca',
-        application_key=APPLICATION_KEY,
-        application_secret=APPLICATION_SECRET,
-        consumer_key=CONSUMER_KEY,
-    )
+    client = ovh.Client(endpoint='runabove-ca')
 
     # get list of all instances
     instances = client.get('/instance')
@@ -247,9 +241,46 @@ List Runabove's instance
 
 Before running this example, make sure you have the
 `tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
-pretty cool library to pretty print tabular data.
+pretty cool library to pretty print tabular data in a clean and easy way.
 
 >>> pip install tabulate
+
+Configuration
+=============
+
+The straightfoward way to use OVH's API keys is to embed them directly in the
+application code. While this is very convenient, it lacks of elegance and
+flexibility.
+
+Alternatively it is suggested to use configuration files or environment
+variables so that the same code may run seamlessly in multiple environments.
+Production and development for instance.
+
+This wrapper will first look for direct instanciation parameters then
+``OVH_ENDPOINT``, ``OVH_APPLICATION_KEY``, ``OVH_APPLICATION_SECRET`` and
+``OVH_CONSUMER_KEY`` environment variables. If either of these parameter is not
+provided, it will look for a configuration file of the form:
+
+.. code:: ini
+
+    [default]
+    ; general configuration: default endpoint
+    endpoint=ovh-eu
+
+    [ovh-eu]
+    ; configuration specific to 'ovh-eu' endpoint
+    application_key=my_app_key
+    application_secret=my_application_secret
+    consumer_key=my_consumer_key
+
+The client will successively attempt to locate this configuration file in
+
+1. Current working directory: ``./ovh.conf``
+2. Current user's home directory ``~/.ovh.conf``
+3. System wide configuration ``/etc/ovh.conf``
+
+This lookup mechanism makes it easy to overload credentials for a specific
+project or user.
 
 Hacking
 =======
@@ -326,3 +357,4 @@ Related links
 - **contribute**: https://github.com/ovh/python-ovh
 - **Report bugs**: https://github.com/ovh/python-ovh/issues
 - **Download**: http://pypi.python.org/pypi/ovh
+
