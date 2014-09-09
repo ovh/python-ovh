@@ -1,6 +1,16 @@
 Python-OVH: lightweight wrapper around OVH's APIs
 =================================================
 
+.. image:: http://img.shields.io/pypi/v/ovh.svg
+           :alt: PyPi Version
+           :target: https://pypi.python.org/pypi/ovh
+.. image:: https://travis-ci.org/ovh/python-ovh.svg?branch=master
+           :alt: Build Status
+           :target: https://travis-ci.org/ovh/python-ovh
+.. image:: https://coveralls.io/repos/ovh/python-ovh/badge.png
+           :alt: Coverage Status
+           :target: https://coveralls.io/r/ovh/python-ovh
+
 Thin wrapper around OVH's APIs. Handles all the hard work including credential
 creation and requests signing.
 
