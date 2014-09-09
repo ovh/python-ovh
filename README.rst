@@ -67,7 +67,7 @@ this from a ``virtualenv``.
     cd python-ovh
     python setup.py develop
     pip install -r requirements-dev.txt
-    nostests # 100% coverage is a hard minimum
+    nosetests # 100% coverage is a hard minimum
 
 
 You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
