@@ -9,27 +9,23 @@ Python-OVH: lightweight wrapper around OVH's APIs
 Thin wrapper around OVH's APIs. Handles all the hard work including credential
 creation and requests signing.
 
-A note on authentication
-------------------------
+.. code:: python
 
-OVH's APIs relies on an OAuth based mechanism for authentication. Oauth is a
-standard protocol allowing to securely authenticate both an application and a
-user within an application. It also supports specific access restrictions. This
-is accomplished using a set of 3 Keys:
+    # -*- encoding: utf-8 -*-
 
-- ``application_key``: Uniquely identifies an application. It can be seen as an
-  application "login" and is attached to an account. This key may safely be
-  shared.
-- ``application_secret``: Authenticates application identified by ``application_key``.
-  it can be seen as an application "password" and should be protected as such !
-- ``consumer_key``: Each application's user has it's own ``consumer_key``
-  specific to the this application. A ``consumer_key`` may only be valid for a
-  subset of the API and a restricted amount of time.
+    import ovh
 
-``application_key`` and ``application_secret`` are defined once for each
-application (see "Supported APIs" bellow) and ``consumer_key`` are granted once
-for each application's and-user.
+    # Instantiate. Visit https://api.ovh.com/createToken/index.cgi?GET=/me
+    # to get your credentials
+    client = ovh.Client(
+        endpoint='ovh-eu',
+        application_key='<application key>',
+        application_secret='<application secret>',
+        consumer_key='<consumer key>',
+    )
 
+    # Print nice welcome message
+    print "Welcome", client.get('/me')['firstname']
 
 Installation
 ============
@@ -47,36 +43,17 @@ Alternatively, you may get latest development version directly from Git.
 
     pip install -e git+https://github.com/ovh/python-ovh.git#egg=ovh
 
+API Documentation
+=================
 
-Hacking
-=======
+If you are looking for information on a specific function, class or method,
+this part of the documentation is for you.
 
-This wrapper uses standard Python tools, so you should feel familiar with it.
-Here is a quick outline of what it may look like. A good practice is to run
-this from a ``virtualenv``.
+.. toctree::
+   :maxdepth: 2
+   :glob:
 
-.. code:: bash
-
-    git clone https://github.com/ovh/python-ovh.git
-    cd python-ovh
-    python setup.py develop
-    pip install -r requirements-dev.txt
-    nosetests # 100% coverage is a hard minimum
-
-
-You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
-to here from you !
-
-Building documentation
-======================
-
-Documentation is managed using the excelent ``Sphinx`` system. For example, to
-build HTML documentation:
-
-.. code:: bash
-
-    cd python-ovh/docs
-    make html
+   api/ovh/*
 
 Example Usage
 =============
@@ -260,16 +237,89 @@ pretty cool library to pretty print tabular data.
 
 >>> pip install tabulate
 
+A note on authentication
+========================
+
+OVH's APIs relies on an OAuth like mechanism for authentication. OAuth is a
+standard protocol allowing to securely authenticate both an application and a
+user within an application. It also supports specific access restrictions. This
+is accomplished using a set of 3 Keys:
+
+- ``application_key``: Uniquely identifies an application. It can be seen as an
+  application "login" and is attached to an account. This key may safely be
+  shared.
+- ``application_secret``: Authenticates application identified by
+  ``application_key``. It can be seen as an application "password" and should be
+  protected as such !
+- ``consumer_key``: Each application's user has it's own ``consumer_key``
+  specific to the this application. A ``consumer_key`` may only be valid for a
+  subset of the API and a restricted amount of time.
+
+``application_key`` and ``application_secret`` are defined once for each
+application (see "Supported APIs" bellow) and ``consumer_key`` are granted once
+for each application's and-user.
+
+Hacking
+=======
+
+This wrapper uses standard Python tools, so you should feel at home with it.
+Here is a quick outline of what it may look like. A good practice is to run
+this from a ``virtualenv``.
+
+Get the sources
+---------------
+
+.. code:: bash
+
+    git clone https://github.com/ovh/python-ovh.git
+    cd python-ovh
+    python setup.py develop
+
+You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
+to hear from you !
+
+Run the tests
+-------------
+
+Simply run ``nosetests``. It will automatically load its configuration from
+``setup.cfg`` and output full coverage status. Since we all love quality, please
+note that we do not accept contributions with test coverage under 100%.
+
+.. code:: bash
+
+    pip install -r requirements-dev.txt
+    nosetests # 100% coverage is a hard minimum
+
+
+Build the documentation
+-----------------------
+
+Documentation is managed using the excellent ``Sphinx`` system. For example, to
+build HTML documentation:
+
+.. code:: bash
+
+    cd python-ovh/docs
+    make html
+
 Supported APIs
 ==============
 
-OVH
----
+OVH Europe
+----------
 
-- **documentation**: https://api.ovh.com/
-- **community support**: api-subscribe@ml.ovh.net
-- **console**: https://api.ovh.com/console
-- **get application credentials**: https://api.ovh.com/createApp/
+- **Documentation**: https://eu.api.ovh.com/
+- **Community support**: api-subscribe@ml.ovh.net
+- **Console**: https://eu.api.ovh.com/console
+- **Create application credentials**: https://eu.api.ovh.com/createApp/
+
+OVH North America
+-----------------
+
+- **Documentation**: https://ca.api.ovh.com/
+- **Community support**: api-subscribe@ml.ovh.net
+- **Console**: https://ca.api.ovh.com/console
+- **Create application credentials**: https://ca.api.ovh.com/createApp/
 
 Runabove
 --------
@@ -284,15 +334,3 @@ Related links
 - **contribute**: https://github.com/ovh/python-ovh
 - **Report bugs**: https://github.com/ovh/python-ovh/issues
 - **Download**: http://pypi.python.org/pypi/ovh
-
-API Documentation
-=================
-
-If you are looking for information on a specific function, class or method,
-this part of the documentation is for you.
-
-.. toctree::
-   :maxdepth: 2
-   :glob:
-
-   api/ovh/*

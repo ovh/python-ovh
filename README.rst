@@ -1,5 +1,9 @@
-Python-OVH: lightweight wrapper around OVH's APIs
-=================================================
+.. image:: https://github.com/ovh/python-ovh/raw/master/docs/img/logo.png
+           :alt: Python & OVH APIs
+           :target: https://pypi.python.org/pypi/ovh
+
+Lightweight wrapper around OVH's APIs. Handles all the hard work including
+credential creation and requests signing.
 
 .. image:: http://img.shields.io/pypi/v/ovh.svg
            :alt: PyPi Version
@@ -11,30 +15,23 @@ Python-OVH: lightweight wrapper around OVH's APIs
            :alt: Coverage Status
            :target: https://coveralls.io/r/ovh/python-ovh
 
-Thin wrapper around OVH's APIs. Handles all the hard work including credential
-creation and requests signing.
+.. code:: python
 
-A note on authentication
-------------------------
+    # -*- encoding: utf-8 -*-
 
-OVH's APIs relies on an OAuth based mechanism for authentication. OAuth is a
-standard protocol allowing to securely authenticate both an application and a
-user within an application. It also supports specific access restrictions. This
-is accomplished using a set of 3 Keys:
+    import ovh
 
-- ``application_key``: Uniquely identifies an application. It can be seen as an
-  application "login" and is attached to an account. This key may safely be
-  shared.
-- ``application_secret``: Authenticates application identified by
-  ``application_key``. It can be seen as an application "password" and should be
-  protected as such !
-- ``consumer_key``: Each application's user has it's own ``consumer_key``
-  specific to the this application. A ``consumer_key`` may only be valid for a
-  subset of the API and a restricted amount of time.
+    # Instantiate. Visit https://api.ovh.com/createToken/index.cgi?GET=/me
+    # to get your credentials
+    client = ovh.Client(
+        endpoint='ovh-eu',
+        application_key='<application key>',
+        application_secret='<application secret>',
+        consumer_key='<consumer key>',
+    )
 
-``application_key`` and ``application_secret`` are defined once for each
-application (see "Supported APIs" bellow) and ``consumer_key`` are granted once
-for each application's and-user.
+    # Print nice welcome message
+    print "Welcome", client.get('/me')['firstname']
 
 
 Installation
@@ -53,52 +50,40 @@ Alternatively, you may get latest development version directly from Git.
 
     pip install -e git+https://github.com/ovh/python-ovh.git#egg=ovh
 
-
-Hacking
-=======
-
-This wrapper uses standard Python tools, so you should feel familiar with it.
-Here is a quick outline of what it may look like. A good practice is to run
-this from a ``virtualenv``.
-
-.. code:: bash
-
-    git clone https://github.com/ovh/python-ovh.git
-    cd python-ovh
-    python setup.py develop
-    pip install -r requirements-dev.txt
-    nosetests # 100% coverage is a hard minimum
-
-
-You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
-to here from you !
-
-Building documentation
-======================
-
-Documentation is managed using the excelent ``Sphinx`` system. For example, to
-build HTML documentation:
-
-.. code:: bash
-
-    cd python-ovh/docs
-    make html
-
 Example Usage
 =============
 
 Login as a user
 ---------------
 
-To communicate with APIs, the SDK uses a token on each request to identify the
-user. This token is called ``consumer_key``. Getting a ``consumer_key`` is done
-in 3 steps:
+1. Create an application
+************************
 
-1. application requests a new consumer key and specifies requested access permissions.
-2. application redirects user to a specific validation URL.
-3. end-user authenticates himself using his OVH credentials to validate it.
+To interact with the APIs, the SDK needs to identify itself using an
+``application_key`` and an ``application_secret``. To get them, you need
+to register your application. Depending the API you plan yo use, visit:
 
-Example:
+* `OVH Europe <https://eu.api.ovh.com/createApp/>`_
+* `OVH North-America <https://ca.api.ovh.com/createApp/>`_
+* `RunAbove <https://api.runabove.com/createApp/>`_
+
+Once created, you will obtain an **application key (AK)** and an **application
+secret (AS)**.
+
+2. Authorize your application to access a customer account
+**********************************************************
+
+To allow your application to access a customer account using the API on your
+behalf, you need a **consumer key (CK)**.
+
+Depending the API you want to use, you need to specify an API endpoint:
+
+* OVH Europe: ``ovh-eu``
+* OVH North-America: ``ovh-ca``
+* RunAbove: ``runabove-ca``
+
+Here is a sample code you can use to allow your application to access a
+customer's informations:
 
 .. code:: python
 
@@ -106,7 +91,7 @@ Example:
 
     import ovh
 
-    # visit https://api.ovh.com/createApp/ to create your application's credentials
+    EDPOINT = '<endpoint>' # one of 'ovh-eu', 'ovh-ca', 'runabove-ca'
     APPLICATION_KEY = '<application key>'
     APPLICATION_SECRET = '<application secret>'
 
@@ -266,23 +251,74 @@ pretty cool library to pretty print tabular data.
 
 >>> pip install tabulate
 
+Hacking
+=======
+
+This wrapper uses standard Python tools, so you should feel at home with it.
+Here is a quick outline of what it may look like. A good practice is to run
+this from a ``virtualenv``.
+
+Get the sources
+---------------
+
+.. code:: bash
+
+    git clone https://github.com/ovh/python-ovh.git
+    cd python-ovh
+    python setup.py develop
+
+You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
+to hear from you !
+
+Run the tests
+-------------
+
+Simply run ``nosetests``. It will automatically load its configuration from
+``setup.cfg`` and output full coverage status. Since we all love quality, please
+note that we do not accept contributions with test coverage under 100%.
+
+.. code:: bash
+
+    pip install -r requirements-dev.txt
+    nosetests # 100% coverage is a hard minimum
+
+
+Build the documentation
+-----------------------
+
+Documentation is managed using the excellent ``Sphinx`` system. For example, to
+build HTML documentation:
+
+.. code:: bash
+
+    cd python-ovh/docs
+    make html
+
 Supported APIs
 ==============
 
-OVH
----
+OVH Europe
+----------
 
- - **documentation**: https://api.ovh.com/
- - **community support**: api-subscribe@ml.ovh.net
- - **console**: https://api.ovh.com/console
- - **get application credentials**: https://api.ovh.com/createApp/
+- **Documentation**: https://eu.api.ovh.com/
+- **Community support**: api-subscribe@ml.ovh.net
+- **Console**: https://eu.api.ovh.com/console
+- **Create application credentials**: https://eu.api.ovh.com/createApp/
+
+OVH North America
+-----------------
+
+- **Documentation**: https://ca.api.ovh.com/
+- **Community support**: api-subscribe@ml.ovh.net
+- **Console**: https://ca.api.ovh.com/console
+- **Create application credentials**: https://ca.api.ovh.com/createApp/
 
 Runabove
 --------
 
- - **console**: https://api.runabove.com/console/
- - **get application credentials**: https://api.runabove.com/createApp/
- - **high level SDK**: https://github.com/runabove/python-runabove
+- **console**: https://api.runabove.com/console/
+- **get application credentials**: https://api.runabove.com/createApp/
+- **high level SDK**: https://github.com/runabove/python-runabove
 
 Related links
 =============
