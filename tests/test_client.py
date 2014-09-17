@@ -127,9 +127,22 @@ class testClient(unittest.TestCase):
 
     @mock.patch.object(Client, 'call')
     def test_get(self, m_call):
+        # basic test
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
         self.assertEqual(m_call.return_value, api.get(FAKE_URL))
         m_call.assert_called_once_with('GET', FAKE_URL, None, True)
+
+        # append query string
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.get(FAKE_URL, param="test"))
+        m_call.assert_called_once_with('GET', FAKE_URL+'?param=test', None, True)
+
+        # append to existing query string
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', param="test"))
+        m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&param=test', None, True)
 
     @mock.patch.object(Client, 'call')
     def test_delete(self, m_call):

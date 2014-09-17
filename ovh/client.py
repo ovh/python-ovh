@@ -35,6 +35,7 @@ It handles requesting credential, signing queries...
 """
 
 import hashlib
+import urllib
 import time
 import json
 
@@ -219,8 +220,15 @@ class Client(object):
 
     ## API shortcuts
 
-    def get(self, _target, _need_auth=True):
+    def get(self, _target, _need_auth=True, **kwargs):
         """'GET' :py:func:`Client.call` wrapper"""
+        if kwargs:
+            query_string = urllib.urlencode(kwargs)
+            if '?' in _target:
+                _target = '%s&%s' % (_target, query_string)
+            else:
+                _target = '%s?%s' % (_target, query_string)
+
         return self.call('GET', _target, None, _need_auth)
 
     def put(self, _target, _need_auth=True, **kwargs):

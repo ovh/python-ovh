@@ -209,6 +209,53 @@ This example assumes an existing Configuration_ with valid ``application_key``,
             client.put('/dedicated/server/%s/burst' % server, status='active')
             print "Enabled burst for %s server located in SBG-1" % server
 
+List application authorized to access your account
+--------------------------------------------------
+
+Thanks to the application key / consumer key mechanism, it is possible to
+finely track applications having access to your data and revoke this access.
+This examples lists validated applications. It could easily be adapted to
+manage revocation too.
+
+This example assumes an existing Configuration_ with valid ``application_key``,
+``application_secret`` and ``consumer_key``.
+
+.. code:: python
+
+    # -*- encoding: utf-8 -*-
+
+    import ovh
+    from tabulate import tabulate
+
+    # create a client
+    client = ovh.Client()
+
+    credentials = client.get('/me/api/credential', status='validated')
+
+    # pretty print credentials status
+    table = []
+    for credential_id in credentials:
+        credential_method = '/me/api/credential/'+str(credential_id)
+        credential = client.get(credential_method)
+        application = client.get(credential_method+'/application')
+
+        table.append([
+            credential_id,
+            '[%s] %s' % (application['status'], application['name']),
+            application['description'],
+            credential['creation'],
+            credential['expiration'],
+            credential['lastUse'],
+        ])
+    print tabulate(table, headers=['ID', 'App Name', 'Description',
+                                   'Token Creation', 'Token Expiration', 'Token Last Use'])
+
+Before running this example, make sure you have the
+`tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
+pretty cool library to pretty print tabular data in a clean and easy way.
+
+>>> pip install tabulate
+
 List Runabove's instance
 ------------------------
 
