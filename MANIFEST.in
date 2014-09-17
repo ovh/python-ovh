@@ -1,4 +1,5 @@
 include *.ini *.cfg *.rst
+include LICENSE
 recursive-include ovh *.py
 recursive-include docs *.py *.rst *.png Makefile make.bat
 recursive-include tests *.py
