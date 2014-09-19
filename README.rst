@@ -5,7 +5,7 @@
 Lightweight wrapper around OVH's APIs. Handles all the hard work including
 credential creation and requests signing.
 
-.. image:: http://img.shields.io/pypi/v/ovh.svg
+.. image:: https://img.shields.io/pypi/v/ovh.svg
            :alt: PyPi Version
            :target: https://pypi.python.org/pypi/ovh
 .. image:: https://travis-ci.org/ovh/python-ovh.svg?branch=master
@@ -382,6 +382,7 @@ OVH Europe
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://eu.api.ovh.com/console
 - **Create application credentials**: https://eu.api.ovh.com/createApp/
+- **Create script credentials** (all keys at once): https://eu.api.ovh.com/createToken/
 
 OVH North America
 -----------------
@@ -390,12 +391,13 @@ OVH North America
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://ca.api.ovh.com/console
 - **Create application credentials**: https://ca.api.ovh.com/createApp/
+- **Create script credentials** (all keys at once): https://ca.api.ovh.com/createToken/
 
 Runabove
 --------
 
 - **console**: https://api.runabove.com/console/
-- **get application credentials**: https://api.runabove.com/createApp/
+- **Create application credentials**: https://api.runabove.com/createApp/
 - **high level SDK**: https://github.com/runabove/python-runabove
 
 Related links
