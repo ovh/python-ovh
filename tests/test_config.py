@@ -76,9 +76,9 @@ class testConfig(unittest.TestCase):
         self.assertEqual('This is a *real* local application key', conf.get('runabove-ca', 'application_secret'))
         self.assertEqual('I am locally kidding',                   conf.get('runabove-ca', 'consumer_key'))
 
-        self.assertIsNone(conf.get('ovh-eu', 'non-existent'))
-        self.assertIsNone(conf.get('ovh-ca', 'application_key'))
-        self.assertIsNone(conf.get('ovh-laponie', 'application_key'))
+        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
+        self.assertTrue(conf.get('ovh-ca', 'application_key') is None)
+        self.assertTrue(conf.get('ovh-laponie', 'application_key') is None)
 
     def test_config_get_conf_env_rules_them_all(self):
         conf = config.ConfigurationManager()
@@ -89,4 +89,4 @@ class testConfig(unittest.TestCase):
             self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], conf.get('wathever', 'application_secret'))
             self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       conf.get('wathever', 'consumer_key'))
 
-        self.assertIsNone(conf.get('ovh-eu', 'non-existent'))
+        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)

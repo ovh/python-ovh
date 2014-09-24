@@ -73,7 +73,7 @@ class testClient(unittest.TestCase):
         self.assertEqual(APPLICATION_KEY, api._application_key)
         self.assertEqual(APPLICATION_SECRET, api._application_secret)
         self.assertEqual(CONSUMER_KEY, api._consumer_key)
-        self.assertIsNone(api._time_delta)
+        self.assertTrue(api._time_delta is None)
 
         # invalid region
         self.assertRaises(InvalidRegion, Client, ENDPOINT_BAD, '', '', '')

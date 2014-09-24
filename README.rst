@@ -399,6 +399,7 @@ Runabove
 - **console**: https://api.runabove.com/console/
 - **Create application credentials**: https://api.runabove.com/createApp/
 - **high level SDK**: https://github.com/runabove/python-runabove
+- **Create script credentials** (all keys at once): https://api.runabove.com/createToken/
 
 Related links
 =============
