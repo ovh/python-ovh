@@ -39,6 +39,12 @@ import urllib
 import time
 import json
 
+try:
+    from urllib import urlencode
+except ImportError:
+    # Python 3
+    from urllib.parse import urlencode
+
 from requests import request
 from requests.exceptions import RequestException
 
@@ -223,7 +229,7 @@ class Client(object):
     def get(self, _target, _need_auth=True, **kwargs):
         """'GET' :py:func:`Client.call` wrapper"""
         if kwargs:
-            query_string = urllib.urlencode(kwargs)
+            query_string = urlencode(kwargs)
             if '?' in _target:
                 _target = '%s&%s' % (_target, query_string)
             else:
