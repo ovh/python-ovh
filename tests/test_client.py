@@ -276,7 +276,11 @@ class testClient(unittest.TestCase):
 
         # Overwrite configuration to avoid interfering with any local config
         from ovh.client import config
-        from ConfigParser import RawConfigParser
+        try:
+            from ConfigParser import RawConfigParser
+        except ImportError:
+            # Python 3
+            from configparser import RawConfigParser
 
         self._orig_config = config.config
         config.config = RawConfigParser()

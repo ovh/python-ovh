@@ -63,7 +63,12 @@ project or user.
 """
 
 import os
-from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
+
+try:
+    from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
+except ImportError:
+    # Python 3
+    from configparser import RawConfigParser, NoSectionError, NoOptionError
 
 __all__ = ['config']
 
