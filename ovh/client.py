@@ -299,7 +299,7 @@ class Client(object):
                 method.upper(), target,
                 body,
                 now
-            ]))
+            ]).encode('utf-8'))
 
             headers['X-Ovh-Consumer'] = self._consumer_key
             headers['X-Ovh-Timestamp'] = now
