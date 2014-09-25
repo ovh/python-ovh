@@ -31,6 +31,12 @@ import requests
 import mock
 import json
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    # Python 2.6
+    from ordereddict import OrderedDict
+
 from ovh.client import Client
 from ovh.exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
@@ -257,7 +263,7 @@ class testClient(unittest.TestCase):
 
 
         # data, nominal
-        data = data={'some': 'random', 'data': 42}
+        data = OrderedDict([('some', 'random'), ('data', 42)])
         m_res.status_code = 200
         self.assertEqual(m_json, api.call(FAKE_METHOD, FAKE_PATH, data, True))
         m_time_delta.assert_called_once_with()
@@ -268,7 +274,7 @@ class testClient(unittest.TestCase):
                 'X-Ovh-Application': APPLICATION_KEY,
                 'Content-type': 'application/json',
                 'X-Ovh-Timestamp': '1404395931',
-                'X-Ovh-Signature': '$1$70e04549d8b9e3d7f499274090710206f8c87a78',
+                'X-Ovh-Signature': '$1$9acb1ac0120006d16261a635aed788e83ab172d2',
                 }, data=json.dumps(data)
         )
         m_time_delta.reset_mock()

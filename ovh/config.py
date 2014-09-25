@@ -66,7 +66,7 @@ import os
 
 try:
     from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
-except ImportError:
+except ImportError: # pragma: no cover
     # Python 3
     from configparser import RawConfigParser, NoSectionError, NoOptionError
 

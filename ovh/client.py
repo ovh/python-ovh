@@ -41,7 +41,7 @@ import json
 
 try:
     from urllib import urlencode
-except ImportError:
+except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 

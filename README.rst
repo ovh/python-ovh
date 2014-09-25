@@ -396,15 +396,16 @@ OVH North America
 Runabove
 --------
 
-- **console**: https://api.runabove.com/console/
+- **Community support**: https://community.runabove.com/
+- **Console**: https://api.runabove.com/console/
 - **Create application credentials**: https://api.runabove.com/createApp/
-- **high level SDK**: https://github.com/runabove/python-runabove
+- **High level SDK**: https://github.com/runabove/python-runabove
 - **Create script credentials** (all keys at once): https://api.runabove.com/createToken/
 
 Related links
 =============
 
-- **contribute**: https://github.com/ovh/python-ovh
+- **Contribute**: https://github.com/ovh/python-ovh
 - **Report bugs**: https://github.com/ovh/python-ovh/issues
 - **Download**: http://pypi.python.org/pypi/ovh
 
