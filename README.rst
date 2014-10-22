@@ -60,7 +60,7 @@ Use the API on behalf of a user
 
 To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
-to register your application. Depending the API you plan yo use, visit:
+to register your application. Depending the API you plan to use, visit:
 
 - `OVH Europe <https://eu.api.ovh.com/createApp/>`_
 - `OVH North-America <https://ca.api.ovh.com/createApp/>`_
