@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.3.0 (2014-09-23)
+ - [enhancement] add kimsufi API Europe/North-America
+ - [enhancement] add soyoustart API Europe/North-America
+ - [Q/A] add minimal integration test
+
 ## 0.2.1 (2014-09-26)
  - [enhancement] add links to 'CreateToken' pages in Readme
  - [compatibility] add support for Python 2.6, 3.2 and 3.3
