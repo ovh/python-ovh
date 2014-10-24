@@ -37,7 +37,7 @@ except ImportError:
     # Python 2.6
     from ordereddict import OrderedDict
 
-from ovh.client import Client
+from ovh.client import Client, ENDPOINTS
 from ovh.exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
@@ -300,4 +300,10 @@ class testClient(unittest.TestCase):
         finally:
             # Restore configuration
             config.config = self._orig_config
+
+    # Perform real API tests.
+    def test_endpoints(self):
+        for endpoint in ENDPOINTS.keys():
+            auth_time = Client(endpoint).get('/auth/time', _need_auth=False)
+            self.assertTrue(auth_time > 0)
 
