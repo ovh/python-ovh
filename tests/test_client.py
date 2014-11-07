@@ -182,7 +182,7 @@ class testClient(unittest.TestCase):
 
     ## test core function
 
-    @mock.patch('ovh.client.request')
+    @mock.patch('ovh.client.Session.request')
     def test_call_no_sign(self, m_req):
         m_res = m_req.return_value
         m_json = m_res.json.return_value
@@ -236,7 +236,7 @@ class testClient(unittest.TestCase):
         m_res.status_code = 306
         self.assertRaises(APIError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
 
-    @mock.patch('ovh.client.request')
+    @mock.patch('ovh.client.Session.request')
     @mock.patch('ovh.client.Client.time_delta', new_callable=mock.PropertyMock)
     def test_call_signature(self, m_time_delta, m_req):
         m_res = m_req.return_value

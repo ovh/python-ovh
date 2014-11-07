@@ -45,7 +45,7 @@ except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from requests import request
+from requests import request, Session
 from requests.exceptions import RequestException
 
 from .config import config
@@ -146,6 +146,9 @@ class Client(object):
 
         # lazy load time delta
         self._time_delta = None
+
+        # use a requests session to reuse HTTPS connections between requests
+        self._session = Session()
 
     ## high level API
 
@@ -311,7 +314,8 @@ class Client(object):
 
         # attempt request
         try:
-            result = request(method, target, headers=headers, data=body)
+            result = self._session.request(method, target, headers=headers,
+                                           data=body)
         except RequestException as error:
             raise HTTPError("Low HTTP request failed error", error)
 
