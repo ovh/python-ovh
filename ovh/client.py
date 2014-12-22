@@ -36,6 +36,7 @@ It handles requesting credential, signing queries...
 
 import hashlib
 import urllib
+import keyword
 import time
 import json
 
@@ -233,9 +234,38 @@ class Client(object):
 
     ## API shortcuts
 
+    def _canonicalize_kwargs(self, kwargs):
+        """
+        If an API needs an argument colliding with a Python reserved keyword, it
+        can be prefixed with an underscore. For example, ``from`` argument of
+        ``POST /email/domain/{domain}/redirection`` may be replaced by ``_from``
+
+        :param dict kwargs: input kwargs
+        :return dict: filtered kawrgs
+        """
+        arguments = {}
+
+        for k, v in kwargs.iteritems():
+            if k[0] == '_' and k[1:] in keyword.kwlist:
+                k = k[1:]
+            arguments[k] = v
+
+        return arguments
+
     def get(self, _target, _need_auth=True, **kwargs):
-        """'GET' :py:func:`Client.call` wrapper"""
+        """
+        'GET' :py:func:`Client.call` wrapper.
+
+        Query string parameters can be set either directly in ``_target`` or as
+        keywork arguments. If an argument collides with a Python reserved
+        keyword, prefix it with a '_'. For instance, ``from`` becomes ``_from``.
+
+        :param string _target: API method to call
+        :param string _need_auth: If True, send authentication headers. This is
+            the default
+        """
         if kwargs:
+            kwargs = self._canonicalize_kwargs(kwargs)
             query_string = urlencode(kwargs)
             if '?' in _target:
                 _target = '%s&%s' % (_target, query_string)
@@ -245,15 +275,43 @@ class Client(object):
         return self.call('GET', _target, None, _need_auth)
 
     def put(self, _target, _need_auth=True, **kwargs):
-        """'PUT' :py:func:`Client.call` wrapper"""
+        """
+        'PUT' :py:func:`Client.call` wrapper
+
+        Body parameters can be set either directly in ``_target`` or as keywork
+        arguments. If an argument collides with a Python reserved keyword,
+        prefix it with a '_'. For instance, ``from`` becomes ``_from``.
+
+        :param string _target: API method to call
+        :param string _need_auth: If True, send authentication headers. This is
+            the default
+        """
+        kwargs = self._canonicalize_kwargs(kwargs)
         return self.call('PUT', _target, kwargs, _need_auth)
 
     def post(self, _target, _need_auth=True, **kwargs):
-        """'POST' :py:func:`Client.call` wrapper"""
+        """
+        'POST' :py:func:`Client.call` wrapper
+
+        Body parameters can be set either directly in ``_target`` or as keywork
+        arguments. If an argument collides with a Python reserved keyword,
+        prefix it with a '_'. For instance, ``from`` becomes ``_from``.
+
+        :param string _target: API method to call
+        :param string _need_auth: If True, send authentication headers. This is
+            the default
+        """
+        kwargs = self._canonicalize_kwargs(kwargs)
         return self.call('POST', _target, kwargs, _need_auth)
 
     def delete(self, _target, _need_auth=True):
-        """'DELETE' :py:func:`Client.call` wrapper"""
+        """
+        'DELETE' :py:func:`Client.call` wrapper
+
+        :param string _target: API method to call
+        :param string _need_auth: If True, send authentication headers. This is
+            the default
+        """
         return self.call('DELETE', _target, None, _need_auth)
 
     ## low level helpers

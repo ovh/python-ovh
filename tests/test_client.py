@@ -131,6 +131,14 @@ class testClient(unittest.TestCase):
 
     ## test wrappers
 
+    def test__canonicalize_kwargs(self):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+
+        self.assertEqual({}, api._canonicalize_kwargs({}))
+        self.assertEqual({'from': 'value'}, api._canonicalize_kwargs({'from': 'value'}))
+        self.assertEqual({'_to': 'value'}, api._canonicalize_kwargs({'_to': 'value'}))
+        self.assertEqual({'from': 'value'}, api._canonicalize_kwargs({'_from': 'value'}))
+
     @mock.patch.object(Client, 'call')
     def test_get(self, m_call):
         # basic test
@@ -149,6 +157,13 @@ class testClient(unittest.TestCase):
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
         self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', param="test"))
         m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&param=test', None, True)
+
+        # keyword calling convention
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.get(FAKE_URL, _from="start", to="end"))
+        m_call.assert_called_once_with('GET', FAKE_URL+'?to=end&from=start', None, True)
+
 
     @mock.patch.object(Client, 'call')
     def test_delete(self, m_call):

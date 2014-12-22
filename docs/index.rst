@@ -149,6 +149,40 @@ end-user on each use.
         {'method': 'DELETE', 'path': '/*'}
     ]
 
+Install a new mail redirection
+------------------------------
+
+e-mail redirections may be freely configured on domains and DNS zones hosted by
+OVH to an arbitrary destination e-mail using API call
+``POST /email/domain/{domain}/redirection``.
+
+For this call, the api specifies that the source adress shall be given under the
+``from`` keyword. Which is a problem as this is also a reserved Python keyword.
+In this case, simply prefix it with a '_', the wrapper will automatically detect
+it as being a prefixed reserved keyword and will subsitute it. Such aliasing
+is only supported with reserved keywords.
+
+.. code:: python
+
+    # -*- encoding: utf-8 -*-
+
+    import ovh
+
+    DOMAIN = "example.com"
+    SOURCE = "sales@example.com"
+    DESTINATION = "contact@example.com"
+
+    # create a client
+    client = ovh.Client()
+
+    # Create a new alias
+    client.post('/email/domain/%s/redirection' % DOMAIN,
+            _from=SOURCE,
+            to=DESTINATION
+            localCopy=False
+        )
+    print "Installed new mail redirection from %s to %s" % (SOURCE, DESTINATION)
+
 Grab bill list
 --------------
 

@@ -1,7 +1,12 @@
 Changelog
 =========
 
-## 0.3.0 (2014-09-23)
+## 0.3.1 (2014-12-22)
+
+ - [enhancement] support '_' prefixed keyword argument alias when colliding with Python reserved keywords
+ - [enhancement] add API documentation
+
+## 0.3.0 (2014-11-23)
  - [enhancement] add kimsufi API Europe/North-America
  - [enhancement] add soyoustart API Europe/North-America
  - [Q/A] add minimal integration test
