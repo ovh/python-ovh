@@ -295,7 +295,7 @@ pretty cool library to pretty print tabular data in a clean and easy way.
 Configuration
 =============
 
-The straightfoward way to use OVH's API keys is to embed them directly in the
+The straightforward way to use OVH's API keys is to embed them directly in the
 application code. While this is very convenient, it lacks of elegance and
 flexibility.
 
