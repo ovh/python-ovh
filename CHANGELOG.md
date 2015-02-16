@@ -5,6 +5,7 @@ Changelog
 
  - [enhancement] support '_' prefixed keyword argument alias when colliding with Python reserved keywords
  - [enhancement] add API documentation
+ - [enhancement] Use requests Session objects (thanks @xtrochu-edp)
 
 ## 0.3.0 (2014-11-23)
  - [enhancement] add kimsufi API Europe/North-America
