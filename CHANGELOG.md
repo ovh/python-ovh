@@ -1,7 +1,11 @@
 Changelog
 =========
 
-## 0.3.1 (2014-12-22)
+## 0.3.2 (2015-02-16)
+
+ - [fix] Python 3 build
+
+## 0.3.1 (2015-02-16)
 
  - [enhancement] support '_' prefixed keyword argument alias when colliding with Python reserved keywords
  - [enhancement] add API documentation
