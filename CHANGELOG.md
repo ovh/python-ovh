@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.3.3 (2015-03-11)
+
+ - [fix] Python 3 tests false negative
+ - [fix] More flexible requests dependency
+
 ## 0.3.2 (2015-02-16)
 
  - [fix] Python 3 build
