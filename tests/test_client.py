@@ -162,7 +162,10 @@ class testClient(unittest.TestCase):
         m_call.reset_mock()
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
         self.assertEqual(m_call.return_value, api.get(FAKE_URL, _from="start", to="end"))
-        m_call.assert_called_once_with('GET', FAKE_URL+'?to=end&from=start', None, True)
+        try:
+            m_call.assert_called_once_with('GET', FAKE_URL+'?to=end&from=start', None, True)
+        except:
+            m_call.assert_called_once_with('GET', FAKE_URL+'?from=start&to=end', None, True)
 
 
     @mock.patch.object(Client, 'call')
