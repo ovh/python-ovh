@@ -41,7 +41,7 @@ from ovh.client import Client, ENDPOINTS
 from ovh.exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
-    InvalidKey,
+    InvalidKey, NotGrantedCall, NotCredential, Forbidden,
 )
 
 M_ENVIRON = {
@@ -243,6 +243,18 @@ class testClient(unittest.TestCase):
         # HTTP errors
         m_res.status_code = 404
         self.assertRaises(ResourceNotFoundError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 403
+        m_res.json.return_value = {'errorCode': "NOT_GRANTED_CALL"}
+        self.assertRaises(NotGrantedCall, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 403
+        m_res.json.return_value = {'errorCode': "NOT_CREDENTIAL"}
+        self.assertRaises(NotCredential, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 403
+        m_res.json.return_value = {'errorCode': "INVALID_KEY"}
+        self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 403
+        m_res.json.return_value = {'errorCode': "FORBIDDEN"}
+        self.assertRaises(Forbidden, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 400
         self.assertRaises(BadParametersError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 409

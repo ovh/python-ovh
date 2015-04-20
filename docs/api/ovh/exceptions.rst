@@ -16,3 +16,6 @@ Exceptions Module
 .. autoexception:: BadParametersError
 .. autoexception:: ResourceConflictError
 .. autoexception:: NetworkError
+.. autoexception:: NotGrantedCall
+.. autoexception:: NotCredential
+.. autoexception:: Forbidden

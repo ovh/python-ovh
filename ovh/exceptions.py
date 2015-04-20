@@ -60,3 +60,11 @@ class ResourceConflictError(APIError):
 class NetworkError(APIError):
     """Raised when there is an error from network layer."""
 
+class NotGrantedCall(APIError):
+    """Raised when there is an error from network layer."""
+
+class NotCredential(APIError):
+    """Raised when there is an error from network layer."""
+
+class Forbidden(APIError):
+    """Raised when there is an error from network layer."""
