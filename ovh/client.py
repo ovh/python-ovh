@@ -53,6 +53,7 @@ from .config import config
 from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
+    NotGrantedCall, NotCredential, Forbidden,
 )
 
 #: Mapping between OVH API region names and corresponding endpoints
@@ -388,6 +389,14 @@ class Client(object):
         # error check
         if status >= 100 and status < 300:
             return json_result
+        elif status == 403 and json_result.get('errorCode') == 'NOT_GRANTED_CALL':
+                raise NotGrantedCall(json_result.get('message'))
+        elif status == 403 and json_result.get('errorCode') == 'NOT_CREDENTIAL':
+                raise NotCredential(json_result.get('message'))
+        elif status == 403 and json_result.get('errorCode') == 'INVALID_KEY':
+                raise InvalidKey(json_result.get('message'))
+        elif status == 403 and json_result.get('errorCode') == 'FORBIDDEN':
+                raise Forbidden(json_result.get('message'))
         elif status == 404:
             raise ResourceNotFoundError(json_result.get('message'))
         elif status == 400:
