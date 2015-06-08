@@ -41,7 +41,7 @@ from ovh.client import Client, ENDPOINTS
 from ovh.exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
-    InvalidKey, NotGrantedCall, NotCredential, Forbidden,
+    InvalidKey, InvalidCredential, NotGrantedCall, NotCredential, Forbidden,
 )
 
 M_ENVIRON = {
@@ -252,6 +252,9 @@ class testClient(unittest.TestCase):
         m_res.status_code = 403
         m_res.json.return_value = {'errorCode': "INVALID_KEY"}
         self.assertRaises(InvalidKey, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 403
+        m_res.json.return_value = {'errorCode': "INVALID_CREDENTIAL"}
+        self.assertRaises(InvalidCredential, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 403
         m_res.json.return_value = {'errorCode': "FORBIDDEN"}
         self.assertRaises(Forbidden, api.call, FAKE_METHOD, FAKE_PATH, None, False)

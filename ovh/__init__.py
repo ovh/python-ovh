@@ -30,5 +30,5 @@ from .client import Client
 from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
-    InvalidKey, NotGrantedCall, NotCredential, Forbidden,
+    InvalidKey, InvalidCredential, NotGrantedCall, NotCredential, Forbidden,
 )
