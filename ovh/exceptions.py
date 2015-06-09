@@ -39,6 +39,9 @@ class HTTPError(APIError):
 class InvalidKey(APIError):
     """Raised when trying to sign request with invalid key"""
 
+class InvalidCredential(APIError):
+    """Raised when trying to sign request with invalid consumer key"""
+
 class InvalidResponse(APIError):
     """Raised when api response is not valid json"""
 
