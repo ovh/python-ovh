@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 0.3.4 (2015-06-10)
+
+ - [enhancement] add NotGrantedCall, NotCredential, Forbidden, InvalidCredential exceptions
+
 ## 0.3.3 (2015-03-11)
 
  - [fix] Python 3 tests false negative
