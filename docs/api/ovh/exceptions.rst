@@ -19,3 +19,4 @@ Exceptions Module
 .. autoexception:: NotGrantedCall
 .. autoexception:: NotCredential
 .. autoexception:: Forbidden
+.. autoexception:: InvalidCredential
