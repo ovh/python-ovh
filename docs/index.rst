@@ -363,6 +363,33 @@ The client will successively attempt to locate this configuration file in
 This lookup mechanism makes it easy to overload credentials for a specific
 project or user.
 
+Passing parameters
+=============
+
+You can call all the methods of the API with the necessary arguments.
+
+If an API needs an argument colliding with a Python reserved keyword, it
+can be prefixed with an underscore. For example, ``from`` argument of
+``POST /email/domain/{domain}/redirection`` may be replaced by ``_from``.
+
+With characters invalid in python argument name like a dot, you can:
+
+.. code:: python
+
+    # -*- encoding: utf-8 -*-
+
+    import ovh
+
+    params = {}
+    params['date.from'] = '2014-01-01'
+    params['date.to'] = '2015-01-01'
+
+    # create a client
+    client = ovh.Client()
+
+    # pass parameters using **
+    client.post('/me/bills', **params)
+
 Hacking
 =======
 
