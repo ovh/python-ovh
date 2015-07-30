@@ -11,4 +11,5 @@ install:
 script: nosetests
 after_success:
     coveralls
+sudo: false
 
