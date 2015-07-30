@@ -372,7 +372,7 @@ This lookup mechanism makes it easy to overload credentials for a specific
 project or user.
 
 Passing parameters
-=============
+==================
 
 You can call all the methods of the API with the necessary arguments.
 
