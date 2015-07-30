@@ -63,6 +63,8 @@ FAKE_TIME = 1404395889.467238
 FAKE_METHOD = 'MeThOd'
 FAKE_PATH = '/unit/test'
 
+TIMEOUT = 180
+
 class testClient(unittest.TestCase):
     def setUp(self):
         self.time_patch = mock.patch('time.time', return_value=FAKE_TIME)
@@ -80,6 +82,13 @@ class testClient(unittest.TestCase):
         self.assertEqual(APPLICATION_SECRET, api._application_secret)
         self.assertEqual(CONSUMER_KEY, api._consumer_key)
         self.assertTrue(api._time_delta is None)
+        self.assertEqual(TIMEOUT, api._timeout)
+
+        # override default timeout
+        timeout = (1, 1)
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET,
+                     CONSUMER_KEY, timeout=timeout)
+        self.assertEqual(timeout, api._timeout)
 
         # invalid region
         self.assertRaises(InvalidRegion, Client, ENDPOINT_BAD, '', '', '')
@@ -212,7 +221,8 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_json, api.call(FAKE_METHOD, FAKE_PATH, None, False))
         m_req.assert_called_once_with(
             FAKE_METHOD, BASE_URL+'/unit/test',
-            headers={'X-Ovh-Application': APPLICATION_KEY}, data=''
+            headers={'X-Ovh-Application': APPLICATION_KEY}, data='',
+            timeout=TIMEOUT
         )
         m_req.reset_mock()
 
@@ -226,7 +236,7 @@ class testClient(unittest.TestCase):
             headers={
                 'X-Ovh-Application': APPLICATION_KEY,
                 'Content-type': 'application/json',
-            }, data=j_data
+            }, data=j_data, timeout=TIMEOUT
         )
         m_req.reset_mock()
 
@@ -289,7 +299,7 @@ class testClient(unittest.TestCase):
                 'X-Ovh-Application': APPLICATION_KEY,
                 'X-Ovh-Signature': '$1$16ae5ba8c63841b1951575be905867991d5f49dc',
                 'X-Ovh-Timestamp': '1404395931',
-            }, data=''
+            }, data='', timeout=TIMEOUT
         )
         m_time_delta.reset_mock()
         m_req.reset_mock()
@@ -308,7 +318,7 @@ class testClient(unittest.TestCase):
                 'Content-type': 'application/json',
                 'X-Ovh-Timestamp': '1404395931',
                 'X-Ovh-Signature': '$1$9acb1ac0120006d16261a635aed788e83ab172d2',
-                }, data=json.dumps(data)
+                }, data=json.dumps(data), timeout=TIMEOUT
         )
         m_time_delta.reset_mock()
         m_req.reset_mock()

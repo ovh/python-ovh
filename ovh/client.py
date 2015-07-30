@@ -67,6 +67,9 @@ ENDPOINTS = {
     'runabove-ca': 'https://api.runabove.com/1.0',
 }
 
+#: Default timeout for each request. 180 seconds connect, 180 seconds read.
+TIMEOUT = 180
+
 
 class Client(object):
     """
@@ -101,7 +104,7 @@ class Client(object):
     """
 
     def __init__(self, endpoint=None, application_key=None,
-                 application_secret=None, consumer_key=None):
+                 application_secret=None, consumer_key=None, timeout=TIMEOUT):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -117,10 +120,18 @@ class Client(object):
         See :py:mod:`ovh.config` for more informations on supported
         configuration mechanisms.
 
+        ``timeout`` can either be a float or a tuple. If it is a float it
+        sets the same timeout for both connection and read. If it is a tuple
+        connection and read timeout will be set independently. To use the
+        latter approach you need at least requests v2.4.0. Default value is
+        180 seconds for connection and 180 seconds for read.
+
         :param str endpoint: API endpoint to use. Valid values in ``ENDPOINTS``
         :param str application_key: Application key as provided by OVH
         :param str application_secret: Application secret key as provided by OVH
         :param str consumer_key: uniquely identifies
+        :param tuple timeout: Connection and read timeout for each request
+        :param float timeout: Same timeout for both connection and read
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
         # load endpoint
@@ -151,6 +162,9 @@ class Client(object):
 
         # use a requests session to reuse HTTPS connections between requests
         self._session = Session()
+
+        # Override default timeout
+        self._timeout = timeout
 
     ## high level API
 
@@ -374,7 +388,7 @@ class Client(object):
         # attempt request
         try:
             result = self._session.request(method, target, headers=headers,
-                                           data=body)
+                                           data=body, timeout=self._timeout)
         except RequestException as error:
             raise HTTPError("Low HTTP request failed error", error)
 
