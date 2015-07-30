@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.3.5 (2015-07-30)
+
+ - [enhancement] API call timeouts. Defaults to 180s
+ - [buildsystem] move to new Travis build system
+ - [documentation] send complex / python keywork parameters
+
 ## 0.3.4 (2015-06-10)
 
  - [enhancement] add NotGrantedCall, NotCredential, Forbidden, InvalidCredential exceptions
