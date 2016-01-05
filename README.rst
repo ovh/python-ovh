@@ -60,7 +60,7 @@ Use the API on behalf of a user
 
 To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
-to register your application. Depending the API you plan yo use, visit:
+to register your application. Depending the API you plan to use, visit:
 
 - `OVH Europe <https://eu.api.ovh.com/createApp/>`_
 - `OVH North-America <https://ca.api.ovh.com/createApp/>`_
@@ -76,7 +76,7 @@ secret (AS)**.
 2. Configure your application
 *****************************
 
-The easiest and safest way to use your application's credentials is create an
+The easiest and safest way to use your application's credentials is to create an
 ``ovh.conf`` configuration file in application's working directory. Here is how
 it looks like:
 
@@ -104,7 +104,7 @@ Depending on the API you want to use, you may set the ``endpoint`` to:
 * ``kimsufi-ca`` for Kimsufi North America API
 * ``runabove-ca`` for RunAbove API
 
-See Configuration_ for more inforamtions on available configuration mechanisms.
+See Configuration_ for more information on available configuration mechanisms.
 
 .. note:: When using a versioning system, make sure to add ``ovh.conf`` to ignored
           files. It contains confidential/security-sensitive informations!
