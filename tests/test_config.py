@@ -37,6 +37,8 @@ M_CONFIG_PATH = [
     './fixtures/pwd_ovh.conf',
 ]
 
+M_CUSTOM_CONFIG_PATH = './fixtures/custom_ovh.conf'
+
 M_ENVIRON = {
     'OVH_ENDPOINT': 'endpoint from environ',
     'OVH_APPLICATION_KEY': 'application key from environ',
@@ -89,4 +91,14 @@ class testConfig(unittest.TestCase):
             self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], conf.get('wathever', 'application_secret'))
             self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       conf.get('wathever', 'consumer_key'))
 
+        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
+
+    def test_config_get_custom_conf(self):
+        conf = config.ConfigurationManager()
+        conf.read(M_CUSTOM_CONFIG_PATH)
+
+        self.assertEqual('ovh-ca', conf.get('default', 'endpoint'))
+        self.assertEqual('This is a fake custom application key',   conf.get('ovh-ca', 'application_key'))
+        self.assertEqual('This is a *real* custom application key', conf.get('ovh-ca', 'application_secret'))
+        self.assertEqual('I am customingly kidding',                conf.get('ovh-ca', 'consumer_key'))
         self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
