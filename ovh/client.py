@@ -104,7 +104,8 @@ class Client(object):
     """
 
     def __init__(self, endpoint=None, application_key=None,
-                 application_secret=None, consumer_key=None, timeout=TIMEOUT):
+                 application_secret=None, consumer_key=None, timeout=TIMEOUT,
+                 config_file=None):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -134,6 +135,11 @@ class Client(object):
         :param float timeout: Same timeout for both connection and read
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
+        # Load a custom config file is requested
+        if config_file is not None:
+            config.read(config_file)
+            print("toto")
+
         # load endpoint
         if endpoint is None:
             endpoint = config.get('default', 'endpoint')
