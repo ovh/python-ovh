@@ -138,7 +138,6 @@ class Client(object):
         # Load a custom config file is requested
         if config_file is not None:
             config.read(config_file)
-            print("toto")
 
         # load endpoint
         if endpoint is None:
