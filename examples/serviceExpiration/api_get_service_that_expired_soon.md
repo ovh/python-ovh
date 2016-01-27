@@ -1,7 +1,7 @@
-How to get services that will expired soon with python wrapper?
----------------------------------------------------------------
+How to get list of services expiring soon with Python wrapper?
+--------------------------------------------------------------
 
-This documentation will help you to know what services will be expired soon and need to be renew. Following script will check each of your OVH services and check expiration date.
+This documentation will help you to list what services will be expired soon and need to be renew. The following script will check the expiration date of each services attached to your consumer_key
 
 ## Requirements
 
@@ -39,7 +39,7 @@ If you need a more generic token, you may adjust the **Rights** fields at your n
 
 ## Download the script
 
-- Download and edit the python file to get service that will expired. You can download [this file](serviceThatWillExpired.py). By default, delay is defined as 60 days. You can edit the script to change the delay.
+- Download and edit the python file to get service that will expired. You can download [this file](serviceThatWillExpired.py). By default, delay is defined as 60 days. You can edit the script to change the ```delay```.
 
 ## Run script
 

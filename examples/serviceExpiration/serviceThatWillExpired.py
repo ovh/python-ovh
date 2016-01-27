@@ -57,7 +57,7 @@ delay_date = datetime.datetime.now() + datetime.timedelta(days=delay)
 
 services_will_expired = []
 
-# Checking all OVH product (service type)
+# Check all OVH product (service type)
 for service_type in service_types:
 	service_list = client.get('/%s' % service_type )
 
