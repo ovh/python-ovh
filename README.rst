@@ -300,6 +300,62 @@ pretty cool library to pretty print tabular data in a clean and easy way.
 
 >>> pip install tabulate
 
+
+Open a KVM (remote screen) on a dedicated server
+------------------------------------------------
+
+Recent dedicated servers come with an IPMI interface. A lightweight control board embedded
+on the server. Using IPMI, it is possible to get a remote screen on a server. This is
+particularly useful to tweak the BIOS or troubleshoot boot issues.
+
+Hopefully, this can easily be automated using a simple script. It assumes Java Web Start is
+fully installed on the machine and a consumer key allowed on the server exists.
+
+.. code:: python
+
+    # -*- encoding: utf-8 -*-
+    import ovh
+    import sys
+    import time
+    import tempfile
+    import subprocess
+
+    # check arguments
+    if len(sys.argv) != 3:
+        print "Usage: %s SERVER_NAME ALLOWED_IP_V4" % sys.argv[0]
+        sys.exit(1)
+
+    server_name = sys.argv[1]
+    allowed_ip = sys.argv[2]
+
+    # create a client
+    client = ovh.Client()
+
+    # create a KVM
+    client.post('/dedicated/server/'+server_name+'/features/ipmi/access', ipToAllow=allowed_ip, ttl=15, type="kvmipJnlp")
+
+    # open the KVM, when ready
+    while True:
+        try:
+            # use a named temfile and feed it to java web start
+            with tempfile.NamedTemporaryFile() as f:
+                f.write(client.get('/dedicated/server/ns6457228.ip-178-33-61.eu/features/ipmi/access?type=kvmipJnlp')['value'])
+                f.flush()
+                subprocess.call(["javaws", f.name])
+            break
+        except:
+            time.sleep(1)
+
+Running is only a simple command line:
+
+.. code:: bash
+
+    # Basic
+    python open_kvm.py ns1234567.ip-178-42-42.eu $(curl ifconfig.ovh)
+
+    # Use a specific consumer key
+    OVH_CONSUMER_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA python open_kvm.py ns6457228.ip-178-33-61.eu $(curl -s ifconfig.ovh)
+
 Configuration
 =============
 
