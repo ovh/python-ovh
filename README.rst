@@ -300,42 +300,6 @@ pretty cool library to pretty print tabular data in a clean and easy way.
 
 >>> pip install tabulate
 
-List Runabove's instance
-------------------------
-
-This example assumes an existing Configuration_ with valid ``application_key``,
-``application_secret`` and ``consumer_key``.
-
-.. code:: python
-
-    # -*- encoding: utf-8 -*-
-
-    import ovh
-    from tabulate import tabulate
-
-    # visit https://api.runabove.com/createApp/ to create your application's credentials
-    client = ovh.Client(endpoint='runabove-ca')
-
-    # get list of all instances
-    instances = client.get('/instance')
-
-    # pretty print instances status
-    table = []
-    for instance in instances:
-        table.append([
-            instance['name'],
-            instance['ip'],
-            instance['region'],
-            instance['status'],
-        ])
-    print tabulate(table, headers=['Name', 'IP', 'Region', 'Status'])
-
-Before running this example, make sure you have the
-`tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
-pretty cool library to pretty print tabular data in a clean and easy way.
-
->>> pip install tabulate
-
 Configuration
 =============
 
