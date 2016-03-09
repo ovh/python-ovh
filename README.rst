@@ -300,41 +300,61 @@ pretty cool library to pretty print tabular data in a clean and easy way.
 
 >>> pip install tabulate
 
-List Runabove's instance
-------------------------
 
-This example assumes an existing Configuration_ with valid ``application_key``,
-``application_secret`` and ``consumer_key``.
+Open a KVM (remote screen) on a dedicated server
+------------------------------------------------
+
+Recent dedicated servers come with an IPMI interface. A lightweight control board embedded
+on the server. Using IPMI, it is possible to get a remote screen on a server. This is
+particularly useful to tweak the BIOS or troubleshoot boot issues.
+
+Hopefully, this can easily be automated using a simple script. It assumes Java Web Start is
+fully installed on the machine and a consumer key allowed on the server exists.
 
 .. code:: python
 
     # -*- encoding: utf-8 -*-
-
     import ovh
-    from tabulate import tabulate
+    import sys
+    import time
+    import tempfile
+    import subprocess
 
-    # visit https://api.runabove.com/createApp/ to create your application's credentials
-    client = ovh.Client(endpoint='runabove-ca')
+    # check arguments
+    if len(sys.argv) != 3:
+        print "Usage: %s SERVER_NAME ALLOWED_IP_V4" % sys.argv[0]
+        sys.exit(1)
 
-    # get list of all instances
-    instances = client.get('/instance')
+    server_name = sys.argv[1]
+    allowed_ip = sys.argv[2]
 
-    # pretty print instances status
-    table = []
-    for instance in instances:
-        table.append([
-            instance['name'],
-            instance['ip'],
-            instance['region'],
-            instance['status'],
-        ])
-    print tabulate(table, headers=['Name', 'IP', 'Region', 'Status'])
+    # create a client
+    client = ovh.Client()
 
-Before running this example, make sure you have the
-`tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
-pretty cool library to pretty print tabular data in a clean and easy way.
+    # create a KVM
+    client.post('/dedicated/server/'+server_name+'/features/ipmi/access', ipToAllow=allowed_ip, ttl=15, type="kvmipJnlp")
 
->>> pip install tabulate
+    # open the KVM, when ready
+    while True:
+        try:
+            # use a named temfile and feed it to java web start
+            with tempfile.NamedTemporaryFile() as f:
+                f.write(client.get('/dedicated/server/ns6457228.ip-178-33-61.eu/features/ipmi/access?type=kvmipJnlp')['value'])
+                f.flush()
+                subprocess.call(["javaws", f.name])
+            break
+        except:
+            time.sleep(1)
+
+Running is only a simple command line:
+
+.. code:: bash
+
+    # Basic
+    python open_kvm.py ns1234567.ip-178-42-42.eu $(curl ifconfig.ovh)
+
+    # Use a specific consumer key
+    OVH_CONSUMER_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA python open_kvm.py ns6457228.ip-178-33-61.eu $(curl -s ifconfig.ovh)
 
 Configuration
 =============
