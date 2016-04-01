@@ -46,8 +46,8 @@ except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from requests import request, Session
-from requests.exceptions import RequestException
+from .vendor.requests import request, Session
+from .vendor.requests.exceptions import RequestException
 
 from .config import config
 from .exceptions import (

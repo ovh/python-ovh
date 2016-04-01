@@ -27,9 +27,10 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import requests
 import mock
 import json
+
+from ovh.vendor import requests
 
 try:
     from collections import OrderedDict
