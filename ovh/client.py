@@ -49,6 +49,14 @@ except ImportError: # pragma: no cover
 from .vendor.requests import request, Session
 from .vendor.requests.exceptions import RequestException
 
+# Disable pyopenssl. It breaks SSL connection pool when SSL connection is
+# closed unexpetedly by the server. And we don't need SNI anyway.
+try:
+    from .vendor.requests.packages.urllib3.contrib import pyopenssl
+    pyopenssl.extract_from_urllib3()
+except ImportError:
+    pass
+
 from .config import config
 from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
