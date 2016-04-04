@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2013-2014, OVH SAS.
+# Copyright (c) 2013-2016, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -46,8 +46,16 @@ except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from requests import request, Session
-from requests.exceptions import RequestException
+from .vendor.requests import request, Session
+from .vendor.requests.exceptions import RequestException
+
+# Disable pyopenssl. It breaks SSL connection pool when SSL connection is
+# closed unexpetedly by the server. And we don't need SNI anyway.
+try:
+    from .vendor.requests.packages.urllib3.contrib import pyopenssl
+    pyopenssl.extract_from_urllib3()
+except ImportError:
+    pass
 
 from .config import config
 from .exceptions import (

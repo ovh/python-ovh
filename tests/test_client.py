@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2013-2014, OVH SAS.
+# Copyright (c) 2013-2016, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,9 +27,10 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import requests
 import mock
 import json
+
+from ovh.vendor import requests
 
 try:
     from collections import OrderedDict
