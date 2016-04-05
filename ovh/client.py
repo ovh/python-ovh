@@ -50,6 +50,7 @@ from requests import request, Session
 from requests.exceptions import RequestException
 
 from .config import config
+from .consumer_key import ConsumerKeyRequest
 from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
@@ -189,6 +190,26 @@ class Client(object):
             self._time_delta = server_time - int(time.time())
         return self._time_delta
 
+    def new_consumer_key_request(self):
+        """
+        Create a new consumer key request. This is the recommended way to create
+        a new consumer key request.
+
+        Full example:
+
+        >>> import ovh
+        >>> client = ovh.Client("ovh-eu")
+        >>> ck = client.new_consumer_key_request()
+        >>> ck.add_rules(ovh.API_READ_ONLY, "/me")
+        >>> ck.add_recursive_rules(ovh.API_READ_WRITE, "/sms")
+        >>> ck.request()
+        {
+            'state': 'pendingValidation',
+            'consumerKey': 'TnpZAd5pYNqxk4RhlPiSRfJ4WrkmII2i',
+            'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
+        }
+        """
+        return ConsumerKeyRequest(self)
 
     def request_consumerkey(self, access_rules, redirect_url=None):
         """

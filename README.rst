@@ -130,12 +130,11 @@ customer's informations:
     client = ovh.Client()
 
     # Request RO, /me API access
-    access_rules = [
-        {'method': 'GET', 'path': '/me'},
-    ]
+    ck = client.new_consumer_key_request()
+    ck.add_rules(ovh.API_READ_ONLY, "/me")    
 
     # Request token
-    validation = client.request_consumerkey(access_rules)
+    validation = ck.request()
 
     print "Please visit %s to authenticate" % validation['validationUrl']
     raw_input("and press Enter to continue...")
@@ -148,16 +147,12 @@ customer's informations:
 Returned ``consumerKey`` should then be kept to avoid re-authenticating your
 end-user on each use.
 
-.. note:: To request full and unlimited access to the API, you may use wildcards:
+.. note:: To request full and unlimited access to the API, you may use ``add_recursive_rules``:
 
 .. code:: python
 
-    access_rules = [
-        {'method': 'GET', 'path': '/*'},
-        {'method': 'POST', 'path': '/*'},
-        {'method': 'PUT', 'path': '/*'},
-        {'method': 'DELETE', 'path': '/*'}
-    ]
+    # Allow all GET, POST, PUT, DELETE on /* (full API)
+    ck.add_recursive_rules(ovh.API_READ_WRITE, '/')
 
 Install a new mail redirection
 ------------------------------
