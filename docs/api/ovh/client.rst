@@ -22,6 +22,16 @@ High level helpers
 request_consumerkey
 -------------------
 
+Helpers to generate a consumer key. See ``new_consumer_key_request``
+below for a full working example or :py:class:`ConsumerKeyRequest`
+for dertailed implementatation.
+
+The basic idea of ``ConsumerKeyRequest`` is to generate appropriate
+autorization requests from human readable function calls. In short:
+use it!
+
+.. automethod:: Client.new_consumer_key_request
+
 .. automethod:: Client.request_consumerkey
 
 get/post/put/delete

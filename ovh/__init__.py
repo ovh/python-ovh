@@ -32,3 +32,9 @@ from .exceptions import (
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
     InvalidKey, InvalidCredential, NotGrantedCall, NotCredential, Forbidden,
 )
+from .consumer_key import (
+    ConsumerKeyRequest,
+    API_READ_ONLY,
+    API_READ_WRITE,
+    API_READ_WRITE_SAFE,
+)

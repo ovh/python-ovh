@@ -139,6 +139,12 @@ class testClient(unittest.TestCase):
             'accessRules': FAKE_RULES,
         }, False)
 
+    def test_new_consumer_key_request(self):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+
+        ck = api.new_consumer_key_request()
+        self.assertEqual(ck._client, api)
+
     ## test wrappers
 
     def test__canonicalize_kwargs(self):
