@@ -131,7 +131,7 @@ customer's informations:
 
     # Request RO, /me API access
     ck = client.new_consumer_key_request()
-    ck.add_rules(ovh.API_READ_ONLY, "/me")    
+    ck.add_rules(ovh.API_READ_ONLY, "/me")
 
     # Request token
     validation = ck.request()
@@ -529,4 +529,9 @@ Related links
 - **Contribute**: https://github.com/ovh/python-ovh
 - **Report bugs**: https://github.com/ovh/python-ovh/issues
 - **Download**: http://pypi.python.org/pypi/ovh
+
+License
+=======
+
+3-Clause BSD
 
