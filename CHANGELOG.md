@@ -1,6 +1,18 @@
 Changelog
 =========
 
+## 0.4.0 (2016-04-07)
+ - [feature] add consumer key helpers
+ - [fix] disable pyopenssl for ovh to fix "EPIPE"
+ - [buildsystem] vendor 'requests' library to fix version and configuration conflicts
+ - [buildsystem] add 'scripts' with release helpers
+ - [documentation] add consumer_key documentation
+ - [documentation] fix rst format for pypi
+ - [docuumentation] add service list example
+ - [documentation] add expiring service list example
+ - [documentation] add dedicated server KVM example
+ - [documentation] explicitely list supported python version
+
 ## 0.3.5 (2015-07-30)
 
  - [enhancement] API call timeouts. Defaults to 180s
