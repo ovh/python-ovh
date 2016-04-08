@@ -7,9 +7,13 @@ except ImportError:
     use_setuptools()
     from setuptools import setup
 
+
 setup(
     setup_requires=['d2to1'],
     d2to1=True,
+    package_data={
+        '': ['*.pem'],
+    },
     tests_require=[
         "coverage==3.7.1",
         "mock==1.0.1",
@@ -17,4 +21,3 @@ setup(
         "yanc==0.2.4",
     ],
 )
-
