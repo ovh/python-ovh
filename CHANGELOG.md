@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.4.1 (2016-04-08)
+ - [buildsystem] fix: include the vendorized packages and package data in the install process (#22)
+ - [buildsystem] add python 3.5 support
+ - [documentation] add license information to README
+
 ## 0.4.0 (2016-04-07)
  - [feature] add consumer key helpers
  - [fix] disable pyopenssl for ovh to fix "EPIPE"
