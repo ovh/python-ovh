@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.4.2 (2016-04-11)
+ - [buildsystem] fix missing cacert.pem file in package. Closes #23
+
 ## 0.4.1 (2016-04-08)
  - [buildsystem] fix: include the vendorized packages and package data in the install process (#22)
  - [buildsystem] add python 3.5 support
