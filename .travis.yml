@@ -9,7 +9,9 @@ python:
 install:
   - pip install .
   - pip install -r requirements-dev.txt
-script: nosetests
+script:
+  - nosetests
+  - python setup.py sdist && pip install dist/ovh-*.tar.gz && cd /tmp && python -c 'import ovh; ovh.Client("ovh-eu").get("/auth/time", _need_auth=False)'
 after_success:
     coveralls
 sudo: false

@@ -1,5 +1,6 @@
 include *.ini *.cfg *.rst
 include LICENSE
+include ovh/vendor/requests/cacert.pem
 recursive-include ovh *.py
 recursive-include docs *.py *.rst *.png Makefile make.bat
 recursive-include tests *.py
