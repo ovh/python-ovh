@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distribute_setup import use_setuptools
     use_setuptools()
-    from setuptools import setup
+    from setuptools import setup, find_packages
 
 
 setup(
@@ -19,18 +19,7 @@ setup(
     license = "BSD",
     keywords = "ovh sdk rest",
     url = "http://api.ovh.com",
-    packages = [
-        "ovh",
-        "ovh.vendor",
-        "ovh.vendor.requests",
-        "ovh.vendor.requests.packages",
-        "ovh.vendor.requests.packages.urllib3",
-        "ovh.vendor.requests.packages.urllib3.util",
-        "ovh.vendor.requests.packages.urllib3.contrib",
-        "ovh.vendor.requests.packages.urllib3.packages",
-        "ovh.vendor.requests.packages.urllib3.packages.ssl_match_hostname",
-        "ovh.vendor.requests.packages.chardet",
-    ],
+    packages = find_packages(exclude=['tests']),
     package_data={
         'ovh.vendor.requests': ['*.pem'],
     },
