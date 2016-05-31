@@ -117,5 +117,9 @@ class ConfigurationManager(object):
         # not found, sorry
         return None
 
+    def read(self, config_file):
+        # Read an other config file
+        self.config.read(config_file)
+
 #: System wide instance :py:class:`ConfigurationManager` instance
 config = ConfigurationManager()

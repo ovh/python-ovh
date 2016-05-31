@@ -354,9 +354,31 @@ Running is only a simple command line:
 Configuration
 =============
 
+You have 3 ways to provide configuration to the client:
+ - write it directly in the application code
+ - read environment variables or predefined configuration files
+ - read it from a custom configuration file
+
+Embed the configuration in the code
+-----------------------------------
+
 The straightforward way to use OVH's API keys is to embed them directly in the
 application code. While this is very convenient, it lacks of elegance and
 flexibility.
+
+Example usage:
+
+.. code:: python
+
+    client = ovh.Client(
+        endpoint='ovh-eu',
+        application_key='<application key>',
+        application_secret='<application secret>',
+        consumer_key='<consumer key>',
+    )
+
+Environment vars and predefined configuration files
+---------------------------------------------------
 
 Alternatively it is suggested to use configuration files or environment
 variables so that the same code may run seamlessly in multiple environments.
@@ -387,6 +409,24 @@ The client will successively attempt to locate this configuration file in
 
 This lookup mechanism makes it easy to overload credentials for a specific
 project or user.
+
+Example usage:
+
+.. code:: python
+
+    client = ovh.Client()
+
+Custom configuration file
+-------------------------
+
+You can also specify a custom configuration file. With this method, you won't be able to inherit values from environment.
+
+Example usage:
+
+.. code:: python
+
+    client = ovh.Client(config_file='/my/config.conf')
+
 
 Passing parameters
 ==================
