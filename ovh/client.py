@@ -438,22 +438,28 @@ class Client(object):
         if status >= 100 and status < 300:
             return json_result
         elif status == 403 and json_result.get('errorCode') == 'NOT_GRANTED_CALL':
-                raise NotGrantedCall(json_result.get('message'))
+                raise NotGrantedCall(json_result.get('message'),
+                                     response=result)
         elif status == 403 and json_result.get('errorCode') == 'NOT_CREDENTIAL':
-                raise NotCredential(json_result.get('message'))
+                raise NotCredential(json_result.get('message'),
+                                    response=result)
         elif status == 403 and json_result.get('errorCode') == 'INVALID_KEY':
-                raise InvalidKey(json_result.get('message'))
+                raise InvalidKey(json_result.get('message'), response=result)
         elif status == 403 and json_result.get('errorCode') == 'INVALID_CREDENTIAL':
-                raise InvalidCredential(json_result.get('message'))
+                raise InvalidCredential(json_result.get('message'),
+                                        response=result)
         elif status == 403 and json_result.get('errorCode') == 'FORBIDDEN':
-                raise Forbidden(json_result.get('message'))
+                raise Forbidden(json_result.get('message'), response=result)
         elif status == 404:
-            raise ResourceNotFoundError(json_result.get('message'))
+            raise ResourceNotFoundError(json_result.get('message'),
+                                        response=result)
         elif status == 400:
-            raise BadParametersError(json_result.get('message'))
+            raise BadParametersError(json_result.get('message'),
+                                     response=result)
         elif status == 409:
-            raise ResourceConflictError(json_result.get('message'))
+            raise ResourceConflictError(json_result.get('message'),
+                                        response=result)
         elif status == 0:
             raise NetworkError()
         else:
-            raise APIError(json_result.get('message'))
+            raise APIError(json_result.get('message'), response=result)
