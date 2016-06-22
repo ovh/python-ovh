@@ -33,7 +33,8 @@ All exceptions used in OVH SDK derives from `APIError`
 class APIError(Exception):
     """Base OVH API exception, all specific exceptions inherits from it."""
     def __init__(self, *args, **kwargs):
-        self.response = kwargs.get('response')
+        self.response = kwargs.pop('response', None)
+        super(APIError, self).__init__(*args, **kwargs)
 
 class HTTPError(APIError):
     """Raised when the request fails at a low level (DNS, network, ...)"""
