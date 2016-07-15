@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 0.4.3 (2016-07-15)
+ - [api] fix: api expects lower case boolean value in querystring. Closes #32 (#33)
+ - [feature] Add response in exception (#30, #31)
+ - [feature] Read custom file on runtime (#29)
+ - [buildsystem] chore: use find_packages in setup.py instead of hard-coded list
+ - [buildsystem] fix: drop conflicting d2to1 dependency (closes #25 closes #27)
+ - [documentation] improv contributing guide (#26)
+
 ## 0.4.2 (2016-04-11)
  - [buildsystem] fix missing cacert.pem file in package. Closes #23
 
