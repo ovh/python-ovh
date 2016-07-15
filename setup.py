@@ -8,6 +8,9 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
+# Read README.rst content
+with open('README.rst') as f:
+    readme = f.read()
 
 setup(
     name = "ovh",
@@ -16,6 +19,7 @@ setup(
     author = "Jean-Tiare Le Bigot",
     author_email = "jean-tiare.le-bigot@corp.ovh.com",
     description = "Official OVH.com API wrapper",
+    long_description = readme,
     license = "BSD",
     keywords = "ovh sdk rest",
     url = "http://api.ovh.com",
