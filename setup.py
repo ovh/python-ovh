@@ -14,7 +14,7 @@ with open('README.rst') as f:
 
 setup(
     name = "ovh",
-    version = "0.4.3",
+    version = "0.4.4",
     setup_requires=['setuptools'],
     author = "Jean-Tiare Le Bigot",
     author_email = "jean-tiare.le-bigot@corp.ovh.com",

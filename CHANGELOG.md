@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.4.4 (2016-07-15)
+ - [buildsystem] fix PyPi upload
+
 ## 0.4.3 (2016-07-15)
  - [api] fix: api expects lower case boolean value in querystring. Closes #32 (#33)
  - [feature] Add response in exception (#30, #31)
