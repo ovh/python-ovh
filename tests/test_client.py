@@ -185,6 +185,12 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', param="test"))
         m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&param=test', None, True)
 
+        # boolean arguments
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', checkbox=True))
+        m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&checkbox=true', None, True)
+
         # keyword calling convention
         m_call.reset_mock()
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
