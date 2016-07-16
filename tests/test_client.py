@@ -213,6 +213,7 @@ class testClient(unittest.TestCase):
             'arg1': object(),
             'arg2': object(),
             'arg3': object(),
+            'arg4': False,
         }
 
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
@@ -225,6 +226,7 @@ class testClient(unittest.TestCase):
             'arg1': object(),
             'arg2': object(),
             'arg3': object(),
+            'arg4': False,
         }
 
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)

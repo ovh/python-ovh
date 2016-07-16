@@ -289,27 +289,34 @@ class Client(object):
         can be prefixed with an underscore. For example, ``from`` argument of
         ``POST /email/domain/{domain}/redirection`` may be replaced by ``_from``
 
-        This function also handles Python booleans which should be serialized
-        using solely lowercase to be recognized by the API.
-
         :param dict kwargs: input kwargs
         :return dict: filtered kawrgs
         """
         arguments = {}
 
         for k, v in kwargs.items():
-            # Handle Python keywork collision
             if k[0] == '_' and k[1:] in keyword.kwlist:
                 k = k[1:]
-
-            # Handle Booleans
-            if isinstance(v, bool):
-                v = str(v).lower()
-
-            # Commit
             arguments[k] = v
 
         return arguments
+
+    def _prepare_query_string(self, kwargs):
+        """
+        Boolean needs to be send as lowercase 'false' or 'true' in querystring.
+        This function prepares arguments for querystring and encodes them.
+
+        :param dict kwargs: input kwargs
+        :return string: prepared querystring
+        """
+        arguments = {}
+
+        for k, v in kwargs.items():
+            if isinstance(v, bool):
+                v = str(v).lower()
+            arguments[k] = v
+
+        return urlencode(arguments)
 
     def get(self, _target, _need_auth=True, **kwargs):
         """
@@ -325,7 +332,7 @@ class Client(object):
         """
         if kwargs:
             kwargs = self._canonicalize_kwargs(kwargs)
-            query_string = urlencode(kwargs)
+            query_string = self._prepare_query_string(kwargs)
             if '?' in _target:
                 _target = '%s&%s' % (_target, query_string)
             else:
