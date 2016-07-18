@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.4.5 (2016-07-18)
+ - [fix] (regression) body boolean must be sent as boolean (#34)
+
 ## 0.4.4 (2016-07-15)
  - [buildsystem] fix PyPi upload
 
