@@ -47,6 +47,7 @@ except ImportError: # pragma: no cover
     from urllib.parse import urlencode
 
 from .vendor.requests import request, Session
+from .vendor.requests.packages import urllib3
 from .vendor.requests.exceptions import RequestException
 
 # Disable pyopenssl. It breaks SSL connection pool when SSL connection is
@@ -56,6 +57,10 @@ try:
     pyopenssl.extract_from_urllib3()
 except ImportError:
     pass
+
+# Disable SNI related Warning. The API does not rely on it
+urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
+urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
 
 from .config import config
 from .consumer_key import ConsumerKeyRequest
