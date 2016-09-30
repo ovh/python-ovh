@@ -31,6 +31,12 @@ then
     exit 1
 fi
 
+# Upgrading debian/changelog
+dch --noquery --distribution trusty --newversion ${CURRENT_VERSION} "New upstream release v${CURRENT_VERSION}"
+while IFS= read -r line ; do
+    dch -a $line
+done <<< $(git log --format='format:%s' --no-merges v${CURRENT_VERSION}..)
+
 sed -i "4i## ${VERSION} ($(date --iso))\n${CHANGES}\n" CHANGELOG.md
 vim CHANGELOG.md
 
