@@ -1,0 +1,26 @@
+Source: python-ovh
+Section: python
+Priority: optional
+Maintainer: Arnaud Morin <arnaud.morin@corp.ovh.com>
+Build-Depends: debhelper (>= 9), python-all, dh-python, python-setuptools, python3-all
+Standards-Version: 3.9.5
+X-Python-Version: >= 2.6
+X-Python3-Version: >= 3.2
+
+Package: python-ovh
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python
+Description: Wrapper around OVH's APIs (Python 2)
+ Lightweight wrapper around OVH's APIs. Handles all the hard work
+ including credential creation and requests signing.
+ .
+ This package provides Python 2 module bindings only.
+
+Package: python3-ovh
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, python3
+Description: Wrapper around OVH's APIs (Python 3)
+ Lightweight wrapper around OVH's APIs. Handles all the hard work
+ including credential creation and requests signing.
+ .
+ This package provides Python 3 module bindings only.
