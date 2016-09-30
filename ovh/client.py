@@ -47,6 +47,7 @@ except ImportError: # pragma: no cover
     from urllib.parse import urlencode
 
 from .vendor.requests import request, Session
+from .vendor.requests.packages import urllib3
 from .vendor.requests.exceptions import RequestException
 
 # Disable pyopenssl. It breaks SSL connection pool when SSL connection is
@@ -56,6 +57,10 @@ try:
     pyopenssl.extract_from_urllib3()
 except ImportError:
     pass
+
+# Disable SNI related Warning. The API does not rely on it
+urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
+urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
 
 from .config import config
 from .consumer_key import ConsumerKeyRequest
@@ -113,7 +118,8 @@ class Client(object):
     """
 
     def __init__(self, endpoint=None, application_key=None,
-                 application_secret=None, consumer_key=None, timeout=TIMEOUT):
+                 application_secret=None, consumer_key=None, timeout=TIMEOUT,
+                 config_file=None):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -143,6 +149,10 @@ class Client(object):
         :param float timeout: Same timeout for both connection and read
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
+        # Load a custom config file if requested
+        if config_file is not None:
+            config.read(config_file)
+
         # load endpoint
         if endpoint is None:
             endpoint = config.get('default', 'endpoint')
@@ -296,6 +306,23 @@ class Client(object):
 
         return arguments
 
+    def _prepare_query_string(self, kwargs):
+        """
+        Boolean needs to be send as lowercase 'false' or 'true' in querystring.
+        This function prepares arguments for querystring and encodes them.
+
+        :param dict kwargs: input kwargs
+        :return string: prepared querystring
+        """
+        arguments = {}
+
+        for k, v in kwargs.items():
+            if isinstance(v, bool):
+                v = str(v).lower()
+            arguments[k] = v
+
+        return urlencode(arguments)
+
     def get(self, _target, _need_auth=True, **kwargs):
         """
         'GET' :py:func:`Client.call` wrapper.
@@ -310,7 +337,7 @@ class Client(object):
         """
         if kwargs:
             kwargs = self._canonicalize_kwargs(kwargs)
-            query_string = urlencode(kwargs)
+            query_string = self._prepare_query_string(kwargs)
             if '?' in _target:
                 _target = '%s&%s' % (_target, query_string)
             else:
@@ -433,22 +460,28 @@ class Client(object):
         if status >= 100 and status < 300:
             return json_result
         elif status == 403 and json_result.get('errorCode') == 'NOT_GRANTED_CALL':
-                raise NotGrantedCall(json_result.get('message'))
+                raise NotGrantedCall(json_result.get('message'),
+                                     response=result)
         elif status == 403 and json_result.get('errorCode') == 'NOT_CREDENTIAL':
-                raise NotCredential(json_result.get('message'))
+                raise NotCredential(json_result.get('message'),
+                                    response=result)
         elif status == 403 and json_result.get('errorCode') == 'INVALID_KEY':
-                raise InvalidKey(json_result.get('message'))
+                raise InvalidKey(json_result.get('message'), response=result)
         elif status == 403 and json_result.get('errorCode') == 'INVALID_CREDENTIAL':
-                raise InvalidCredential(json_result.get('message'))
+                raise InvalidCredential(json_result.get('message'),
+                                        response=result)
         elif status == 403 and json_result.get('errorCode') == 'FORBIDDEN':
-                raise Forbidden(json_result.get('message'))
+                raise Forbidden(json_result.get('message'), response=result)
         elif status == 404:
-            raise ResourceNotFoundError(json_result.get('message'))
+            raise ResourceNotFoundError(json_result.get('message'),
+                                        response=result)
         elif status == 400:
-            raise BadParametersError(json_result.get('message'))
+            raise BadParametersError(json_result.get('message'),
+                                     response=result)
         elif status == 409:
-            raise ResourceConflictError(json_result.get('message'))
+            raise ResourceConflictError(json_result.get('message'),
+                                        response=result)
         elif status == 0:
             raise NetworkError()
         else:
-            raise APIError(json_result.get('message'))
+            raise APIError(json_result.get('message'), response=result)

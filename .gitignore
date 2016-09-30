@@ -1,4 +1,5 @@
 # execution artefacts
+*.swp
 *.pyc
 .coverage
 

@@ -52,6 +52,8 @@ M_ENVIRON = {
     'OVH_CONSUMER_KEY': 'consumer key from from environ',
 }
 
+M_CUSTOM_CONFIG_PATH = './fixtures/custom_ovh.conf'
+
 APPLICATION_KEY = 'fake application key'
 APPLICATION_SECRET = 'fake application secret'
 CONSUMER_KEY = 'fake consumer key'
@@ -102,6 +104,15 @@ class testClient(unittest.TestCase):
         self.assertEqual(M_ENVIRON['OVH_APPLICATION_KEY'],    api._application_key)
         self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], api._application_secret)
         self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       api._consumer_key)
+
+    def test_init_from_custom_config(self):
+        # custom config file
+        api = Client(config_file=M_CUSTOM_CONFIG_PATH)
+
+        self.assertEqual('https://ca.api.ovh.com/1.0', api._endpoint)
+        self.assertEqual('This is a fake custom application key', api._application_key)
+        self.assertEqual('This is a *real* custom application key', api._application_secret)
+        self.assertEqual('I am customingly kidding', api._consumer_key)
 
     @mock.patch.object(Client, 'call')
     def test_time_delta(self, m_call):
@@ -174,6 +185,12 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', param="test"))
         m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&param=test', None, True)
 
+        # boolean arguments
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.get(FAKE_URL+'?query=string', checkbox=True))
+        m_call.assert_called_once_with('GET', FAKE_URL+'?query=string&checkbox=true', None, True)
+
         # keyword calling convention
         m_call.reset_mock()
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
@@ -196,6 +213,7 @@ class testClient(unittest.TestCase):
             'arg1': object(),
             'arg2': object(),
             'arg3': object(),
+            'arg4': False,
         }
 
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
@@ -208,6 +226,7 @@ class testClient(unittest.TestCase):
             'arg1': object(),
             'arg2': object(),
             'arg3': object(),
+            'arg4': False,
         }
 
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
