@@ -305,6 +305,24 @@ class testClient(unittest.TestCase):
         m_res.status_code = 306
         self.assertRaises(APIError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
 
+
+    @mock.patch('ovh.client.Session.request')
+    def test_call_query_id(self, m_req):
+        m_res = m_req.return_value
+        m_json = m_res.json.return_value
+        m_res.headers = {"X-OVH-QUERYID": "FR.test1"}
+
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET)
+
+        m_res.status_code = 99
+        self.assertRaises(APIError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        try:
+            api.call(FAKE_METHOD, FAKE_PATH, None, False)
+            self.assertEqual(0, 1)   # should fail as method have to raise APIError
+        except APIError as e:
+            self.assertEqual(e.query_id, "FR.test1")
+
+
     @mock.patch('ovh.client.Session.request')
     @mock.patch('ovh.client.Client.time_delta', new_callable=mock.PropertyMock)
     def test_call_signature(self, m_time_delta, m_req):
