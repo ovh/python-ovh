@@ -34,7 +34,17 @@ class APIError(Exception):
     """Base OVH API exception, all specific exceptions inherits from it."""
     def __init__(self, *args, **kwargs):
         self.response = kwargs.pop('response', None)
+        if self.response is not None:
+            self.query_id = self.response.headers.get("X-OVH-QUERYID")
+        else:
+            self.query_id = None
         super(APIError, self).__init__(*args, **kwargs)
+
+    def __str__(self):
+        if self.query_id:
+            return "{} \nOVH-Query-ID: {}".format(super(APIError, self).__str__(), self.query_id)
+        else:
+            return super(APIError, self).__str__()
 
 class HTTPError(APIError):
     """Raised when the request fails at a low level (DNS, network, ...)"""
