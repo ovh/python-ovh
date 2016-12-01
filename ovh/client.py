@@ -38,13 +38,20 @@ import hashlib
 import urllib
 import keyword
 import time
-import json
 
 try:
     from urllib import urlencode
 except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
+
+try:
+    import json
+    from collections import OrderedDict
+except ImportError: # pragma: no cover
+    # Python 2.6
+    import simplejson as json
+    from ordereddict import OrderedDict
 
 from .vendor.requests import request, Session
 from .vendor.requests.packages import urllib3
@@ -119,7 +126,7 @@ class Client(object):
 
     def __init__(self, endpoint=None, application_key=None,
                  application_secret=None, consumer_key=None, timeout=TIMEOUT,
-                 config_file=None):
+                 config_file=None, preserve_key_order=False):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -147,6 +154,7 @@ class Client(object):
         :param str consumer_key: uniquely identifies
         :param tuple timeout: Connection and read timeout for each request
         :param float timeout: Same timeout for both connection and read
+        :param boolean preserve_key_order: Load json API response in ``OrderedDict`` instead of dicts. Potentially slower.
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
         # Load a custom config file if requested
@@ -184,6 +192,9 @@ class Client(object):
 
         # Override default timeout
         self._timeout = timeout
+
+        # Shall we preserve key order ? (Can safely be changed between requests)
+        self.preserve_key_order = preserve_key_order
 
     ## high level API
 
@@ -452,7 +463,10 @@ class Client(object):
 
         # attempt to decode and return the response
         try:
-            json_result = result.json()
+            if self.preserve_key_order:
+                json_result = result.json(object_pairs_hook=OrderedDict)
+            else:
+                json_result = result.json()
         except ValueError as error:
             raise InvalidResponse("Failed to decode API response", error)
 

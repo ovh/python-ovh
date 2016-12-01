@@ -394,3 +394,11 @@ class testClient(unittest.TestCase):
             auth_time = Client(endpoint).get('/auth/time', _need_auth=False)
             self.assertTrue(auth_time > 0)
 
+    def test_order_cart(self):
+        # This endpoint is nice. It does not require authentication and
+        # triggers most code. This test will be deterministic only if
+        # ``preserve_key_order`` is correctly taken into account
+        expected = ['cartId', 'expire', 'description', 'readOnly', 'items']
+        cart = Client('ovh-eu', preserve_key_order=True).post('/order/cart', ovhSubsidiary='FR', _need_auth=False)
+        self.assertEqual(expected, list(cart.keys()))
+
