@@ -3,12 +3,12 @@ Upstream-Name: python-ovh
 Source: https://github.com/ovh/python-ovh
 
 Files: *
-Copyright: 2016 OVH SAS
+Copyright: 2013-2017 OVH SAS
 License: 3-clause BSD
  See LICENSE
 
 
 Files: debian/*
-Copyright: 2016 OVH SAS
+Copyright: 2013-2017 OVH SAS
 License: 3-clause BSD
  See LICENSE
