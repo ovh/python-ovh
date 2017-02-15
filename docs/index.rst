@@ -67,7 +67,6 @@ to register your application. Depending the API you plan yo use, visit:
 
 - `OVH Europe <https://eu.api.ovh.com/createApp/>`_
 - `OVH North-America <https://ca.api.ovh.com/createApp/>`_
-- `RunAbove <https://api.runabove.com/createApp/>`_
 
 Once created, you will obtain an **application key (AK)** and an **application
 secret (AS)**.
@@ -97,7 +96,6 @@ Depending on the API you want to use, you may set the ``endpoint`` to:
 
 * ``ovh-eu`` for OVH Europe API
 * ``ovh-ca`` for OVH North-America API
-* ``runabove-ca`` for RunAbove API
 
 See Configuration_ for more inforamtions on available configuration mechanisms.
 
@@ -290,42 +288,6 @@ pretty cool library to pretty print tabular data in a clean and easy way.
 
 >>> pip install tabulate
 
-List Runabove's instance
-------------------------
-
-This example assumes an existing Configuration_ with valid ``application_key``,
-``application_secret`` and ``consumer_key``.
-
-.. code:: python
-
-    # -*- encoding: utf-8 -*-
-
-    import ovh
-    from tabulate import tabulate
-
-    # visit https://api.runabove.com/createApp/ to create your application's credentials
-    client = ovh.Client(endpoint='runabove-ca')
-
-    # get list of all instances
-    instances = client.get('/instance')
-
-    # pretty print instances status
-    table = []
-    for instance in instances:
-        table.append([
-            instance['name'],
-            instance['ip'],
-            instance['region'],
-            instance['status'],
-        ])
-    print tabulate(table, headers=['Name', 'IP', 'Region', 'Status'])
-
-Before running this example, make sure you have the
-`tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
-pretty cool library to pretty print tabular data in a clean and easy way.
-
->>> pip install tabulate
-
 Configuration
 =============
 
@@ -451,13 +413,6 @@ OVH North America
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://ca.api.ovh.com/console
 - **Create application credentials**: https://ca.api.ovh.com/createApp/
-
-Runabove
---------
-
-- **console**: https://api.runabove.com/console/
-- **get application credentials**: https://api.runabove.com/createApp/
-- **high level SDK**: https://github.com/runabove/python-runabove
 
 Related links
 =============

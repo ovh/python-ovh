@@ -46,7 +46,7 @@ from ovh.exceptions import (
 )
 
 M_ENVIRON = {
-    'OVH_ENDPOINT': 'runabove-ca',
+    'OVH_ENDPOINT': 'soyoustart-ca',
     'OVH_APPLICATION_KEY': 'application key from environ',
     'OVH_APPLICATION_SECRET': 'application secret from environ',
     'OVH_CONSUMER_KEY': 'consumer key from from environ',
@@ -100,7 +100,7 @@ class testClient(unittest.TestCase):
         with mock.patch.dict('os.environ', M_ENVIRON):
             api = Client()
 
-        self.assertEqual('https://api.runabove.com/1.0',      api._endpoint)
+        self.assertEqual('https://ca.api.soyoustart.com/1.0',      api._endpoint)
         self.assertEqual(M_ENVIRON['OVH_APPLICATION_KEY'],    api._application_key)
         self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], api._application_secret)
         self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       api._consumer_key)

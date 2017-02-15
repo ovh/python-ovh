@@ -78,7 +78,6 @@ ENDPOINTS = {
     'kimsufi-ca': 'https://ca.api.kimsufi.com/1.0',
     'soyoustart-eu': 'https://eu.api.soyoustart.com/1.0',
     'soyoustart-ca': 'https://ca.api.soyoustart.com/1.0',
-    'runabove-ca': 'https://api.runabove.com/1.0',
 }
 
 #: Default timeout for each request. 180 seconds connect, 180 seconds read.

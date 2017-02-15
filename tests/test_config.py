@@ -70,13 +70,13 @@ class testConfig(unittest.TestCase):
     def test_config_get_conf(self):
         conf = config.ConfigurationManager()
 
-        self.assertEqual('runabove-ca', conf.get('default', 'endpoint'))
+        self.assertEqual('soyoustart-ca', conf.get('default', 'endpoint'))
         self.assertEqual('This is a *fake* global application key',    conf.get('ovh-eu', 'application_key'))
         self.assertEqual('This is a *real* global application secret', conf.get('ovh-eu', 'application_secret'))
         self.assertEqual('I am kidding at home',                      conf.get('ovh-eu', 'consumer_key'))
-        self.assertEqual('This is a fake local application key',   conf.get('runabove-ca', 'application_key'))
-        self.assertEqual('This is a *real* local application key', conf.get('runabove-ca', 'application_secret'))
-        self.assertEqual('I am locally kidding',                   conf.get('runabove-ca', 'consumer_key'))
+        self.assertEqual('This is a fake local application key',   conf.get('soyoustart-ca', 'application_key'))
+        self.assertEqual('This is a *real* local application key', conf.get('soyoustart-ca', 'application_secret'))
+        self.assertEqual('I am locally kidding',                   conf.get('soyoustart-ca', 'consumer_key'))
 
         self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
         self.assertTrue(conf.get('ovh-ca', 'application_key') is None)
