@@ -70,7 +70,6 @@ to register your application. Depending the API you plan to use, visit:
 - `So you Start North America <https://ca.api.soyoustart.com/createApp/>`_
 - `Kimsufi Europe <https://eu.api.kimsufi.com/createApp/>`_
 - `Kimsufi North America <https://ca.api.kimsufi.com/createApp/>`_
-- `RunAbove <https://api.runabove.com/createApp/>`_
 
 Once created, you will obtain an **application key (AK)** and an **application
 secret (AS)**.
@@ -104,7 +103,6 @@ Depending on the API you want to use, you may set the ``endpoint`` to:
 * ``soyoustart-ca`` for So you Start North America API
 * ``kimsufi-eu`` for Kimsufi Europe API
 * ``kimsufi-ca`` for Kimsufi North America API
-* ``runabove-ca`` for RunAbove API
 
 See Configuration_ for more information on available configuration mechanisms.
 
@@ -554,14 +552,6 @@ Kimsufi North America
 - **Console**: https://ca.api.kimsufi.com/console/
 - **Create application credentials**: https://ca.api.kimsufi.com/createApp/
 - **Create script credentials** (all keys at once): https://ca.api.kimsufi.com/createToken/
-
-Runabove
---------
-
-- **Community support**: https://community.runabove.com/
-- **Console**: https://api.runabove.com/console/
-- **Create application credentials**: https://api.runabove.com/createApp/
-- **High level SDK**: https://github.com/runabove/python-runabove
 
 Related links
 =============
