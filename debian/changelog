@@ -1,3 +1,14 @@
+python-ovh (0.4.5) trusty; urgency=low
+
+  * New upstream release v0.4.5
+  * Add build dependency on python3-setuptool update copyrights to 2017
+    feat(query-id): add query_id property to exceptions in order to
+    provide debugging facilities when encounter API issues Add debian
+    folder fix: remove Python SNI warnings, OVH API does not need SNI
+    (#35) fix: coveralls version
+
+ -- Jean-Tiare Le Bigot <jean-tiare.le-bigot@corp.ovh.com>  Wed, 15 Feb 2017 11:47:29 +0100
+
 python-ovh (0.4.4) trusty; urgency=medium
 
   * New upstream release v0.4.4
@@ -5,7 +16,7 @@ python-ovh (0.4.4) trusty; urgency=medium
   * Add debian folder
   * fix: remove Python SNI warnings, OVH API does not need SNI (#35)
   * fix: coveralls version
-  * [auto] bump version to v0.4.5
+  * [auto] bump version to v0.4.6
   * fix: (regression) body boolean must be sent as boolean (#34)
 
  -- Arnaud Morin <arnaud.morin@corp.ovh.com>  Mon, 03 Oct 2016 14:34:21 +0200

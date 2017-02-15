@@ -1,8 +1,12 @@
 Changelog
 =========
 
-## 0.4.6 (UNRELEASED)
- - [fix] remove Python SNI warnings, OVH API does not need SNI
+## 0.4.6 (2017-02-27)
+ - [api] add query_id property to exceptions to help error reporting
+ - [api] remove deprecated runabove api
+ - [feature] remove Python SNI warnings, OVH API does not need SNI (#35)
+ - [buildsystem] Add build dependency on python3-setuptool
+ - [buildsystem] Add debian folder
 
 ## 0.4.5 (2016-07-18)
  - [fix] (regression) body boolean must be sent as boolean (#34)
