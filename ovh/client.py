@@ -388,7 +388,7 @@ class Client(object):
 
     def call(self, method, path, data=None, need_auth=True):
         """
-        Lowest level call helper. If ``consumer_key`` is not ``None``, inject
+        Low level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
 
         Request signature is a sha1 hash on following fields, joined by '+'
@@ -399,51 +399,16 @@ class Client(object):
          - body
          - server current time (takes time delta into account)
 
-        :param str method: HTTP verb. Usualy one of GET, POST, PUT, DELETE
+        :param str method: HTTP verb. Usually one of GET, POST, PUT, DELETE
         :param str path: api entrypoint to call, relative to endpoint base path
         :param data: any json serializable data to send as request's body
         :param boolean need_auth: if False, bypass signature
         :raises HTTPError: when underlying request failed for network reason
         :raises InvalidResponse: when API response could not be decoded
         """
-        body = ''
-        target = self._endpoint + path
-        headers = {
-            'X-Ovh-Application': self._application_key
-        }
-
-        # include payload
-        if data is not None:
-            headers['Content-type'] = 'application/json'
-            body = json.dumps(data)
-
-        # sign request. Never sign 'time' or will recuse infinitely
-        if need_auth:
-            if not self._application_secret:
-                raise InvalidKey("Invalid ApplicationSecret '%s'" %
-                                 self._application_secret)
-
-            if not self._consumer_key:
-                raise InvalidKey("Invalid ConsumerKey '%s'" %
-                                 self._consumer_key)
-
-            now = str(int(time.time()) + self.time_delta)
-            signature = hashlib.sha1()
-            signature.update("+".join([
-                self._application_secret, self._consumer_key,
-                method.upper(), target,
-                body,
-                now
-            ]).encode('utf-8'))
-
-            headers['X-Ovh-Consumer'] = self._consumer_key
-            headers['X-Ovh-Timestamp'] = now
-            headers['X-Ovh-Signature'] = "$1$" + signature.hexdigest()
-
         # attempt request
         try:
-            result = self._session.request(method, target, headers=headers,
-                                           data=body, timeout=self._timeout)
+            result = self.raw_call(method=method, path=path, data=data, need_auth=need_auth)
         except RequestException as error:
             raise HTTPError("Low HTTP request failed error", error)
 
@@ -484,3 +449,59 @@ class Client(object):
             raise NetworkError()
         else:
             raise APIError(json_result.get('message'), response=result)
+
+    def raw_call(self, method, path, data=None, need_auth=True):
+        """
+        Lowest level call helper. If ``consumer_key`` is not ``None``, inject
+        authentication headers and sign the request.
+        Will return a vendored ``requests.Response`` object or let any ``requests`` exception pass through.
+
+        Request signature is a sha1 hash on following fields, joined by '+'
+         - application_secret
+         - consumer_key
+         - METHOD
+         - full request url
+         - body
+         - server current time (takes time delta into account)
+
+        :param str method: HTTP verb. Usually one of GET, POST, PUT, DELETE
+        :param str path: api entrypoint to call, relative to endpoint base path
+        :param data: any json serializable data to send as request's body
+        :param boolean need_auth: if False, bypass signature
+        """
+        body = ''
+        target = self._endpoint + path
+        headers = {
+            'X-Ovh-Application': self._application_key
+        }
+
+        # include payload
+        if data is not None:
+            headers['Content-type'] = 'application/json'
+            body = json.dumps(data)
+
+        # sign request. Never sign 'time' or will recuse infinitely
+        if need_auth:
+            if not self._application_secret:
+                raise InvalidKey("Invalid ApplicationSecret '%s'" %
+                                 self._application_secret)
+
+            if not self._consumer_key:
+                raise InvalidKey("Invalid ConsumerKey '%s'" %
+                                 self._consumer_key)
+
+            now = str(int(time.time()) + self.time_delta)
+            signature = hashlib.sha1()
+            signature.update("+".join([
+                self._application_secret, self._consumer_key,
+                method.upper(), target,
+                body,
+                now
+            ]).encode('utf-8'))
+
+            headers['X-Ovh-Consumer'] = self._consumer_key
+            headers['X-Ovh-Timestamp'] = now
+            headers['X-Ovh-Signature'] = "$1$" + signature.hexdigest()
+
+        return self._session.request(method, target, headers=headers,
+                                     data=body, timeout=self._timeout)
