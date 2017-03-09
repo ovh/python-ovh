@@ -388,6 +388,12 @@ class testClient(unittest.TestCase):
             # Restore configuration
             config.config = self._orig_config
 
+    @mock.patch('ovh.client.Session.request', return_value="Let's assume requests will return this")
+    def test_raw_call(self, m_req):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET)
+        r = api.raw_call(FAKE_METHOD, FAKE_PATH, None, False)
+        self.assertEqual(r, "Let's assume requests will return this")
+
     # Perform real API tests.
     def test_endpoints(self):
         for endpoint in ENDPOINTS.keys():
