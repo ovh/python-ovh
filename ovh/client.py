@@ -454,7 +454,8 @@ class Client(object):
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
-        Will return a vendored ``requests.Response`` object or let any ``requests`` exception pass through.
+        Will return a vendored ``requests.Response`` object or let any
+        ``requests`` exception pass through.
 
         Request signature is a sha1 hash on following fields, joined by '+'
          - application_secret
