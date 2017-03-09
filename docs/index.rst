@@ -352,6 +352,34 @@ With characters invalid in python argument name like a dot, you can:
     # pass parameters using **
     client.post('/me/bills', **params)
 
+Advanced usage
+==============
+
+Un-authenticated calls
+----------------------
+
+If the user has not authenticated yet (ie, there is no valid Consumer Key), you
+may force ``python-ovh`` to issue the call by passing ``_need_auth=True`` to
+the high level ``get()``, ``post()``, ``put()`` and ``delete()`` helpers or
+``need_auth=True`` to the low level method ``Client.call()`` and
+``Client.raw_call()``.
+
+This is needed when calling ``POST /auth/credential`` and ``GET /auth/time``
+which are used internally for authentication and can optionally be done for
+most of the ``/order`` calls.
+
+Access the raw requests response objects
+----------------------------------------
+
+The high level ``get()``, ``post()``, ``put()`` and ``delete()`` helpers as well
+as the lower level ``call()`` will returned a parsed json response or raise in
+case of error.
+
+In some rare scenario, advanced setups, you may need to perform customer
+processing on the raw request response. It may be accessed via ``raw_call()``.
+This is the lowest level call in ``python-ovh``. See the source for more
+informations.
+
 Hacking
 =======
 
