@@ -16,7 +16,6 @@ python-ovh (0.4.4) trusty; urgency=medium
   * Add debian folder
   * fix: remove Python SNI warnings, OVH API does not need SNI (#35)
   * fix: coveralls version
-  * [auto] bump version to v0.4.6
   * fix: (regression) body boolean must be sent as boolean (#34)
 
  -- Arnaud Morin <arnaud.morin@corp.ovh.com>  Mon, 03 Oct 2016 14:34:21 +0200

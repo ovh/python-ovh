@@ -31,14 +31,14 @@ then
     exit 1
 fi
 
-# Upgrading debian/changelog
-dch --noquery --distribution trusty --newversion ${CURRENT_VERSION} "New upstream release v${CURRENT_VERSION}"
-while IFS= read -r line ; do
-    dch -a $line
-done <<< $(git log --format='format:%s' --no-merges v${CURRENT_VERSION}..)
-
 sed -i "4i## ${VERSION} ($(date --iso))\n${CHANGES}\n" CHANGELOG.md
 vim CHANGELOG.md
+
+# Upgrading debian/changelog
+dch --noquery --distribution trusty --newversion ${VERSION} "New upstream release v${VERSION}"
+awk "/## ${VERSION}/{f=1;next}/##/{f=0} f" CHANGELOG.md | sed 's/^\s*-\s*//' | while IFS= read -r line ; do
+    dch --noquery --distribution trusty -a "$line"
+done
 
 # Commit and tag
 git commit -sam "[auto] bump version to v${VERSION}"
