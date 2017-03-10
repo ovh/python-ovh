@@ -1,3 +1,12 @@
+python-ovh (0.4.7) trusty; urgency=low
+
+  * New upstream release v0.4.7
+  * [api] add raw_call method returning a raw requests Response object
+  * [documentation] add advanced usage documentation
+  * [buildsystem] fix bump-version debian/Changelog generation
+
+ -- Jean-Tiare Le Bigot <jean-tiare.le-bigot@corp.ovh.com>  Fri, 10 Mar 2017 13:00:16 +0100
+
 python-ovh (0.4.5) trusty; urgency=low
 
   * New upstream release v0.4.5

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.4.7 (2017-03-10)
+ - [api] add raw_call method returning a raw requests Response object
+ - [documentation] add advanced usage documentation
+ - [buildsystem] fix bump-version debian/Changelog generation
+
 ## 0.4.6 (2017-02-27)
  - [api] add query_id property to exceptions to help error reporting
  - [api] remove deprecated runabove api
