@@ -318,6 +318,8 @@ class Client(object):
         for k, v in kwargs.items():
             if isinstance(v, bool):
                 v = str(v).lower()
+            elif v is None:
+                v = 'null'
             arguments[k] = v
 
         return urlencode(arguments)
