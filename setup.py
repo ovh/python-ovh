@@ -8,6 +8,13 @@ except ImportError:
     use_setuptools()
     from setuptools import setup, find_packages
 
+# Python 2.6 compatibility
+requirements=[]
+try:
+    from collections import OrderedDict
+except ImportError:
+    requirements=['ordereddict', 'simplejson']
+
 # Read README.rst content
 with open('README.rst') as f:
     readme = f.read()
@@ -16,6 +23,7 @@ setup(
     name = "ovh",
     version = "0.4.7",
     setup_requires=['setuptools'],
+    install_requires=requirements,
     author = "Jean-Tiare Le Bigot",
     author_email = "jean-tiare.le-bigot@corp.ovh.com",
     description = "Official OVH.com API wrapper",
