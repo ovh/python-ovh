@@ -68,6 +68,7 @@ from .exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
     NotGrantedCall, NotCredential, Forbidden, InvalidCredential,
+    ResourceExpiredError,
 )
 
 #: Mapping between OVH API region names and corresponding endpoints
@@ -445,6 +446,9 @@ class Client(object):
         elif status == 409:
             raise ResourceConflictError(json_result.get('message'),
                                         response=result)
+        elif status == 460:
+            raise ResourceExpiredError(json_result.get('message'),
+                                       response=result)
         elif status == 0:
             raise NetworkError()
         else:

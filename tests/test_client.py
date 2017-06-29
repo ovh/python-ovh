@@ -43,6 +43,7 @@ from ovh.exceptions import (
     APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
     ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
     InvalidKey, InvalidCredential, NotGrantedCall, NotCredential, Forbidden,
+    ResourceExpiredError,
 )
 
 M_ENVIRON = {
@@ -298,6 +299,8 @@ class testClient(unittest.TestCase):
         self.assertRaises(BadParametersError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 409
         self.assertRaises(ResourceConflictError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
+        m_res.status_code = 460
+        self.assertRaises(ResourceExpiredError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 0
         self.assertRaises(NetworkError, api.call, FAKE_METHOD, FAKE_PATH, None, False)
         m_res.status_code = 99
