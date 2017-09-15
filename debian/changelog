@@ -1,6 +1,13 @@
-python-ovh (0.4.7) trusty; urgency=low
+python-ovh (0.4.8) trusty; urgency=low
 
-  * New upstream release v0.4.7
+  * New upstream release v0.4.8
+  * [feature] Add ResourceExpiredError exception (#48)
+
+ -- Geoffrey Bauduin <geoffrey.bauduin@corp.ovh.com>  Fri, 15 Sep 2017 11:53:30 +0200
+
+python-ovh (0.4.8) trusty; urgency=low
+
+  * New upstream release v0.4.8
   * [api] add raw_call method returning a raw requests Response object
   * [documentation] add advanced usage documentation
   * [buildsystem] fix bump-version debian/Changelog generation
