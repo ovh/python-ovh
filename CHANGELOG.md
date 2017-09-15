@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.4.8 (2017-09-15)
+ - [feature] Add ResourceExpiredError exception (#48)
+
 ## 0.4.7 (2017-03-10)
  - [api] add raw_call method returning a raw requests Response object
  - [documentation] add advanced usage documentation
