@@ -84,3 +84,6 @@ class NotCredential(APIError):
 
 class Forbidden(APIError):
     """Raised when there is an error from network layer."""
+
+class ResourceExpiredError(APIError):
+    """Raised when requested resource expired."""
