@@ -509,7 +509,7 @@ note that we do not accept contributions with test coverage under 100%.
 
 .. code:: bash
 
-    pip install -r requirements-dev.txt
+    pip install -e .[dev]
     nosetests # 100% coverage is a hard minimum
 
 
