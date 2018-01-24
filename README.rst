@@ -21,7 +21,7 @@ credential creation and requests signing.
 
     import ovh
 
-    # Instantiate. Visit https://api.ovh.com/createToken/index.cgi?GET=/me
+    # Instantiate. Visit https://api.ovh.com/createToken/?GET=/me
     # to get your credentials
     client = ovh.Client(
         endpoint='ovh-eu',
