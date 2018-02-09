@@ -16,7 +16,7 @@ install:
   - pip install -e .[dev]
 script:
   - nosetests
-  - python setup.py sdist && pip install dist/ovh-*.tar.gz && cd /tmp && python -c 'import ovh; ovh.Client("ovh-eu").get("/auth/time", _need_auth=False)'
+  - python setup.py sdist bdist_wheel && pip install dist/ovh-*.tar.gz && cd /tmp && python -c 'import ovh; ovh.Client("ovh-eu").get("/auth/time", _need_auth=False)'
 after_success:
     coveralls
 sudo: false
