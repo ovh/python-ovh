@@ -8,12 +8,21 @@ credential creation and requests signing.
 .. image:: https://img.shields.io/pypi/v/ovh.svg
            :alt: PyPi Version
            :target: https://pypi.python.org/pypi/ovh
+.. image:: https://img.shields.io/pypi/status/ovh.svg
+           :alt: PyPi repository status
+           :target: https://pypi.python.org/pypi/ovh
+.. image:: https://img.shields.io/pypi/pyversions/ovh.svg
+           :alt: PyPi supported Python versions
+           :target: https://pypi.python.org/pypi/ovh
+.. image:: https://img.shields.io/pypi/wheel/ovh.svg
+           :alt: PyPi Wheel status
+           :target: https://pypi.python.org/pypi/ovh
 .. image:: https://travis-ci.org/ovh/python-ovh.svg?branch=master
            :alt: Build Status
            :target: https://travis-ci.org/ovh/python-ovh
-.. image:: https://coveralls.io/repos/ovh/python-ovh/badge.png
+.. image:: https://coveralls.io/repos/github/ovh/python-ovh/badge.svg
            :alt: Coverage Status
-           :target: https://coveralls.io/r/ovh/python-ovh
+           :target: https://coveralls.io/github/ovh/python-ovh
 
 .. code:: python
 
