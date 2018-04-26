@@ -335,15 +335,21 @@ class Client(object):
         :param string _need_auth: If True, send authentication headers. This is
             the default
         """
+
+        _batch = None
+
         if kwargs:
             kwargs = self._canonicalize_kwargs(kwargs)
+            _batch = kwargs.pop('_batch', None)
+
+        if kwargs:
             query_string = self._prepare_query_string(kwargs)
             if '?' in _target:
                 _target = '%s&%s' % (_target, query_string)
             else:
                 _target = '%s?%s' % (_target, query_string)
 
-        return self.call('GET', _target, None, _need_auth)
+        return self.call('GET', _target, None, _need_auth, _batch)
 
     def put(self, _target, _need_auth=True, **kwargs):
         """
@@ -387,7 +393,7 @@ class Client(object):
 
     ## low level helpers
 
-    def call(self, method, path, data=None, need_auth=True):
+    def call(self, method, path, data=None, need_auth=True, batch=None):
         """
         Low level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
@@ -409,7 +415,7 @@ class Client(object):
         """
         # attempt request
         try:
-            result = self.raw_call(method=method, path=path, data=data, need_auth=need_auth)
+            result = self.raw_call(method=method, path=path, data=data, need_auth=need_auth, batch=batch)
         except RequestException as error:
             raise HTTPError("Low HTTP request failed error", error)
 
@@ -454,7 +460,7 @@ class Client(object):
         else:
             raise APIError(json_result.get('message'), response=result)
 
-    def raw_call(self, method, path, data=None, need_auth=True):
+    def raw_call(self, method, path, data=None, need_auth=True, batch=None):
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
@@ -479,6 +485,9 @@ class Client(object):
         headers = {
             'X-Ovh-Application': self._application_key
         }
+
+        if batch:
+            headers['X-Ovh-Batch'] = batch
 
         # include payload
         if data is not None:
