@@ -550,9 +550,7 @@ OVH Europe
 OVH US
 ----------
 
-
 - **Documentation**: https://api.ovhcloud.com/
-- **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://api.ovhcloud.com/console/
 - **Create application credentials**: https://api.ovhcloud.com/createApp/
 - **Create script credentials** (all keys at once): https://api.ovhcloud.com/createToken/
