@@ -38,6 +38,7 @@ import hashlib
 import urllib
 import keyword
 import time
+import backoff
 import json
 
 try:
@@ -120,7 +121,7 @@ class Client(object):
 
     def __init__(self, endpoint=None, application_key=None,
                  application_secret=None, consumer_key=None, timeout=TIMEOUT,
-                 config_file=None):
+                 config_file=None, auto_retry=None):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -148,6 +149,7 @@ class Client(object):
         :param str consumer_key: uniquely identifies
         :param tuple timeout: Connection and read timeout for each request
         :param float timeout: Same timeout for both connection and read
+        :param init auto_retry: Number of times backoff will retry if a call fail
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
         # Load a custom config file if requested
@@ -186,7 +188,17 @@ class Client(object):
         # Override default timeout
         self._timeout = timeout
 
+        # Set default auto_retry
+        self._auto_retry = auto_retry
+
     ## high level API
+
+    def retry_call(self, *args, **kwargs):
+        if self._auto_retry is None:
+            return self.call(*args, **kwargs)
+        else:
+            return backoff.on_exception(backoff.expo, APIError, max_tries=self._auto_retry)(self.call)(*args, **kwargs)
+
 
     @property
     def time_delta(self):
@@ -344,7 +356,7 @@ class Client(object):
             else:
                 _target = '%s?%s' % (_target, query_string)
 
-        return self.call('GET', _target, None, _need_auth)
+        return self.retry_call('GET', _target, None, _need_auth)
 
     def put(self, _target, _need_auth=True, **kwargs):
         """
@@ -359,7 +371,7 @@ class Client(object):
             the default
         """
         kwargs = self._canonicalize_kwargs(kwargs)
-        return self.call('PUT', _target, kwargs, _need_auth)
+        return self.retry_call('PUT', _target, kwargs, _need_auth)
 
     def post(self, _target, _need_auth=True, **kwargs):
         """
@@ -374,7 +386,7 @@ class Client(object):
             the default
         """
         kwargs = self._canonicalize_kwargs(kwargs)
-        return self.call('POST', _target, kwargs, _need_auth)
+        return self.retry_call('POST', _target, kwargs, _need_auth)
 
     def delete(self, _target, _need_auth=True):
         """
@@ -384,9 +396,10 @@ class Client(object):
         :param string _need_auth: If True, send authentication headers. This is
             the default
         """
-        return self.call('DELETE', _target, None, _need_auth)
+        return self.retry_call('DELETE', _target, None, _need_auth)
 
     ## low level helpers
+
 
     def call(self, method, path, data=None, need_auth=True):
         """
