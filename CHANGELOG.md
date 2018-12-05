@@ -48,13 +48,13 @@ Changelog
  - [docuumentation] add service list example
  - [documentation] add expiring service list example
  - [documentation] add dedicated server KVM example
- - [documentation] explicitely list supported python version
+ - [documentation] explicitly list supported python version
 
 ## 0.3.5 (2015-07-30)
 
  - [enhancement] API call timeouts. Defaults to 180s
  - [buildsystem] move to new Travis build system
- - [documentation] send complex / python keywork parameters
+ - [documentation] send complex / python keyword parameters
 
 ## 0.3.4 (2015-06-10)
 

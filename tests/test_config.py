@@ -53,7 +53,7 @@ class testConfig(unittest.TestCase):
         config.CONFIG_PATH = M_CONFIG_PATH
 
     def tearDown(self):
-        """Restore configuraton lookup path"""
+        """Restore configuration lookup path"""
         config.CONFIG_PATH = self._orig_CONFIG_PATH
 
     def test_real_lookup_path(self):

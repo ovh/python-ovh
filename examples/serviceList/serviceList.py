@@ -56,7 +56,7 @@ services_will_expired = []
 for service_type in service_types:
 	service_list = client.get('/%s' % service_type )
 
-	# If we found you have this one or more of this product, we get these informations
+	# If we found you have this one or more of this product, we get these information
 	for service in service_list:
 		service_infos = client.get('/%s/%s/serviceInfos' % (service_type, service) )
 		service_expiration_date = datetime.datetime.strptime(service_infos['expiration'], '%Y-%m-%d')

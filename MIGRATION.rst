@@ -2,9 +2,9 @@
 Migrate from legacy wrappers
 ############################
 
-This guide specifically targets developers comming from the legacy wrappers
+This guide specifically targets developers coming from the legacy wrappers
 previously distributed on https://api.ovh.com/g934.first_step_with_api. It
-highligts the main evolutions between these 2 major version as well as some
+highlights the main evolutions between these 2 major version as well as some
 tips to help with the migration. If you have any further questions, feel free
 to drop a mail on api@ml.ovh.net (api-subscribe@ml.ovh.net to subscribe).
 
@@ -50,7 +50,7 @@ New method:
 
     from ovh import Client
 
-Instanciate a new client
+Instantiate a new client
 ------------------------
 
 Legacy method:
@@ -102,7 +102,7 @@ And then simply create a client instance:
 
 With no additional boilerplate!
 
-For more informations on available configuration mechanism, please see
+For more information on available configuration mechanism, please see
 https://github.com/ovh/python-ovh/blob/master/README.rst#configuration
 
 Use the client
