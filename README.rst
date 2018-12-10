@@ -550,10 +550,10 @@ OVH Europe
 OVH US
 ----------
 
-- **Documentation**: https://api.ovhcloud.com/
-- **Console**: https://api.ovhcloud.com/console/
-- **Create application credentials**: https://api.ovhcloud.com/createApp/
-- **Create script credentials** (all keys at once): https://api.ovhcloud.com/createToken/
+- **Documentation**: https://api.us.ovhcloud.com/
+- **Console**: https://api.us.ovhcloud.com/console/
+- **Create application credentials**: https://api.us.ovhcloud.com/createApp/
+- **Create script credentials** (all keys at once): https://api.us.ovhcloud.com/createToken/
 
 OVH North America
 -----------------
