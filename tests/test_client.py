@@ -29,14 +29,9 @@
 import unittest
 import mock
 import json
+from collections import OrderedDict
 
 from ovh.vendor import requests
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    # Python 2.6
-    from ordereddict import OrderedDict
 
 from ovh.client import Client, ENDPOINTS
 from ovh.exceptions import (
