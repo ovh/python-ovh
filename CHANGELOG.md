@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.5.0 (2018-12-13)
+ - [compatibility] drop support for EOL Python 2.6, 3.2 and 3.3 (#71)
+ - [feature] Add OVH US endpoint (#63 #70)
+ - [buildsystem] auto Pypi deployment when new tag (#60)
+ - [documentation] fix typos (#72)
+ - [documentation] flag package as Stable (#59)
+
 ## 0.4.8 (2017-09-15)
  - [feature] Add ResourceExpiredError exception (#48)
 
@@ -45,7 +52,7 @@ Changelog
  - [buildsystem] add 'scripts' with release helpers
  - [documentation] add consumer_key documentation
  - [documentation] fix rst format for pypi
- - [docuumentation] add service list example
+ - [documentation] add service list example
  - [documentation] add expiring service list example
  - [documentation] add dedicated server KVM example
  - [documentation] explicitly list supported python version

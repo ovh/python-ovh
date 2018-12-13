@@ -1,3 +1,14 @@
+python-ovh (0.5.0) trusty; urgency=medium
+
+  * New upstream release v0.5.0
+  * [compatibility] drop support for EOL Python 2.6, 3.2 and 3.3 (#71)
+  * [feature] Add OVH US endpoint (#63 #70)
+  * [buildsystem] auto Pypi deployment when new tag (#60)
+  * [documentation] fix typos (#72)
+  * [documentation] flag package as Stable (#59)
+
+ -- Romain Beuque <romain.beuque@corp.ovh.com>  Thu, 13 Dec 2018 15:40:12 +0100
+
 python-ovh (0.4.8) trusty; urgency=low
 
   * New upstream release v0.4.8
