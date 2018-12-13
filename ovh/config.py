@@ -35,7 +35,7 @@ Alternatively it is suggested to use configuration files or environment
 variables so that the same code may run seamlessly in multiple environments.
 Production and development for instance.
 
-This wrapper will first look for direct instanciation parameters then
+This wrapper will first look for direct instantiation parameters then
 ``OVH_ENDPOINT``, ``OVH_APPLICATION_KEY``, ``OVH_APPLICATION_SECRET`` and
 ``OVH_CONSUMER_KEY`` environment variables. If either of these parameter is not
 provided, it will look for a configuration file of the form:

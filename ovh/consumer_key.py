@@ -29,7 +29,7 @@
 
 """
 This module provides a consumer key creation helper. Consumer keys are linked
-with permissions defining whicg endpoint they are allowed to call. Just like
+with permissions defining which endpoint they are allowed to call. Just like
 a physical key can unlock some doors but not others.
 
 OVH API consumer keys authorization is pattern based. This makes it extremely
@@ -65,7 +65,7 @@ class ConsumerKeyRequest(object):
     def request(self, redirect_url=None):
         '''
         Create the consumer key with the configures autorizations. The user will
-        need to validate it befor it can be used with the API
+        need to validate it before it can be used with the API
 
         >>> ck.request()
         {

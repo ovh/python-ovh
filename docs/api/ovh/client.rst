@@ -27,7 +27,7 @@ below for a full working example or :py:class:`ConsumerKeyRequest`
 for dertailed implementatation.
 
 The basic idea of ``ConsumerKeyRequest`` is to generate appropriate
-autorization requests from human readable function calls. In short:
+authorization requests from human readable function calls. In short:
 use it!
 
 .. automethod:: Client.new_consumer_key_request

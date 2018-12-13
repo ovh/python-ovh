@@ -51,7 +51,7 @@ from .vendor.requests.packages import urllib3
 from .vendor.requests.exceptions import RequestException
 
 # Disable pyopenssl. It breaks SSL connection pool when SSL connection is
-# closed unexpetedly by the server. And we don't need SNI anyway.
+# closed unexpectedly by the server. And we don't need SNI anyway.
 try:
     from .vendor.requests.packages.urllib3.contrib import pyopenssl
     pyopenssl.extract_from_urllib3()
@@ -133,7 +133,7 @@ class Client(object):
         or ``consumer_key`` is not provided, this client will attempt to locate
         from them from environment, ~/.ovh.cfg or /etc/ovh.cfg.
 
-        See :py:mod:`ovh.config` for more informations on supported
+        See :py:mod:`ovh.config` for more information on supported
         configuration mechanisms.
 
         ``timeout`` can either be a float or a tuple. If it is a float it
@@ -161,7 +161,7 @@ class Client(object):
         try:
             self._endpoint = ENDPOINTS[endpoint]
         except KeyError:
-            raise InvalidRegion("Unknow endpoint %s. Valid endpoints: %s",
+            raise InvalidRegion("Unknown endpoint %s. Valid endpoints: %s",
                                 endpoint, ENDPOINTS.keys())
 
         # load keys
@@ -236,7 +236,7 @@ class Client(object):
         will return a ``consumerKey`` and a ``validationUrl``. The end user must
         visit the ``validationUrl``, authenticate and validate the requested
         ``access_rules`` to link his account to the ``consumerKey``. Once this
-        is done, he may optionaly be redirected to ``redirect_url`` and the
+        is done, he may optionally be redirected to ``redirect_url`` and the
         application can start using the ``consumerKey``.
 
         The new ``consumerKey`` is automatically loaded into
@@ -329,7 +329,7 @@ class Client(object):
         'GET' :py:func:`Client.call` wrapper.
 
         Query string parameters can be set either directly in ``_target`` or as
-        keywork arguments. If an argument collides with a Python reserved
+        keyword arguments. If an argument collides with a Python reserved
         keyword, prefix it with a '_'. For instance, ``from`` becomes ``_from``.
 
         :param string _target: API method to call
@@ -350,7 +350,7 @@ class Client(object):
         """
         'PUT' :py:func:`Client.call` wrapper
 
-        Body parameters can be set either directly in ``_target`` or as keywork
+        Body parameters can be set either directly in ``_target`` or as keyword
         arguments. If an argument collides with a Python reserved keyword,
         prefix it with a '_'. For instance, ``from`` becomes ``_from``.
 
@@ -365,7 +365,7 @@ class Client(object):
         """
         'POST' :py:func:`Client.call` wrapper
 
-        Body parameters can be set either directly in ``_target`` or as keywork
+        Body parameters can be set either directly in ``_target`` or as keyword
         arguments. If an argument collides with a Python reserved keyword,
         prefix it with a '_'. For instance, ``from`` becomes ``_from``.
 

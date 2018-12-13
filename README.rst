@@ -118,7 +118,7 @@ Depending on the API you want to use, you may set the ``endpoint`` to:
 See Configuration_ for more information on available configuration mechanisms.
 
 .. note:: When using a versioning system, make sure to add ``ovh.conf`` to ignored
-          files. It contains confidential/security-sensitive informations!
+          files. It contains confidential/security-sensitive information!
 
 3. Authorize your application to access a customer account
 **********************************************************
@@ -127,7 +127,7 @@ To allow your application to access a customer account using the API on your
 behalf, you need a **consumer key (CK)**.
 
 Here is a sample code you can use to allow your application to access a
-customer's informations:
+customer's information:
 
 .. code:: python
 
@@ -170,10 +170,10 @@ e-mail redirections may be freely configured on domains and DNS zones hosted by
 OVH to an arbitrary destination e-mail using API call
 ``POST /email/domain/{domain}/redirection``.
 
-For this call, the api specifies that the source adress shall be given under the
+For this call, the api specifies that the source address shall be given under the
 ``from`` keyword. Which is a problem as this is also a reserved Python keyword.
 In this case, simply prefix it with a '_', the wrapper will automatically detect
-it as being a prefixed reserved keyword and will subsitute it. Such aliasing
+it as being a prefixed reserved keyword and will substitute it. Such aliasing
 is only supported with reserved keywords.
 
 .. code:: python
@@ -393,7 +393,7 @@ Alternatively it is suggested to use configuration files or environment
 variables so that the same code may run seamlessly in multiple environments.
 Production and development for instance.
 
-This wrapper will first look for direct instanciation parameters then
+This wrapper will first look for direct instantiation parameters then
 ``OVH_ENDPOINT``, ``OVH_APPLICATION_KEY``, ``OVH_APPLICATION_SECRET`` and
 ``OVH_CONSUMER_KEY`` environment variables. If either of these parameter is not
 provided, it will look for a configuration file of the form:
@@ -490,7 +490,7 @@ case of error.
 In some rare scenario, advanced setups, you may need to perform customer
 processing on the raw request response. It may be accessed via ``raw_call()``.
 This is the lowest level call in ``python-ovh``. See the source for more
-informations.
+information.
 
 Hacking
 =======

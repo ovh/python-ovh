@@ -34,7 +34,7 @@ application_secret=my_application_secret
 consumer_key=my_consumer_key
 ```
 
-Be warned, this token is only valid to get informations of your OVH services. You cannot changes or delete your products with it.
+Be warned, this token is only valid to get information of your OVH services. You cannot changes or delete your products with it.
 If you need a more generic token, you may adjust the **Rights** fields at your needs.
 
 ## Download the script
