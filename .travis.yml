@@ -17,8 +17,8 @@ script:
   - python setup.py sdist bdist_wheel && pip install dist/ovh-*.tar.gz && cd /tmp && python -c 'import ovh; ovh.Client("ovh-eu").get("/auth/time", _need_auth=False)' && cd -
 deploy:
   provider: pypi
-  user: $pypi.user
-  password: $pypi.password
+  user: $pypiUser
+  password: $pypiPassword
   distributions: "sdist bdist_wheel"
   on:
     branch: master
