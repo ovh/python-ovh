@@ -71,4 +71,4 @@ for service_type in service_types:
 			services_will_expired.append( [ service_type, service, service_infos['status'], service_infos['expiration'] ] )
 			
 # At the end, we show service expirated or that will expirated (in a table with tabulate)
-print tabulate(services_will_expired, headers=['Type', 'ID', 'status', 'expiration date'])
+print(tabulate(services_will_expired, headers=['Type', 'ID', 'status', 'expiration date']))

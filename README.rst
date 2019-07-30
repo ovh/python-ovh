@@ -40,7 +40,7 @@ credential creation and requests signing.
     )
 
     # Print nice welcome message
-    print "Welcome", client.get('/me')['firstname']
+    print("Welcome", client.get('/me')['firstname'])
 
 Installation
 ============
@@ -133,6 +133,11 @@ customer's information:
 
     # -*- encoding: utf-8 -*-
 
+    try:
+        input = raw_input
+    except NameError:
+        pass
+
     import ovh
 
     # create a client using configuration
@@ -145,12 +150,12 @@ customer's information:
     # Request token
     validation = ck.request()
 
-    print "Please visit %s to authenticate" % validation['validationUrl']
-    raw_input("and press Enter to continue...")
+    print("Please visit %s to authenticate" % validation['validationUrl'])
+    input("and press Enter to continue...")
 
     # Print nice welcome message
-    print "Welcome", client.get('/me')['firstname']
-    print "Btw, your 'consumerKey' is '%s'" % validation['consumerKey']
+    print("Welcome", client.get('/me')['firstname'])
+    print("Btw, your 'consumerKey' is '%s'" % validation['consumerKey'])
 
 
 Returned ``consumerKey`` should then be kept to avoid re-authenticating your
@@ -195,7 +200,7 @@ is only supported with reserved keywords.
             to=DESTINATION,
             localCopy=False
         )
-    print "Installed new mail redirection from %s to %s" % (SOURCE, DESTINATION)
+    print("Installed new mail redirection from %s to %s" % (SOURCE, DESTINATION))
 
 Grab bill list
 --------------
@@ -220,12 +225,12 @@ This example assumes an existing Configuration_ with valid ``application_key``,
     bills = client.get('/me/bill')
     for bill in bills:
         details = client.get('/me/bill/%s' % bill)
-        print "%12s (%s): %10s --> %s" % (
+        print("%12s (%s): %10s --> %s" % (
             bill,
             details['date'],
             details['priceWithTax']['text'],
             details['pdfUrl'],
-        )
+        ))
 
 Enable network burst in SBG1
 ----------------------------
@@ -255,7 +260,7 @@ This example assumes an existing Configuration_ with valid ``application_key``,
         if details['datacenter'] == 'sbg1':
             # enable burst on server
             client.put('/dedicated/server/%s/burst' % server, status='active')
-            print "Enabled burst for %s server located in SBG-1" % server
+            print("Enabled burst for %s server located in SBG-1" % server)
 
 List application authorized to access your account
 --------------------------------------------------
@@ -295,8 +300,8 @@ This example assumes an existing Configuration_ with valid ``application_key``,
             credential['expiration'],
             credential['lastUse'],
         ])
-    print tabulate(table, headers=['ID', 'App Name', 'Description',
-                                   'Token Creation', 'Token Expiration', 'Token Last Use'])
+    print(tabulate(table, headers=['ID', 'App Name', 'Description',
+                                   'Token Creation', 'Token Expiration', 'Token Last Use']))
 
 Before running this example, make sure you have the
 `tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
@@ -326,7 +331,7 @@ fully installed on the machine and a consumer key allowed on the server exists.
 
     # check arguments
     if len(sys.argv) != 3:
-        print "Usage: %s SERVER_NAME ALLOWED_IP_V4" % sys.argv[0]
+        print("Usage: %s SERVER_NAME ALLOWED_IP_V4" % sys.argv[0])
         sys.exit(1)
 
     server_name = sys.argv[1]
@@ -343,7 +348,7 @@ fully installed on the machine and a consumer key allowed on the server exists.
         try:
             # use a named temfile and feed it to java web start
             with tempfile.NamedTemporaryFile() as f:
-                f.write(client.get('/dedicated/server/ns6457228.ip-178-33-61.eu/features/ipmi/access?type=kvmipJnlp')['value'])
+                f.write(client.get('/dedicated/server/'+server_name+'/features/ipmi/access?type=kvmipJnlp')['value'])
                 f.flush()
                 subprocess.call(["javaws", f.name])
             break
@@ -355,10 +360,10 @@ Running is only a simple command line:
 .. code:: bash
 
     # Basic
-    python open_kvm.py ns1234567.ip-178-42-42.eu $(curl ifconfig.ovh)
+    python open_kvm.py ns1234567.ip-42-42-42.eu $(curl ifconfig.ovh)
 
     # Use a specific consumer key
-    OVH_CONSUMER_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA python open_kvm.py ns6457228.ip-178-33-61.eu $(curl -s ifconfig.ovh)
+    OVH_CONSUMER_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA python open_kvm.py ns1234567.ip-42-42-42.eu $(curl -s ifconfig.ovh)
 
 Configuration
 =============

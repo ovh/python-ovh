@@ -112,9 +112,9 @@ class Client(object):
         client = Client(REGION, APP_KEY, APP_SECRET, CONSUMER_KEY)
 
         try:
-            print client.get('/me')
+            print(client.get('/me'))
         except APIError as e:
-            print "Ooops, failed to get my info:", e.msg
+            print("Ooops, failed to get my info:", e.msg)
 
     """
 
@@ -261,6 +261,11 @@ class Client(object):
 
         .. code:: python
 
+            try:
+                input = raw_input
+            except NameError:
+                pass
+
             # Request RO, /me API access
             access_rules = [
                 {'method': 'GET', 'path': '/me'},
@@ -269,11 +274,11 @@ class Client(object):
             # Request token
             validation = client.request_consumerkey(access_rules)
 
-            print "Please visit", validation['validationUrl'], "to authenticate"
-            raw_input("and press Enter to continue...")
+            print("Please visit", validation['validationUrl'], "to authenticate")
+            input("and press Enter to continue...")
 
             # Print nice welcome message
-            print "Welcome", client.get('/me')['firstname']
+            print("Welcome", client.get('/me')['firstname'])
 
 
         :param list access_rules: Mapping specifying requested privileges.

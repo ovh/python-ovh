@@ -25,7 +25,7 @@ creation and requests signing.
     )
 
     # Print nice welcome message
-    print "Welcome", client.get('/me')['firstname']
+    print("Welcome", client.get('/me')['firstname'])
 
 Installation
 ============
@@ -112,6 +112,11 @@ behalf, you need a **consumer key (CK)**.
 
     # -*- encoding: utf-8 -*-
 
+    try:
+        input = raw_input
+    except NameError:
+        pass
+
     import ovh
 
     # create a client using configuration
@@ -125,12 +130,12 @@ behalf, you need a **consumer key (CK)**.
     # Request token
     validation = client.request_consumerkey(access_rules)
 
-    print "Please visit %s to authenticate" % validation['validationUrl']
-    raw_input("and press Enter to continue...")
+    print("Please visit %s to authenticate" % validation['validationUrl'])
+    input("and press Enter to continue...")
 
     # Print nice welcome message
-    print "Welcome", client.get('/me')['firstname']
-    print "Btw, your 'consumerKey' is '%s'" % validation['consumerKey']
+    print("Welcome", client.get('/me')['firstname'])
+    print("Btw, your 'consumerKey' is '%s'" % validation['consumerKey'])
 
 
 Returned ``consumerKey`` should then be kept to avoid re-authenticating your
@@ -179,7 +184,7 @@ is only supported with reserved keywords.
             to=DESTINATION
             localCopy=False
         )
-    print "Installed new mail redirection from %s to %s" % (SOURCE, DESTINATION)
+    print("Installed new mail redirection from %s to %s" % (SOURCE, DESTINATION))
 
 Grab bill list
 --------------
@@ -204,12 +209,12 @@ This example assumes an existing Configuration_ with valid ``application_key``,
     bills = client.get('/me/bill')
     for bill in bills:
         details = client.get('/me/bill/%s' % bill)
-        print "%12s (%s): %10s --> %s" % (
+        print("%12s (%s): %10s --> %s" % (
             bill,
             details['date'],
             details['priceWithTax']['text'],
             details['pdfUrl'],
-        )
+        ))
 
 Enable network burst in SBG1
 ----------------------------
@@ -239,7 +244,7 @@ This example assumes an existing Configuration_ with valid ``application_key``,
         if details['datacenter'] == 'sbg1':
             # enable burst on server
             client.put('/dedicated/server/%s/burst' % server, status='active')
-            print "Enabled burst for %s server located in SBG-1" % server
+            print("Enabled burst for %s server located in SBG-1" % server)
 
 List application authorized to access your account
 --------------------------------------------------
@@ -279,8 +284,8 @@ This example assumes an existing Configuration_ with valid ``application_key``,
             credential['expiration'],
             credential['lastUse'],
         ])
-    print tabulate(table, headers=['ID', 'App Name', 'Description',
-                                   'Token Creation', 'Token Expiration', 'Token Last Use'])
+    print(tabulate(table, headers=['ID', 'App Name', 'Description',
+                                   'Token Creation', 'Token Expiration', 'Token Last Use']))
 
 Before running this example, make sure you have the
 `tabulate <https://pypi.python.org/pypi/tabulate>`_ library installed. It's a
@@ -445,6 +450,6 @@ OVH North America
 Related links
 =============
 
-- **contribute**: https://github.com/ovh/python-ovh
+- **Contribute**: https://github.com/ovh/python-ovh
 - **Report bugs**: https://github.com/ovh/python-ovh/issues
 - **Download**: http://pypi.python.org/pypi/ovh
