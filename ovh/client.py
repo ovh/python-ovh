@@ -471,7 +471,7 @@ class Client(object):
         else:
             raise APIError(json_result.get('message'), response=result)
 
-    def raw_call(self, method, path, data=None, need_auth=True):
+    def raw_call(self, method, path, data=None, need_auth=True, headers=None):
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
@@ -490,12 +490,17 @@ class Client(object):
         :param str path: api entrypoint to call, relative to endpoint base path
         :param data: any json serializable data to send as request's body
         :param boolean need_auth: if False, bypass signature
+        :param dict headers: A dict containing the headers that should be sent to
+                             the OVH API. ``raw_call`` will override the
+                             OVH API authentication headers, as well as
+                             the Content-Type header.
         """
         body = ''
         target = self._endpoint + path
-        headers = {
-            'X-Ovh-Application': self._application_key
-        }
+
+        if headers is None:
+            headers = {}
+        headers['X-Ovh-Application'] = self._application_key
 
         # include payload
         if data is not None:

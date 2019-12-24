@@ -433,6 +433,23 @@ class testClient(unittest.TestCase):
         r = api.raw_call(FAKE_METHOD, FAKE_PATH, None, False)
         self.assertEqual(r, "Let's assume requests will return this")
 
+    @mock.patch('ovh.client.Session.request', return_value="Let's assume requests will return this")
+    def test_raw_call_with_headers(self, m_req):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET)
+        r = api.raw_call(FAKE_METHOD, FAKE_PATH, None, False, headers={
+            'Custom-Header': "1",
+        })
+        self.assertEqual(r, "Let's assume requests will return this")
+        m_req.assert_called_once_with(
+            FAKE_METHOD, BASE_URL+FAKE_PATH,
+            headers={
+                'Custom-Header': "1",
+                'X-Ovh-Application': APPLICATION_KEY,
+            },
+            data='',
+            timeout=TIMEOUT
+        )
+
     # Perform real API tests.
     def test_endpoints(self):
         for endpoint in ENDPOINTS.keys():
