@@ -39,6 +39,8 @@ import urllib
 import keyword
 import time
 import json
+import os
+import sys
 
 try:
     from urllib import urlencode
@@ -513,6 +515,9 @@ class Client(object):
             headers['X-Ovh-Consumer'] = self._consumer_key
             headers['X-Ovh-Timestamp'] = now
             headers['X-Ovh-Signature'] = "$1$" + signature.hexdigest()
+
+        if os.getenv('OVH_DEBUG'):
+            print(method, target, headers, file=sys.stderr)
 
         return self._session.request(method, target, headers=headers,
                                      data=body, timeout=self._timeout)
