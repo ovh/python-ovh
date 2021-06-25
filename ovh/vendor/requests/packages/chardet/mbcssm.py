@@ -323,7 +323,7 @@ GB2312_st = (
 
 # To be accurate, the length of class 6 can be either 2 or 4.
 # But it is not necessary to discriminate between the two since
-# it is used for frequency analysis only, and we are validing
+# it is used for frequency analysis only, and we are validating
 # each code range there as well. So it is safe to set it to be
 # 2 here.
 GB2312CharLenTable = (0, 1, 1, 1, 1, 1, 2)

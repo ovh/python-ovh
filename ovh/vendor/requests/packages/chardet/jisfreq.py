@@ -37,7 +37,7 @@
 # 2048 --> 0.99431
 #
 # Ideal Distribution Ratio = 0.92635 / (1-0.92635) = 12.58
-# Random Distribution Ration = 512 / (2965+62+83+86-512) = 0.191
+# Random Distribution Ratio = 512 / (2965+62+83+86-512) = 0.191
 #
 # Typical Distribution Ratio, 25% of IDR
 

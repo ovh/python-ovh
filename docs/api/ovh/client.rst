@@ -24,7 +24,7 @@ request_consumerkey
 
 Helpers to generate a consumer key. See ``new_consumer_key_request``
 below for a full working example or :py:class:`ConsumerKeyRequest`
-for dertailed implementatation.
+for detailed implementation.
 
 The basic idea of ``ConsumerKeyRequest`` is to generate appropriate
 authorization requests from human readable function calls. In short:

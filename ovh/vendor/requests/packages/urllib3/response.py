@@ -158,7 +158,7 @@ class HTTPResponse(io.IOBase):
 
     @property
     def data(self):
-        # For backwords-compat with earlier urllib3 0.4 and earlier.
+        # For backwards-compat with earlier urllib3 0.4 and earlier.
         if self._body:
             return self._body
 
@@ -175,7 +175,7 @@ class HTTPResponse(io.IOBase):
 
     def _init_decoder(self):
         """
-        Set-up the _decoder attribute if necessar.
+        Set-up the _decoder attribute if necessary.
         """
         # Note: content-encoding value should be case-insensitive, per RFC 7230
         # Section 3.2
