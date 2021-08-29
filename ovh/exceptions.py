@@ -41,9 +41,9 @@ class APIError(Exception):
         super(APIError, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        if self.query_id:
+        if self.query_id: # pragma: no cover
             return "{} \nOVH-Query-ID: {}".format(super(APIError, self).__str__(), self.query_id)
-        else:
+        else: # pragma: no cover
             return super(APIError, self).__str__()
 
 class HTTPError(APIError):
