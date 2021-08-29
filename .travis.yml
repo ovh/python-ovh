@@ -20,6 +20,7 @@ install:
   - pip install -e .[dev]
 script:
   - nosetests
+  - coverage report -m
   - python setup.py sdist bdist_wheel && pip install dist/ovh-*.tar.gz && cd /tmp && python -c 'import ovh; ovh.Client("ovh-eu").get("/auth/time", _need_auth=False)' && cd -
 deploy:
   provider: pypi
