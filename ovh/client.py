@@ -306,9 +306,10 @@ class Client(object):
         arguments = {}
 
         for k, v in kwargs.items():
-            if k[0] == '_' and k[1:] in keyword.kwlist:
-                k = k[1:]
-            arguments[k] = v
+            if v is not None:
+                if k[0] == '_' and k[1:] in keyword.kwlist:
+                    k = k[1:]
+                arguments[k] = v
 
         return arguments
 
