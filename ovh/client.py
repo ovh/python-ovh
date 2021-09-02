@@ -423,7 +423,10 @@ class Client(object):
 
         # attempt to decode and return the response
         try:
-            json_result = result.json()
+            if status != 204:
+                json_result = result.json()
+            else:
+                json_result = None
         except ValueError as error:
             raise InvalidResponse("Failed to decode API response", error)
 
