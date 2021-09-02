@@ -97,7 +97,7 @@ Depending on the API you want to use, you may set the ``endpoint`` to:
 * ``ovh-eu`` for OVH Europe API
 * ``ovh-ca`` for OVH North-America API
 
-See Configuration_ for more inforamtions on available configuration mechanisms.
+See Configuration_ for more informations on available configuration mechanisms.
 
 .. note:: When using a versioning system, make sure to add ``ovh.conf`` to ignored
           files. It contains confidential/security-sensitive information!
@@ -220,7 +220,7 @@ Enable network burst in SBG1
 ----------------------------
 
 'Network burst' is a free service but is opt-in. What if you have, say, 10
-servers in ``SBG-1`` datacenter? You certainely don't want to activate it
+servers in ``SBG-1`` datacenter? You certainly don't want to activate it
 manually for each servers. You could take advantage of a code like this.
 
 This example assumes an existing Configuration_ with valid ``application_key``,

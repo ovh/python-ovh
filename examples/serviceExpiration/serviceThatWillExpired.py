@@ -70,5 +70,5 @@ for service_type in service_types:
 		if service_expiration_date < delay_date:
 			services_will_expired.append( [ service_type, service, service_infos['status'], service_infos['expiration'] ] )
 			
-# At the end, we show service expirated or that will expirated (in a table with tabulate)
+# At the end, we show service expired or that will expire (in a table with tabulate)
 print(tabulate(services_will_expired, headers=['Type', 'ID', 'status', 'expiration date']))

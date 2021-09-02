@@ -491,7 +491,7 @@ class Client(object):
             headers['Content-type'] = 'application/json'
             body = json.dumps(data)
 
-        # sign request. Never sign 'time' or will recuse infinitely
+        # sign request. Never sign 'time' or will recurse infinitely
         if need_auth:
             if not self._application_secret:
                 raise InvalidKey("Invalid ApplicationSecret '%s'" %

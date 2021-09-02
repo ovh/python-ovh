@@ -36,7 +36,7 @@
 # 2048 --> 0.97583
 #
 # Ideal Distribution Ratio = 0.74851/(1-0.74851) =2.98
-# Random Distribution Ration = 512/(5401-512)=0.105
+# Random Distribution Ratio = 512/(5401-512)=0.105
 #
 # Typical Distribution Ratio about 25% of Ideal one, still much higher than RDR
 

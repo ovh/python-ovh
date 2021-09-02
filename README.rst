@@ -236,7 +236,7 @@ Enable network burst in SBG1
 ----------------------------
 
 'Network burst' is a free service but is opt-in. What if you have, say, 10
-servers in ``SBG-1`` datacenter? You certainely don't want to activate it
+servers in ``SBG-1`` datacenter? You certainly don't want to activate it
 manually for each servers. You could take advantage of a code like this.
 
 This example assumes an existing Configuration_ with valid ``application_key``,
