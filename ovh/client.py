@@ -46,17 +46,26 @@ except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from .vendor.requests import request, Session
-from .vendor.requests.packages import urllib3
-from .vendor.requests.exceptions import RequestException
+try:
+    from requests import request, Session
+    from requests.packages import urllib3
+    from requests.exceptions import RequestException
+except ImportError:
+    from .vendor.requests import request, Session
+    from .vendor.requests.packages import urllib3
+    from .vendor.requests.exceptions import RequestException
 
 # Disable pyopenssl. It breaks SSL connection pool when SSL connection is
 # closed unexpectedly by the server. And we don't need SNI anyway.
 try:
-    from .vendor.requests.packages.urllib3.contrib import pyopenssl
+    from requests.packages.urllib3.contrib import pyopenssl
     pyopenssl.extract_from_urllib3()
 except ImportError:
-    pass
+    try:
+        from .vendor.requests.packages.urllib3.contrib import pyopenssl
+        pyopenssl.extract_from_urllib3()
+    except ImportError:
+        pass
 
 # Disable SNI related Warning. The API does not rely on it
 urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
