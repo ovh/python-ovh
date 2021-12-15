@@ -199,9 +199,38 @@ class testClient(unittest.TestCase):
 
     @mock.patch.object(Client, 'call')
     def test_delete(self, m_call):
+        # basic test
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
         self.assertEqual(m_call.return_value, api.delete(FAKE_URL))
         m_call.assert_called_once_with('DELETE', FAKE_URL, None, True)
+
+        # append query string
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.delete(FAKE_URL, param="test"))
+        m_call.assert_called_once_with('DELETE', FAKE_URL+'?param=test', None, True)
+
+        # append to existing query string
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.delete(FAKE_URL+'?query=string', param="test"))
+        m_call.assert_called_once_with('DELETE', FAKE_URL+'?query=string&param=test', None, True)
+
+        # boolean arguments
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.delete(FAKE_URL+'?query=string', checkbox=True))
+        m_call.assert_called_once_with('DELETE', FAKE_URL+'?query=string&checkbox=true', None, True)
+
+        # keyword calling convention
+        m_call.reset_mock()
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.delete(FAKE_URL, _from="start", to="end"))
+        try:
+            m_call.assert_called_once_with('DELETE', FAKE_URL+'?to=end&from=start', None, True)
+        except:
+            m_call.assert_called_once_with('DELETE', FAKE_URL+'?from=start&to=end', None, True)
+
 
     @mock.patch.object(Client, 'call')
     def test_post(self, m_call):

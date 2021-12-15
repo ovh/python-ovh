@@ -381,14 +381,26 @@ class Client(object):
         kwargs = self._canonicalize_kwargs(kwargs)
         return self.call('POST', _target, kwargs, _need_auth)
 
-    def delete(self, _target, _need_auth=True):
+    def delete(self, _target, _need_auth=True, **kwargs):
         """
         'DELETE' :py:func:`Client.call` wrapper
+
+        Query string parameters can be set either directly in ``_target`` or as
+        keyword arguments. If an argument collides with a Python reserved
+        keyword, prefix it with a '_'. For instance, ``from`` becomes ``_from``.
 
         :param string _target: API method to call
         :param string _need_auth: If True, send authentication headers. This is
             the default
         """
+        if kwargs:
+            kwargs = self._canonicalize_kwargs(kwargs)
+            query_string = self._prepare_query_string(kwargs)
+            if '?' in _target:
+                _target = '%s&%s' % (_target, query_string)
+            else:
+                _target = '%s?%s' % (_target, query_string)
+
         return self.call('DELETE', _target, None, _need_auth)
 
     ## low level helpers
