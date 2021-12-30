@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.6.0 (2022-01)
+
+ - [compatibility] add support for Python 3.10
+ - [dependencies] drop vendored requests library, added requests>=2.11.0
+ - [fix] previous 'disable pyopenssl for ovh to fix "EPIPE"' fix is handled
+   by requests dependency update
+
 ## 0.5.0 (2018-12-13)
  - [compatibility] drop support for EOL Python 2.6, 3.2 and 3.3 (#71)
  - [feature] Add OVH US endpoint (#63 #70)

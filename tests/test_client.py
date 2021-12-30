@@ -31,7 +31,7 @@ import mock
 import json
 from collections import OrderedDict
 
-from ovh.vendor import requests
+import requests
 
 from ovh.client import Client, ENDPOINTS
 from ovh.exceptions import (
