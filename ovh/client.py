@@ -325,6 +325,8 @@ class Client(object):
         for k, v in kwargs.items():
             if isinstance(v, bool):
                 v = str(v).lower()
+            elif v is None:
+                v = "null"
             arguments[k] = v
 
         return urlencode(arguments)
@@ -344,10 +346,11 @@ class Client(object):
         if kwargs:
             kwargs = self._canonicalize_kwargs(kwargs)
             query_string = self._prepare_query_string(kwargs)
-            if '?' in _target:
-                _target = '%s&%s' % (_target, query_string)
-            else:
-                _target = '%s?%s' % (_target, query_string)
+            if query_string != "":
+                if '?' in _target:
+                    _target = '%s&%s' % (_target, query_string)
+                else:
+                    _target = '%s?%s' % (_target, query_string)
 
         return self.call('GET', _target, None, _need_auth)
 
