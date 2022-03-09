@@ -50,10 +50,6 @@ from requests import request, Session
 from requests.packages import urllib3
 from requests.exceptions import RequestException
 
-# Disable SNI related Warning. The API does not rely on it
-urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
-urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
-
 from .config import config
 from .consumer_key import ConsumerKeyRequest
 from .exceptions import (
