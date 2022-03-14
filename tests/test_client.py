@@ -246,6 +246,12 @@ class testClient(unittest.TestCase):
         m_call.assert_called_once_with('POST', FAKE_URL, PAYLOAD, True)
 
     @mock.patch.object(Client, 'call')
+    def test_post_no_body(self, m_call):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.post(FAKE_URL))
+        m_call.assert_called_once_with('POST', FAKE_URL, None, True)
+
+    @mock.patch.object(Client, 'call')
     def test_put(self, m_call):
         PAYLOAD = {
             'arg1': object(),
@@ -257,6 +263,12 @@ class testClient(unittest.TestCase):
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
         self.assertEqual(m_call.return_value, api.put(FAKE_URL, **PAYLOAD))
         m_call.assert_called_once_with('PUT', FAKE_URL, PAYLOAD, True)
+
+    @mock.patch.object(Client, 'call')
+    def test_put_no_body(self, m_call):
+        api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
+        self.assertEqual(m_call.return_value, api.put(FAKE_URL))
+        m_call.assert_called_once_with('PUT', FAKE_URL, None, True)
 
     ## test core function
 
