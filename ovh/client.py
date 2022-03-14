@@ -46,21 +46,9 @@ except ImportError: # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from .vendor.requests import request, Session
-from .vendor.requests.packages import urllib3
-from .vendor.requests.exceptions import RequestException
-
-# Disable pyopenssl. It breaks SSL connection pool when SSL connection is
-# closed unexpectedly by the server. And we don't need SNI anyway.
-try:
-    from .vendor.requests.packages.urllib3.contrib import pyopenssl
-    pyopenssl.extract_from_urllib3()
-except ImportError:
-    pass
-
-# Disable SNI related Warning. The API does not rely on it
-urllib3.disable_warnings(urllib3.exceptions.SNIMissingWarning)
-urllib3.disable_warnings(urllib3.exceptions.SecurityWarning)
+from requests import request, Session
+from requests.packages import urllib3
+from requests.exceptions import RequestException
 
 from .config import config
 from .consumer_key import ConsumerKeyRequest
@@ -483,7 +471,7 @@ class Client(object):
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
-        Will return a vendored ``requests.Response`` object or let any
+        Will return ``requests.Response`` object or let any
         ``requests`` exception pass through.
 
         Request signature is a sha1 hash on following fields, joined by '+'
