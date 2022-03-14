@@ -2,7 +2,7 @@
            :alt: Python & OVH APIs
            :target: https://pypi.python.org/pypi/ovh
 
-Lightweight wrapper around OVH's APIs. Handles all the hard work including
+Lightweight wrapper around OVHcloud's APIs. Handles all the hard work including
 credential creation and requests signing.
 
 .. image:: https://img.shields.io/pypi/v/ovh.svg
@@ -45,7 +45,7 @@ credential creation and requests signing.
 Installation
 ============
 
-The python wrapper works with Python 2.7 and Python 3.4+.
+The python wrapper works with Python 3.6+.
 
 The easiest way to get the latest stable release is to grab it from `pypi
 <https://pypi.python.org/pypi/ovh>`_ using ``pip``.
@@ -59,6 +59,8 @@ Alternatively, you may get latest development version directly from Git.
 .. code:: bash
 
     pip install -e git+https://github.com/ovh/python-ovh.git#egg=ovh
+
+People looking for Python 2 compatibility should use 0.6.x version.
 
 Example Usage
 =============
@@ -132,12 +134,6 @@ customer's information:
 .. code:: python
 
     # -*- encoding: utf-8 -*-
-
-    try:
-        input = raw_input
-    except NameError:
-        pass
-
     import ovh
 
     # create a client using configuration
