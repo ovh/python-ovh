@@ -355,6 +355,8 @@ class Client(object):
             the default
         """
         kwargs = self._canonicalize_kwargs(kwargs)
+        if not kwargs:
+            kwargs = None
         return self.call('PUT', _target, kwargs, _need_auth)
 
     def post(self, _target, _need_auth=True, **kwargs):
@@ -370,6 +372,8 @@ class Client(object):
             the default
         """
         kwargs = self._canonicalize_kwargs(kwargs)
+        if not kwargs:
+            kwargs = None
         return self.call('POST', _target, kwargs, _need_auth)
 
     def delete(self, _target, _need_auth=True, **kwargs):
@@ -494,7 +498,7 @@ class Client(object):
         }
 
         # include payload
-        if data:
+        if data is not None:
             headers['Content-type'] = 'application/json'
             body = json.dumps(data)
 
