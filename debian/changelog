@@ -1,3 +1,14 @@
+python-ovh (1.0.0) master; urgency=medium
+
+    * breaking: remove python 2 support (#110)
+    * feat: added compatibility for Python 3.8, 3.9, 3.10 (#108)
+    * feat: add headers customisation in `raw_call` (#84)
+    * fix: do not send JSON body when no parameter was provided (#85)
+    * chore: improved coverage and bump coverage library (#100)
+    * chore: add scripts for debian packaging (#110)
+
+ -- Romain Beuque <romain.beuque@ovhcloud.com>  Tue, 15 Mar 2022 11:55:32 +0000
+
 python-ovh (0.6.0) trusty; urgency=medium
 
     * feat: added compatibility for Python 3.7 (#80)
