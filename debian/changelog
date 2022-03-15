@@ -1,3 +1,25 @@
+python-ovh (1.0.0) master; urgency=medium
+
+    * breaking: remove python 2 support (#110)
+    * feat: added compatibility for Python 3.8, 3.9, 3.10 (#108)
+    * feat: add headers customisation in `raw_call` (#84)
+    * fix: do not send JSON body when no parameter was provided (#85)
+    * chore: improved coverage and bump coverage library (#100)
+    * chore: add scripts for debian packaging (#110)
+
+ -- Romain Beuque <romain.beuque@ovhcloud.com>  Tue, 15 Mar 2022 11:55:32 +0000
+
+python-ovh (0.6.0) trusty; urgency=medium
+
+    * feat: added compatibility for Python 3.7 (#80)
+    * feat: delete function now supports body parameters (#109)
+    * fix: if HTTP status is 204 No Response, do not attempt to parse response
+      body (#92)
+    * fix: query parameters None should be JSON encoded and empty query params
+      should not be sent (#102)
+
+ -- Romain Beuque <romain.beuque@ovhcloud.com>  Tue, 15 Mar 2022 09:45:15 +0000
+
 python-ovh (0.5.0) trusty; urgency=medium
 
   * New upstream release v0.5.0
