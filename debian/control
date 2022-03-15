@@ -1,7 +1,7 @@
 Source: python-ovh
 Section: python
 Priority: optional
-Maintainer: Arnaud Morin <arnaud.morin@corp.ovh.com>
+Maintainer: Romain Beuque <api@ml.ovh.net>
 Build-Depends: debhelper (>= 9), python-all, dh-python, python-setuptools, python3-setuptools, python3-all
 Standards-Version: 3.9.5
 X-Python-Version: >= 2.7
