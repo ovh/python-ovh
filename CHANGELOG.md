@@ -1,7 +1,16 @@
 Changelog
 =========
 
-## 0.6.0 (2022-01)
+## 1.0.0 (2022-03-15)
+
+- [buildsystem] remove python 2 support (#110)
+- [buildsystem] added compatibility for Python 3.8, 3.9, 3.10 (#108)
+- [feature] add headers customisation in `raw_call` (#84)
+- [fix] do not send JSON body when no parameter was provided (#85)
+- [buildsystem] improved coverage and bump coverage library (#100)
+- [buildsystem] add scripts for debian packaging (#110)
+
+## 0.6.0 (2022-03-15)
 
  - [compatibility] add support for Python 3.10
  - [dependencies] drop vendored requests library, added requests>=2.11.0
