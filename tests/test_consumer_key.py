@@ -29,10 +29,12 @@
 import unittest
 from unittest import mock
 
+
 class testConsumerKeyRequest(unittest.TestCase):
     def test_add_rules(self):
         # Prepare
         import ovh
+
         m_client = mock.Mock()
         ck = ovh.ConsumerKeyRequest(m_client)
 
@@ -41,48 +43,58 @@ class testConsumerKeyRequest(unittest.TestCase):
         ck._access_rules = []
 
         # Test: allow one
-        ck.add_rule("GET", '/me')
-        self.assertEqual([
-            {'method': 'GET', 'path': '/me'},
-        ], ck._access_rules)
+        ck.add_rule("GET", "/me")
+        self.assertEqual(
+            [
+                {"method": "GET", "path": "/me"},
+            ],
+            ck._access_rules,
+        )
         ck._access_rules = []
 
         # Test: allow safe methods on domain
-        ck.add_rules(ovh.API_READ_WRITE_SAFE, '/domains/test.com')
-        self.assertEqual([
-            {'method': 'GET',  'path': '/domains/test.com'},
-            {'method': 'POST', 'path': '/domains/test.com'},
-            {'method': 'PUT',  'path': '/domains/test.com'},
-        ], ck._access_rules)
+        ck.add_rules(ovh.API_READ_WRITE_SAFE, "/domains/test.com")
+        self.assertEqual(
+            [
+                {"method": "GET", "path": "/domains/test.com"},
+                {"method": "POST", "path": "/domains/test.com"},
+                {"method": "PUT", "path": "/domains/test.com"},
+            ],
+            ck._access_rules,
+        )
         ck._access_rules = []
 
         # Test: allow all sms, strips suffix
-        ck.add_recursive_rules(ovh.API_READ_WRITE, '/sms/*')
-        self.assertEqual([
-            {'method': 'GET',    'path': '/sms'},
-            {'method': 'POST',   'path': '/sms'},
-            {'method': 'PUT',    'path': '/sms'},
-            {'method': 'DELETE', 'path': '/sms'},
-
-            {'method': 'GET',    'path': '/sms/*'},
-            {'method': 'POST',   'path': '/sms/*'},
-            {'method': 'PUT',    'path': '/sms/*'},
-            {'method': 'DELETE', 'path': '/sms/*'},
-        ], ck._access_rules)
+        ck.add_recursive_rules(ovh.API_READ_WRITE, "/sms/*")
+        self.assertEqual(
+            [
+                {"method": "GET", "path": "/sms"},
+                {"method": "POST", "path": "/sms"},
+                {"method": "PUT", "path": "/sms"},
+                {"method": "DELETE", "path": "/sms"},
+                {"method": "GET", "path": "/sms/*"},
+                {"method": "POST", "path": "/sms/*"},
+                {"method": "PUT", "path": "/sms/*"},
+                {"method": "DELETE", "path": "/sms/*"},
+            ],
+            ck._access_rules,
+        )
         ck._access_rules = []
 
         # Test: allow all, does not insert the empty rule
-        ck.add_recursive_rules(ovh.API_READ_WRITE, '/')
-        self.assertEqual([
-            {'method': 'GET',    'path': '/*'},
-            {'method': 'POST',   'path': '/*'},
-            {'method': 'PUT',    'path': '/*'},
-            {'method': 'DELETE', 'path': '/*'},
-        ], ck._access_rules)
+        ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
+        self.assertEqual(
+            [
+                {"method": "GET", "path": "/*"},
+                {"method": "POST", "path": "/*"},
+                {"method": "PUT", "path": "/*"},
+                {"method": "DELETE", "path": "/*"},
+            ],
+            ck._access_rules,
+        )
         ck._access_rules = []
 
         # Test launch request
-        ck.add_recursive_rules(ovh.API_READ_WRITE, '/')
+        ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
         self.assertEqual(m_client.request_consumerkey.return_value, ck.request())
         m_client.request_consumerkey.assert_called_once_with(ck._access_rules, None)
-

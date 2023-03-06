@@ -30,10 +30,12 @@
 All exceptions used in OVH SDK derives from `APIError`
 """
 
+
 class APIError(Exception):
     """Base OVH API exception, all specific exceptions inherits from it."""
+
     def __init__(self, *args, **kwargs):
-        self.response = kwargs.pop('response', None)
+        self.response = kwargs.pop("response", None)
         if self.response is not None:
             self.query_id = self.response.headers.get("X-OVH-QUERYID")
         else:
@@ -41,49 +43,63 @@ class APIError(Exception):
         super(APIError, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        if self.query_id: # pragma: no cover
+        if self.query_id:  # pragma: no cover
             return "{} \nOVH-Query-ID: {}".format(super(APIError, self).__str__(), self.query_id)
-        else: # pragma: no cover
+        else:  # pragma: no cover
             return super(APIError, self).__str__()
+
 
 class HTTPError(APIError):
     """Raised when the request fails at a low level (DNS, network, ...)"""
 
+
 class InvalidKey(APIError):
     """Raised when trying to sign request with invalid key"""
+
 
 class InvalidCredential(APIError):
     """Raised when trying to sign request with invalid consumer key"""
 
+
 class InvalidResponse(APIError):
     """Raised when api response is not valid json"""
+
 
 class InvalidRegion(APIError):
     """Raised when region is not in `REGIONS`."""
 
+
 class ReadOnlyError(APIError):
     """Raised when attempting to modify readonly data."""
+
 
 class ResourceNotFoundError(APIError):
     """Raised when requested resource does not exist."""
 
+
 class BadParametersError(APIError):
     """Raised when request contains bad parameters."""
+
 
 class ResourceConflictError(APIError):
     """Raised when trying to create an already existing resource."""
 
+
 class NetworkError(APIError):
     """Raised when there is an error from network layer."""
+
 
 class NotGrantedCall(APIError):
     """Raised when there is an error from network layer."""
 
+
 class NotCredential(APIError):
     """Raised when there is an error from network layer."""
 
+
 class Forbidden(APIError):
     """Raised when there is an error from network layer."""
+
 
 class ResourceExpiredError(APIError):
     """Raised when requested resource expired."""

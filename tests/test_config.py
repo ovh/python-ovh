@@ -32,19 +32,20 @@ from unittest import mock
 import os
 
 M_CONFIG_PATH = [
-    'tests/fixtures/etc_ovh.conf',
-    'tests/fixtures/home_ovh.conf',
-    'tests/fixtures/pwd_ovh.conf',
+    "tests/fixtures/etc_ovh.conf",
+    "tests/fixtures/home_ovh.conf",
+    "tests/fixtures/pwd_ovh.conf",
 ]
 
-M_CUSTOM_CONFIG_PATH = 'tests/fixtures/custom_ovh.conf'
+M_CUSTOM_CONFIG_PATH = "tests/fixtures/custom_ovh.conf"
 
 M_ENVIRON = {
-    'OVH_ENDPOINT': 'endpoint from environ',
-    'OVH_APPLICATION_KEY': 'application key from environ',
-    'OVH_APPLICATION_SECRET': 'application secret from environ',
-    'OVH_CONSUMER_KEY': 'consumer key from from environ',
+    "OVH_ENDPOINT": "endpoint from environ",
+    "OVH_APPLICATION_KEY": "application key from environ",
+    "OVH_APPLICATION_SECRET": "application secret from environ",
+    "OVH_CONSUMER_KEY": "consumer key from from environ",
 }
+
 
 class testConfig(unittest.TestCase):
     def setUp(self):
@@ -57,48 +58,50 @@ class testConfig(unittest.TestCase):
         config.CONFIG_PATH = self._orig_CONFIG_PATH
 
     def test_real_lookup_path(self):
-        home = os.environ['HOME']
-        pwd = os.environ['PWD']
+        home = os.environ["HOME"]
+        pwd = os.environ["PWD"]
 
-        self.assertEqual([
-           '/etc/ovh.conf',
-           home+'/.ovh.conf',
-           pwd+'/ovh.conf',
-
-        ], self._orig_CONFIG_PATH)
+        self.assertEqual(
+            [
+                "/etc/ovh.conf",
+                home + "/.ovh.conf",
+                pwd + "/ovh.conf",
+            ],
+            self._orig_CONFIG_PATH,
+        )
 
     def test_config_get_conf(self):
         conf = config.ConfigurationManager()
 
-        self.assertEqual('soyoustart-ca', conf.get('default', 'endpoint'))
-        self.assertEqual('This is a *fake* global application key',    conf.get('ovh-eu', 'application_key'))
-        self.assertEqual('This is a *real* global application secret', conf.get('ovh-eu', 'application_secret'))
-        self.assertEqual('I am kidding at home',                      conf.get('ovh-eu', 'consumer_key'))
-        self.assertEqual('This is a fake local application key',   conf.get('soyoustart-ca', 'application_key'))
-        self.assertEqual('This is a *real* local application key', conf.get('soyoustart-ca', 'application_secret'))
-        self.assertEqual('I am locally kidding',                   conf.get('soyoustart-ca', 'consumer_key'))
+        self.assertEqual("soyoustart-ca", conf.get("default", "endpoint"))
+        self.assertEqual("This is a *fake* global application key", conf.get("ovh-eu", "application_key"))
+        self.assertEqual("This is a *real* global application secret", conf.get("ovh-eu", "application_secret"))
+        self.assertEqual("I am kidding at home", conf.get("ovh-eu", "consumer_key"))
+        self.assertEqual("This is a fake local application key", conf.get("soyoustart-ca", "application_key"))
+        self.assertEqual("This is a *real* local application key", conf.get("soyoustart-ca", "application_secret"))
+        self.assertEqual("I am locally kidding", conf.get("soyoustart-ca", "consumer_key"))
 
-        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
-        self.assertTrue(conf.get('ovh-ca', 'application_key') is None)
-        self.assertTrue(conf.get('ovh-laponie', 'application_key') is None)
+        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)
+        self.assertTrue(conf.get("ovh-ca", "application_key") is None)
+        self.assertTrue(conf.get("ovh-laponie", "application_key") is None)
 
     def test_config_get_conf_env_rules_them_all(self):
         conf = config.ConfigurationManager()
 
-        with mock.patch.dict('os.environ', M_ENVIRON):
-            self.assertEqual(M_ENVIRON['OVH_ENDPOINT'],           conf.get('wathever', 'endpoint'))
-            self.assertEqual(M_ENVIRON['OVH_APPLICATION_KEY'],    conf.get('wathever', 'application_key'))
-            self.assertEqual(M_ENVIRON['OVH_APPLICATION_SECRET'], conf.get('wathever', 'application_secret'))
-            self.assertEqual(M_ENVIRON['OVH_CONSUMER_KEY'],       conf.get('wathever', 'consumer_key'))
+        with mock.patch.dict("os.environ", M_ENVIRON):
+            self.assertEqual(M_ENVIRON["OVH_ENDPOINT"], conf.get("wathever", "endpoint"))
+            self.assertEqual(M_ENVIRON["OVH_APPLICATION_KEY"], conf.get("wathever", "application_key"))
+            self.assertEqual(M_ENVIRON["OVH_APPLICATION_SECRET"], conf.get("wathever", "application_secret"))
+            self.assertEqual(M_ENVIRON["OVH_CONSUMER_KEY"], conf.get("wathever", "consumer_key"))
 
-        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
+        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)
 
     def test_config_get_custom_conf(self):
         conf = config.ConfigurationManager()
         conf.read(M_CUSTOM_CONFIG_PATH)
 
-        self.assertEqual('ovh-ca', conf.get('default', 'endpoint'))
-        self.assertEqual('This is a fake custom application key',   conf.get('ovh-ca', 'application_key'))
-        self.assertEqual('This is a *real* custom application key', conf.get('ovh-ca', 'application_secret'))
-        self.assertEqual('I am customingly kidding',                conf.get('ovh-ca', 'consumer_key'))
-        self.assertTrue(conf.get('ovh-eu', 'non-existent') is None)
+        self.assertEqual("ovh-ca", conf.get("default", "endpoint"))
+        self.assertEqual("This is a fake custom application key", conf.get("ovh-ca", "application_key"))
+        self.assertEqual("This is a *real* custom application key", conf.get("ovh-ca", "application_secret"))
+        self.assertEqual("I am customingly kidding", conf.get("ovh-ca", "consumer_key"))
+        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)

@@ -28,9 +28,20 @@
 
 from .client import Client
 from .exceptions import (
-    APIError, NetworkError, InvalidResponse, InvalidRegion, ReadOnlyError,
-    ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
-    InvalidKey, InvalidCredential, NotGrantedCall, NotCredential, Forbidden,
+    APIError,
+    NetworkError,
+    InvalidResponse,
+    InvalidRegion,
+    ReadOnlyError,
+    ResourceNotFoundError,
+    BadParametersError,
+    ResourceConflictError,
+    HTTPError,
+    InvalidKey,
+    InvalidCredential,
+    NotGrantedCall,
+    NotCredential,
+    Forbidden,
 )
 from .consumer_key import (
     ConsumerKeyRequest,

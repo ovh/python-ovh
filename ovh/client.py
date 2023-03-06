@@ -42,7 +42,7 @@ import json
 
 try:
     from urllib import urlencode
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
@@ -53,21 +53,31 @@ from requests.exceptions import RequestException
 from .config import config
 from .consumer_key import ConsumerKeyRequest
 from .exceptions import (
-    APIError, NetworkError, InvalidResponse, InvalidRegion, InvalidKey,
-    ResourceNotFoundError, BadParametersError, ResourceConflictError, HTTPError,
-    NotGrantedCall, NotCredential, Forbidden, InvalidCredential,
+    APIError,
+    NetworkError,
+    InvalidResponse,
+    InvalidRegion,
+    InvalidKey,
+    ResourceNotFoundError,
+    BadParametersError,
+    ResourceConflictError,
+    HTTPError,
+    NotGrantedCall,
+    NotCredential,
+    Forbidden,
+    InvalidCredential,
     ResourceExpiredError,
 )
 
 #: Mapping between OVH API region names and corresponding endpoints
 ENDPOINTS = {
-    'ovh-eu': 'https://eu.api.ovh.com/1.0',
-    'ovh-us': 'https://api.us.ovhcloud.com/1.0',
-    'ovh-ca': 'https://ca.api.ovh.com/1.0',
-    'kimsufi-eu': 'https://eu.api.kimsufi.com/1.0',
-    'kimsufi-ca': 'https://ca.api.kimsufi.com/1.0',
-    'soyoustart-eu': 'https://eu.api.soyoustart.com/1.0',
-    'soyoustart-ca': 'https://ca.api.soyoustart.com/1.0',
+    "ovh-eu": "https://eu.api.ovh.com/1.0",
+    "ovh-us": "https://api.us.ovhcloud.com/1.0",
+    "ovh-ca": "https://ca.api.ovh.com/1.0",
+    "kimsufi-eu": "https://eu.api.kimsufi.com/1.0",
+    "kimsufi-ca": "https://ca.api.kimsufi.com/1.0",
+    "soyoustart-eu": "https://eu.api.soyoustart.com/1.0",
+    "soyoustart-ca": "https://ca.api.soyoustart.com/1.0",
 }
 
 #: Default timeout for each request. 180 seconds connect, 180 seconds read.
@@ -106,9 +116,15 @@ class Client(object):
 
     """
 
-    def __init__(self, endpoint=None, application_key=None,
-                 application_secret=None, consumer_key=None, timeout=TIMEOUT,
-                 config_file=None):
+    def __init__(
+        self,
+        endpoint=None,
+        application_key=None,
+        application_secret=None,
+        consumer_key=None,
+        timeout=TIMEOUT,
+        config_file=None,
+    ):
         """
         Creates a new Client. No credential check is done at this point.
 
@@ -144,25 +160,24 @@ class Client(object):
 
         # load endpoint
         if endpoint is None:
-            endpoint = config.get('default', 'endpoint')
+            endpoint = config.get("default", "endpoint")
 
         try:
             self._endpoint = ENDPOINTS[endpoint]
         except KeyError:
-            raise InvalidRegion("Unknown endpoint %s. Valid endpoints: %s",
-                                endpoint, ENDPOINTS.keys())
+            raise InvalidRegion("Unknown endpoint %s. Valid endpoints: %s", endpoint, ENDPOINTS.keys())
 
         # load keys
         if application_key is None:
-            application_key = config.get(endpoint, 'application_key')
+            application_key = config.get(endpoint, "application_key")
         self._application_key = application_key
 
         if application_secret is None:
-            application_secret = config.get(endpoint, 'application_secret')
+            application_secret = config.get(endpoint, "application_secret")
         self._application_secret = application_secret
 
         if consumer_key is None:
-            consumer_key = config.get(endpoint, 'consumer_key')
+            consumer_key = config.get(endpoint, "consumer_key")
         self._consumer_key = consumer_key
 
         # lazy load time delta
@@ -193,7 +208,7 @@ class Client(object):
         :rtype: int
         """
         if self._time_delta is None:
-            server_time = self.get('/auth/time', _need_auth=False)
+            server_time = self.get("/auth/time", _need_auth=False)
             self._time_delta = server_time - int(time.time())
         return self._time_delta
 
@@ -275,9 +290,8 @@ class Client(object):
         :returns: dict with ``consumerKey`` and ``validationUrl`` keys
         :rtype: dict
         """
-        res = self.post('/auth/credential', _need_auth=False,
-                        accessRules=access_rules, redirection=redirect_url)
-        self._consumer_key = res['consumerKey']
+        res = self.post("/auth/credential", _need_auth=False, accessRules=access_rules, redirection=redirect_url)
+        self._consumer_key = res["consumerKey"]
         return res
 
     ## API shortcuts
@@ -294,7 +308,7 @@ class Client(object):
         arguments = {}
 
         for k, v in kwargs.items():
-            if k[0] == '_' and k[1:] in keyword.kwlist:
+            if k[0] == "_" and k[1:] in keyword.kwlist:
                 k = k[1:]
             arguments[k] = v
 
@@ -335,12 +349,12 @@ class Client(object):
             kwargs = self._canonicalize_kwargs(kwargs)
             query_string = self._prepare_query_string(kwargs)
             if query_string != "":
-                if '?' in _target:
-                    _target = '%s&%s' % (_target, query_string)
+                if "?" in _target:
+                    _target = "%s&%s" % (_target, query_string)
                 else:
-                    _target = '%s?%s' % (_target, query_string)
+                    _target = "%s?%s" % (_target, query_string)
 
-        return self.call('GET', _target, None, _need_auth)
+        return self.call("GET", _target, None, _need_auth)
 
     def put(self, _target, _need_auth=True, **kwargs):
         """
@@ -357,7 +371,7 @@ class Client(object):
         kwargs = self._canonicalize_kwargs(kwargs)
         if not kwargs:
             kwargs = None
-        return self.call('PUT', _target, kwargs, _need_auth)
+        return self.call("PUT", _target, kwargs, _need_auth)
 
     def post(self, _target, _need_auth=True, **kwargs):
         """
@@ -374,7 +388,7 @@ class Client(object):
         kwargs = self._canonicalize_kwargs(kwargs)
         if not kwargs:
             kwargs = None
-        return self.call('POST', _target, kwargs, _need_auth)
+        return self.call("POST", _target, kwargs, _need_auth)
 
     def delete(self, _target, _need_auth=True, **kwargs):
         """
@@ -392,12 +406,12 @@ class Client(object):
             kwargs = self._canonicalize_kwargs(kwargs)
             query_string = self._prepare_query_string(kwargs)
             if query_string != "":
-                if '?' in _target:
-                    _target = '%s&%s' % (_target, query_string)
+                if "?" in _target:
+                    _target = "%s&%s" % (_target, query_string)
                 else:
-                    _target = '%s?%s' % (_target, query_string)
+                    _target = "%s?%s" % (_target, query_string)
 
-        return self.call('DELETE', _target, None, _need_auth)
+        return self.call("DELETE", _target, None, _need_auth)
 
     ## low level helpers
 
@@ -441,35 +455,28 @@ class Client(object):
         # error check
         if status >= 100 and status < 300:
             return json_result
-        elif status == 403 and json_result.get('errorCode') == 'NOT_GRANTED_CALL':
-                raise NotGrantedCall(json_result.get('message'),
-                                     response=result)
-        elif status == 403 and json_result.get('errorCode') == 'NOT_CREDENTIAL':
-                raise NotCredential(json_result.get('message'),
-                                    response=result)
-        elif status == 403 and json_result.get('errorCode') == 'INVALID_KEY':
-                raise InvalidKey(json_result.get('message'), response=result)
-        elif status == 403 and json_result.get('errorCode') == 'INVALID_CREDENTIAL':
-                raise InvalidCredential(json_result.get('message'),
-                                        response=result)
-        elif status == 403 and json_result.get('errorCode') == 'FORBIDDEN':
-                raise Forbidden(json_result.get('message'), response=result)
+        elif status == 403 and json_result.get("errorCode") == "NOT_GRANTED_CALL":
+            raise NotGrantedCall(json_result.get("message"), response=result)
+        elif status == 403 and json_result.get("errorCode") == "NOT_CREDENTIAL":
+            raise NotCredential(json_result.get("message"), response=result)
+        elif status == 403 and json_result.get("errorCode") == "INVALID_KEY":
+            raise InvalidKey(json_result.get("message"), response=result)
+        elif status == 403 and json_result.get("errorCode") == "INVALID_CREDENTIAL":
+            raise InvalidCredential(json_result.get("message"), response=result)
+        elif status == 403 and json_result.get("errorCode") == "FORBIDDEN":
+            raise Forbidden(json_result.get("message"), response=result)
         elif status == 404:
-            raise ResourceNotFoundError(json_result.get('message'),
-                                        response=result)
+            raise ResourceNotFoundError(json_result.get("message"), response=result)
         elif status == 400:
-            raise BadParametersError(json_result.get('message'),
-                                     response=result)
+            raise BadParametersError(json_result.get("message"), response=result)
         elif status == 409:
-            raise ResourceConflictError(json_result.get('message'),
-                                        response=result)
+            raise ResourceConflictError(json_result.get("message"), response=result)
         elif status == 460:
-            raise ResourceExpiredError(json_result.get('message'),
-                                       response=result)
+            raise ResourceExpiredError(json_result.get("message"), response=result)
         elif status == 0:
             raise NetworkError()
         else:
-            raise APIError(json_result.get('message'), response=result)
+            raise APIError(json_result.get("message"), response=result)
 
     def raw_call(self, method, path, data=None, need_auth=True, headers=None):
         """
@@ -495,40 +502,36 @@ class Client(object):
                              OVH API authentication headers, as well as
                              the Content-Type header.
         """
-        body = ''
+        body = ""
         target = self._endpoint + path
 
         if headers is None:
             headers = {}
-        headers['X-Ovh-Application'] = self._application_key
+        headers["X-Ovh-Application"] = self._application_key
 
         # include payload
         if data is not None:
-            headers['Content-type'] = 'application/json'
+            headers["Content-type"] = "application/json"
             body = json.dumps(data)
 
         # sign request. Never sign 'time' or will recurse infinitely
         if need_auth:
             if not self._application_secret:
-                raise InvalidKey("Invalid ApplicationSecret '%s'" %
-                                 self._application_secret)
+                raise InvalidKey("Invalid ApplicationSecret '%s'" % self._application_secret)
 
             if not self._consumer_key:
-                raise InvalidKey("Invalid ConsumerKey '%s'" %
-                                 self._consumer_key)
+                raise InvalidKey("Invalid ConsumerKey '%s'" % self._consumer_key)
 
             now = str(int(time.time()) + self.time_delta)
             signature = hashlib.sha1()
-            signature.update("+".join([
-                self._application_secret, self._consumer_key,
-                method.upper(), target,
-                body,
-                now
-            ]).encode('utf-8'))
+            signature.update(
+                "+".join([self._application_secret, self._consumer_key, method.upper(), target, body, now]).encode(
+                    "utf-8"
+                )
+            )
 
-            headers['X-Ovh-Consumer'] = self._consumer_key
-            headers['X-Ovh-Timestamp'] = now
-            headers['X-Ovh-Signature'] = "$1$" + signature.hexdigest()
+            headers["X-Ovh-Consumer"] = self._consumer_key
+            headers["X-Ovh-Timestamp"] = now
+            headers["X-Ovh-Signature"] = "$1$" + signature.hexdigest()
 
-        return self._session.request(method, target, headers=headers,
-                                     data=body, timeout=self._timeout)
+        return self._session.request(method, target, headers=headers, data=body, timeout=self._timeout)
