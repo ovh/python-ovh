@@ -26,6 +26,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# flake8: noqa
 from .client import Client
 from .consumer_key import API_READ_ONLY, API_READ_WRITE, API_READ_WRITE_SAFE, ConsumerKeyRequest
 from .exceptions import (

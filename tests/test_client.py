@@ -46,7 +46,6 @@ from ovh.exceptions import (
     NetworkError,
     NotCredential,
     NotGrantedCall,
-    ReadOnlyError,
     ResourceConflictError,
     ResourceExpiredError,
     ResourceNotFoundError,
@@ -84,7 +83,7 @@ class testClient(unittest.TestCase):
     def tearDown(self):
         self.time_patch.stop()
 
-    ## test helpers
+    # test helpers
 
     def test_init(self):
         # nominal
@@ -168,7 +167,7 @@ class testClient(unittest.TestCase):
         ck = api.new_consumer_key_request()
         self.assertEqual(ck._client, api)
 
-    ## test wrappers
+    # test wrappers
 
     def test__canonicalize_kwargs(self):
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET, CONSUMER_KEY)
@@ -209,7 +208,7 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_call.return_value, api.get(FAKE_URL, _from="start", to="end"))
         try:
             m_call.assert_called_once_with("GET", FAKE_URL + "?to=end&from=start", None, True)
-        except:
+        except Exception:
             m_call.assert_called_once_with("GET", FAKE_URL + "?from=start&to=end", None, True)
 
     @mock.patch.object(Client, "call")
@@ -243,7 +242,7 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_call.return_value, api.delete(FAKE_URL, _from="start", to="end"))
         try:
             m_call.assert_called_once_with("DELETE", FAKE_URL + "?to=end&from=start", None, True)
-        except:
+        except Exception:
             m_call.assert_called_once_with("DELETE", FAKE_URL + "?from=start&to=end", None, True)
 
     @mock.patch.object(Client, "call")
@@ -284,7 +283,7 @@ class testClient(unittest.TestCase):
         self.assertEqual(m_call.return_value, api.put(FAKE_URL))
         m_call.assert_called_once_with("PUT", FAKE_URL, None, True)
 
-    ## test core function
+    # test core function
 
     @mock.patch("ovh.client.Session.request")
     def test_call_no_sign(self, m_req):
@@ -366,7 +365,6 @@ class testClient(unittest.TestCase):
     @mock.patch("ovh.client.Session.request")
     def test_call_query_id(self, m_req):
         m_res = m_req.return_value
-        m_json = m_res.json.return_value
         m_res.headers = {"X-OVH-QUERYID": "FR.test1"}
 
         api = Client(ENDPOINT, APPLICATION_KEY, APPLICATION_SECRET)

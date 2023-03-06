@@ -38,7 +38,6 @@ import hashlib
 import json
 import keyword
 import time
-import urllib
 
 try:
     from urllib import urlencode
@@ -46,9 +45,8 @@ except ImportError:  # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from requests import Session, request
+from requests import Session
 from requests.exceptions import RequestException
-from requests.packages import urllib3
 
 from .config import config
 from .consumer_key import ConsumerKeyRequest
@@ -189,7 +187,7 @@ class Client(object):
         # Override default timeout
         self._timeout = timeout
 
-    ## high level API
+    # high level API
 
     @property
     def time_delta(self):
@@ -230,7 +228,7 @@ class Client(object):
             'consumerKey': 'TnpZAd5pYNqxk4RhlPiSRfJ4WrkmII2i',
             'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
         }
-        """
+        """  # noqa:E501
         return ConsumerKeyRequest(self)
 
     def request_consumerkey(self, access_rules, redirect_url=None):
@@ -294,7 +292,7 @@ class Client(object):
         self._consumer_key = res["consumerKey"]
         return res
 
-    ## API shortcuts
+    # API shortcuts
 
     def _canonicalize_kwargs(self, kwargs):
         """
@@ -413,7 +411,7 @@ class Client(object):
 
         return self.call("DELETE", _target, None, _need_auth)
 
-    ## low level helpers
+    # low level helpers
 
     def call(self, method, path, data=None, need_auth=True):
         """

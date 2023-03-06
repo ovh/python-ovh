@@ -74,7 +74,7 @@ class ConsumerKeyRequest(object):
             'consumerKey': 'TnpZAd5pYNqxk4RhlPiSRfJ4WrkmII2i',
             'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
         }
-        """
+        """  # noqa: E501
         return self._client.request_consumerkey(self._access_rules, redirect_url)
 
     def add_rule(self, method, path):
