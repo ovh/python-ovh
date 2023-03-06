@@ -1,4 +1,15 @@
-python-ovh (1.0.0) master; urgency=medium
+python-ovh (1.0.1) experimental; urgency=medium
+
+    * chore: missing changelog entry for 1.0.0 (#112)
+    * build: add github actions (#112)
+    * chore: apply flake8 linting (#112)
+    * chore: apply isort formatting (#112)
+    * chore: apply black formatting (#112)
+    * test: switch to pytest (#112)
+
+ -- Adrien Barreau <adrien.barreau@ovhcloud.com>  Mon, 06 Mar 2023 16:40:26 +0000
+
+python-ovh (1.0.0) experimental; urgency=medium
 
     * breaking: remove python 2 support (#110)
     * feat: added compatibility for Python 3.8, 3.9, 3.10 (#108)

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+## 1.0.1 (2023-03-07)
+
+- [buildsystem] missing changelog entry for 1.0.0
+- [buildsystem] add github actions
+- [buildsystem] apply flake8 linting
+- [buildsystem] apply isort formatting
+- [buildsystem] apply black formatting
+- [buildsystem] switch to pytest
+
 ## 1.0.0 (2022-03-15)
 
 - [buildsystem] remove python 2 support (#110)
