@@ -27,7 +27,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import mock
+from unittest import mock
 
 class testConsumerKeyRequest(unittest.TestCase):
     def test_add_rules(self):

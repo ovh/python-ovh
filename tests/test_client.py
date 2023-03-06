@@ -27,7 +27,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import mock
+from unittest import mock
 import json
 from collections import OrderedDict
 
@@ -48,7 +48,7 @@ M_ENVIRON = {
     'OVH_CONSUMER_KEY': 'consumer key from from environ',
 }
 
-M_CUSTOM_CONFIG_PATH = './fixtures/custom_ovh.conf'
+M_CUSTOM_CONFIG_PATH = 'tests/fixtures/custom_ovh.conf'
 
 APPLICATION_KEY = 'fake application key'
 APPLICATION_SECRET = 'fake application secret'

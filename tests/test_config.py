@@ -28,16 +28,16 @@
 
 from ovh import config
 import unittest
-import mock
+from unittest import mock
 import os
 
 M_CONFIG_PATH = [
-    './fixtures/etc_ovh.conf',
-    './fixtures/home_ovh.conf',
-    './fixtures/pwd_ovh.conf',
+    'tests/fixtures/etc_ovh.conf',
+    'tests/fixtures/home_ovh.conf',
+    'tests/fixtures/pwd_ovh.conf',
 ]
 
-M_CUSTOM_CONFIG_PATH = './fixtures/custom_ovh.conf'
+M_CUSTOM_CONFIG_PATH = 'tests/fixtures/custom_ovh.conf'
 
 M_ENVIRON = {
     'OVH_ENDPOINT': 'endpoint from environ',
@@ -63,7 +63,7 @@ class testConfig(unittest.TestCase):
         self.assertEqual([
            '/etc/ovh.conf',
            home+'/.ovh.conf',
-           pwd+'/tests/ovh.conf',
+           pwd+'/ovh.conf',
 
         ], self._orig_CONFIG_PATH)
 
