@@ -27,25 +27,20 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from .client import Client
+from .consumer_key import API_READ_ONLY, API_READ_WRITE, API_READ_WRITE_SAFE, ConsumerKeyRequest
 from .exceptions import (
     APIError,
-    NetworkError,
-    InvalidResponse,
-    InvalidRegion,
-    ReadOnlyError,
-    ResourceNotFoundError,
     BadParametersError,
-    ResourceConflictError,
-    HTTPError,
-    InvalidKey,
-    InvalidCredential,
-    NotGrantedCall,
-    NotCredential,
     Forbidden,
-)
-from .consumer_key import (
-    ConsumerKeyRequest,
-    API_READ_ONLY,
-    API_READ_WRITE,
-    API_READ_WRITE_SAFE,
+    HTTPError,
+    InvalidCredential,
+    InvalidKey,
+    InvalidRegion,
+    InvalidResponse,
+    NetworkError,
+    NotCredential,
+    NotGrantedCall,
+    ReadOnlyError,
+    ResourceConflictError,
+    ResourceNotFoundError,
 )

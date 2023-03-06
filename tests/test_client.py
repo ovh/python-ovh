@@ -26,30 +26,30 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from collections import OrderedDict
+import json
 import unittest
 from unittest import mock
-import json
-from collections import OrderedDict
 
 import requests
 
-from ovh.client import Client, ENDPOINTS
+from ovh.client import ENDPOINTS, Client
 from ovh.exceptions import (
     APIError,
-    NetworkError,
-    InvalidResponse,
-    InvalidRegion,
-    ReadOnlyError,
-    ResourceNotFoundError,
     BadParametersError,
-    ResourceConflictError,
-    HTTPError,
-    InvalidKey,
-    InvalidCredential,
-    NotGrantedCall,
-    NotCredential,
     Forbidden,
+    HTTPError,
+    InvalidCredential,
+    InvalidKey,
+    InvalidRegion,
+    InvalidResponse,
+    NetworkError,
+    NotCredential,
+    NotGrantedCall,
+    ReadOnlyError,
+    ResourceConflictError,
     ResourceExpiredError,
+    ResourceNotFoundError,
 )
 
 M_ENVIRON = {

@@ -35,10 +35,10 @@ It handles requesting credential, signing queries...
 """
 
 import hashlib
-import urllib
+import json
 import keyword
 import time
-import json
+import urllib
 
 try:
     from urllib import urlencode
@@ -46,27 +46,27 @@ except ImportError:  # pragma: no cover
     # Python 3
     from urllib.parse import urlencode
 
-from requests import request, Session
-from requests.packages import urllib3
+from requests import Session, request
 from requests.exceptions import RequestException
+from requests.packages import urllib3
 
 from .config import config
 from .consumer_key import ConsumerKeyRequest
 from .exceptions import (
     APIError,
-    NetworkError,
-    InvalidResponse,
-    InvalidRegion,
-    InvalidKey,
-    ResourceNotFoundError,
     BadParametersError,
-    ResourceConflictError,
-    HTTPError,
-    NotGrantedCall,
-    NotCredential,
     Forbidden,
+    HTTPError,
     InvalidCredential,
+    InvalidKey,
+    InvalidRegion,
+    InvalidResponse,
+    NetworkError,
+    NotCredential,
+    NotGrantedCall,
+    ResourceConflictError,
     ResourceExpiredError,
+    ResourceNotFoundError,
 )
 
 #: Mapping between OVH API region names and corresponding endpoints

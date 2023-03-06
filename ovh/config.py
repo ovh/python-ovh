@@ -65,10 +65,10 @@ project or user.
 import os
 
 try:
-    from ConfigParser import RawConfigParser, NoSectionError, NoOptionError
+    from ConfigParser import NoOptionError, NoSectionError, RawConfigParser
 except ImportError:  # pragma: no cover
     # Python 3
-    from configparser import RawConfigParser, NoSectionError, NoOptionError
+    from configparser import NoOptionError, NoSectionError, RawConfigParser
 
 __all__ = ["config"]
 

@@ -1,7 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 import datetime
+
 from tabulate import tabulate
+
 import ovh
 
 # Services type desired to mine. To speed up the script, delete service type you don't use!

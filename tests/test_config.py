@@ -26,10 +26,11 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ovh import config
+import os
 import unittest
 from unittest import mock
-import os
+
+from ovh import config
 
 M_CONFIG_PATH = [
     "tests/fixtures/etc_ovh.conf",
