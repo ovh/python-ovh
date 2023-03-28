@@ -472,6 +472,20 @@ class Client:
         else:
             raise APIError(json_result.get("message"), response=result)
 
+    def _get_target(self, path):
+        """
+        _get_target returns the URL to target given an endpoint and a path.
+        If the path starts with `/v1` or `/v2`, then remove the trailing `/1.0` from the endpoint.
+
+        :param str path: path to use prefix from
+        :returns: target with one of /1.0 and /v1|2 path segment
+        :rtype: str
+        """
+        endpoint = self._endpoint
+        if endpoint.endswith("/1.0") and path.startswith(("/v1", "/v2")):
+            endpoint = endpoint[:-4]
+        return endpoint + path
+
     def raw_call(self, method, path, data=None, need_auth=True, headers=None):
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
@@ -497,7 +511,7 @@ class Client:
                              the Content-Type header.
         """
         body = ""
-        target = self._endpoint + path
+        target = self._get_target(path)
 
         if headers is None:
             headers = {}

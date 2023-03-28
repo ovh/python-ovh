@@ -275,3 +275,35 @@ class TestClient:
         for endpoint in ENDPOINTS.keys():
             auth_time = Client(endpoint).get("/auth/time", _need_auth=False)
             assert auth_time > 0
+
+    @mock.patch("time.time", return_value=1457018875.467238)
+    @mock.patch("ovh.client.Session.request")
+    @mock.patch("ovh.client.Client.time_delta", new_callable=mock.PropertyMock, return_value=0)
+    def test_version_in_url(self, m_time_delta, m_req, m_time):
+        m_res = m_req.return_value
+        m_res.status_code = 200
+
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret, MockConsumerKey)
+        api.call("GET", "/call", None, True)
+        api.call("GET", "/v1/call", None, True)
+        api.call("GET", "/v2/call", None, True)
+
+        signatures = {
+            "1.0": "$1$7f2db49253edfc41891023fcd1a54cf61db05fbb",
+            "v1": "$1$e6e7906d385eb28adcbfbe6b66c1528a42d741ad",
+            "v2": "$1$bb63b132a6f84ad5433d0c534d48d3f7c3804285",
+        }
+
+        def _h(prefix):
+            return {
+                "X-Ovh-Application": MockApplicationKey,
+                "X-Ovh-Consumer": MockConsumerKey,
+                "X-Ovh-Timestamp": str(MockTime),
+                "X-Ovh-Signature": signatures[prefix],
+            }
+
+        assert m_req.call_args_list == [
+            mock.call("GET", "https://eu.api.ovh.com/1.0/call", headers=_h("1.0"), data="", timeout=180),
+            mock.call("GET", "https://eu.api.ovh.com/v1/call", headers=_h("v1"), data="", timeout=180),
+            mock.call("GET", "https://eu.api.ovh.com/v2/call", headers=_h("v2"), data="", timeout=180),
+        ]
