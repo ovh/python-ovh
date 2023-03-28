@@ -501,14 +501,14 @@ to hear from you !
 Run the tests
 -------------
 
-Simply run ``nosetests``. It will automatically load its configuration from
+Simply run ``pytest``. It will automatically load its configuration from
 ``setup.cfg`` and output full coverage status. Since we all love quality, please
 note that we do not accept contributions with test coverage under 100%.
 
 .. code:: bash
 
     pip install -e .[dev]
-    nosetests # 100% coverage is a hard minimum
+    pytest
 
 
 Build the documentation
