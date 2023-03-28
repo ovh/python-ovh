@@ -11,8 +11,6 @@ creation and requests signing.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     # Instantiate. Visit https://api.ovh.com/createToken/index.cgi?GET=/me
@@ -110,8 +108,6 @@ behalf, you need a **consumer key (CK)**.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     try:
         input = raw_input
     except NameError:
@@ -167,8 +163,6 @@ is only supported with reserved keywords.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     DOMAIN = "example.com"
@@ -198,8 +192,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     # create a client without a consumerKey
@@ -227,8 +219,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 ``application_secret`` and ``consumer_key``.
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
 
@@ -258,8 +248,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 ``application_secret`` and ``consumer_key``.
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
     from tabulate import tabulate
@@ -342,8 +330,6 @@ can be prefixed with an underscore. For example, ``from`` argument of
 With characters invalid in python argument name like a dot, you can:
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
 

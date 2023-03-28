@@ -1,6 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
-# Copyright (c) 2013-2018, OVH SAS.
+# Copyright (c) 2013-2023, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -38,17 +36,12 @@ import hashlib
 import json
 import keyword
 import time
-
-try:
-    from urllib import urlencode
-except ImportError:  # pragma: no cover
-    # Python 3
-    from urllib.parse import urlencode
+from urllib.parse import urlencode
 
 from requests import Session
 from requests.exceptions import RequestException
 
-from .config import config
+from . import config
 from .consumer_key import ConsumerKeyRequest
 from .exceptions import (
     APIError,
@@ -82,7 +75,7 @@ ENDPOINTS = {
 TIMEOUT = 180
 
 
-class Client(object):
+class Client:
     """
     Low level OVH Client. It abstracts all the authentication and request
     signing logic along with some nice tools helping with key generation.
@@ -152,13 +145,16 @@ class Client(object):
         :param float timeout: Same timeout for both connection and read
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
+
+        configuration = config.ConfigurationManager()
+
         # Load a custom config file if requested
         if config_file is not None:
-            config.read(config_file)
+            configuration.read(config_file)
 
         # load endpoint
         if endpoint is None:
-            endpoint = config.get("default", "endpoint")
+            endpoint = configuration.get("default", "endpoint")
 
         try:
             self._endpoint = ENDPOINTS[endpoint]
@@ -167,15 +163,15 @@ class Client(object):
 
         # load keys
         if application_key is None:
-            application_key = config.get(endpoint, "application_key")
+            application_key = configuration.get(endpoint, "application_key")
         self._application_key = application_key
 
         if application_secret is None:
-            application_secret = config.get(endpoint, "application_secret")
+            application_secret = configuration.get(endpoint, "application_secret")
         self._application_secret = application_secret
 
         if consumer_key is None:
-            consumer_key = config.get(endpoint, "consumer_key")
+            consumer_key = configuration.get(endpoint, "consumer_key")
         self._consumer_key = consumer_key
 
         # lazy load time delta
@@ -510,7 +506,7 @@ class Client(object):
         # include payload
         if data is not None:
             headers["Content-type"] = "application/json"
-            body = json.dumps(data)
+            body = json.dumps(data, separators=(",", ":"))  # Separators to prevent adding useless spaces
 
         # sign request. Never sign 'time' or will recurse infinitely
         if need_auth:

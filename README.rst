@@ -26,8 +26,6 @@ credential creation and requests signing.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     # Instantiate. Visit https://api.ovh.com/createToken/?GET=/me
@@ -133,7 +131,6 @@ customer's information:
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
     import ovh
 
     # create a client using configuration
@@ -179,8 +176,6 @@ is only supported with reserved keywords.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     DOMAIN = "example.com"
@@ -210,8 +205,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
-
     import ovh
 
     # create a client
@@ -239,8 +232,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 ``application_secret`` and ``consumer_key``.
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
 
@@ -270,8 +261,6 @@ This example assumes an existing Configuration_ with valid ``application_key``,
 ``application_secret`` and ``consumer_key``.
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
     from tabulate import tabulate
@@ -318,7 +307,6 @@ fully installed on the machine and a consumer key allowed on the server exists.
 
 .. code:: python
 
-    # -*- encoding: utf-8 -*-
     import ovh
     import sys
     import time
@@ -450,8 +438,6 @@ can be prefixed with an underscore. For example, ``from`` argument of
 With characters invalid in python argument name like a dot, you can:
 
 .. code:: python
-
-    # -*- encoding: utf-8 -*-
 
     import ovh
 

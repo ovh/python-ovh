@@ -1,6 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
-# Copyright (c) 2013-2018, OVH SAS.
+# Copyright (c) 2013-2023, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -26,75 +24,66 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import unittest
 from unittest import mock
 
+import ovh
 
-class testConsumerKeyRequest(unittest.TestCase):
+
+class TestConsumerKey:
     def test_add_rules(self):
         # Prepare
-        import ovh
-
         m_client = mock.Mock()
         ck = ovh.ConsumerKeyRequest(m_client)
 
         # Test: No-op
-        self.assertEqual([], ck._access_rules)
-        ck._access_rules = []
+        assert ck._access_rules == []
 
         # Test: allow one
         ck.add_rule("GET", "/me")
-        self.assertEqual(
-            [
-                {"method": "GET", "path": "/me"},
-            ],
-            ck._access_rules,
-        )
+        assert ck._access_rules == [{"method": "GET", "path": "/me"}]
+
+        # Test: allow RO on /xdsl
         ck._access_rules = []
+        ck.add_rules(ovh.API_READ_ONLY, "/xdsl")
+        assert ck._access_rules == [
+            {"method": "GET", "path": "/xdsl"},
+        ]
 
         # Test: allow safe methods on domain
-        ck.add_rules(ovh.API_READ_WRITE_SAFE, "/domains/test.com")
-        self.assertEqual(
-            [
-                {"method": "GET", "path": "/domains/test.com"},
-                {"method": "POST", "path": "/domains/test.com"},
-                {"method": "PUT", "path": "/domains/test.com"},
-            ],
-            ck._access_rules,
-        )
         ck._access_rules = []
+        ck.add_rules(ovh.API_READ_WRITE_SAFE, "/domains/test.com")
+        assert ck._access_rules == [
+            {"method": "GET", "path": "/domains/test.com"},
+            {"method": "POST", "path": "/domains/test.com"},
+            {"method": "PUT", "path": "/domains/test.com"},
+        ]
 
         # Test: allow all sms, strips suffix
-        ck.add_recursive_rules(ovh.API_READ_WRITE, "/sms/*")
-        self.assertEqual(
-            [
-                {"method": "GET", "path": "/sms"},
-                {"method": "POST", "path": "/sms"},
-                {"method": "PUT", "path": "/sms"},
-                {"method": "DELETE", "path": "/sms"},
-                {"method": "GET", "path": "/sms/*"},
-                {"method": "POST", "path": "/sms/*"},
-                {"method": "PUT", "path": "/sms/*"},
-                {"method": "DELETE", "path": "/sms/*"},
-            ],
-            ck._access_rules,
-        )
         ck._access_rules = []
+        ck.add_recursive_rules(ovh.API_READ_WRITE, "/sms/*")
+        assert ck._access_rules == [
+            {"method": "GET", "path": "/sms"},
+            {"method": "POST", "path": "/sms"},
+            {"method": "PUT", "path": "/sms"},
+            {"method": "DELETE", "path": "/sms"},
+            {"method": "GET", "path": "/sms/*"},
+            {"method": "POST", "path": "/sms/*"},
+            {"method": "PUT", "path": "/sms/*"},
+            {"method": "DELETE", "path": "/sms/*"},
+        ]
 
         # Test: allow all, does not insert the empty rule
-        ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
-        self.assertEqual(
-            [
-                {"method": "GET", "path": "/*"},
-                {"method": "POST", "path": "/*"},
-                {"method": "PUT", "path": "/*"},
-                {"method": "DELETE", "path": "/*"},
-            ],
-            ck._access_rules,
-        )
         ck._access_rules = []
+        ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
+        assert ck._access_rules == [
+            {"method": "GET", "path": "/*"},
+            {"method": "POST", "path": "/*"},
+            {"method": "PUT", "path": "/*"},
+            {"method": "DELETE", "path": "/*"},
+        ]
 
         # Test launch request
+        ck._access_rules = []
         ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
-        self.assertEqual(m_client.request_consumerkey.return_value, ck.request())
+        assert ck.request() is m_client.request_consumerkey.return_value
         m_client.request_consumerkey.assert_called_once_with(ck._access_rules, None)

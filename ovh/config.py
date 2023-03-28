@@ -1,6 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
-# Copyright (c) 2013-2018, OVH SAS.
+# Copyright (c) 2013-2023, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -62,13 +60,8 @@ This lookup mechanism makes it easy to overload credentials for a specific
 project or user.
 """
 
+from configparser import NoOptionError, NoSectionError, RawConfigParser
 import os
-
-try:
-    from ConfigParser import NoOptionError, NoSectionError, RawConfigParser
-except ImportError:  # pragma: no cover
-    # Python 3
-    from configparser import NoOptionError, NoSectionError, RawConfigParser
 
 __all__ = ["config"]
 
@@ -80,7 +73,7 @@ CONFIG_PATH = [
 ]
 
 
-class ConfigurationManager(object):
+class ConfigurationManager:
     """
     Application wide configuration manager
     """
