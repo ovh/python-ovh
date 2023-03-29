@@ -17,9 +17,9 @@ credential creation and requests signing.
 .. image:: https://img.shields.io/pypi/wheel/ovh.svg
            :alt: PyPi Wheel status
            :target: https://pypi.python.org/pypi/ovh
-.. image:: https://travis-ci.org/ovh/python-ovh.svg?branch=master
+.. image:: https://github.com/ovh/python-ovh/actions/workflows/test.yaml/badge.svg?branch=master
            :alt: Build Status
-           :target: https://travis-ci.org/ovh/python-ovh
+           :target: https://github.com/ovh/python-ovh/actions/workflows/test.yaml
 .. image:: https://coveralls.io/repos/github/ovh/python-ovh/badge.svg
            :alt: Coverage Status
            :target: https://coveralls.io/github/ovh/python-ovh
