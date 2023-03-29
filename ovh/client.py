@@ -124,6 +124,7 @@ class Client(object):
         timeout=TIMEOUT,
         config_file=None,
         auto_retry=None,
+        auto_retry_on_exceptions=None,
     ):
         """
         Creates a new Client. No credential check is done at this point.
@@ -152,7 +153,8 @@ class Client(object):
         :param str consumer_key: uniquely identifies
         :param tuple timeout: Connection and read timeout for each request
         :param float timeout: Same timeout for both connection and read
-        :param init auto_retry: Number of times backoff will retry if a call fail
+        :param int auto_retry: Number of times backoff will retry if a call fail
+        :param tuple auto_retry_on_exceptions: Exceptions that need to perform an auto_retry
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
         # Load a custom config file if requested
@@ -193,14 +195,21 @@ class Client(object):
         # Set default auto_retry
         self._auto_retry = auto_retry
 
-    # high level API
+        # Set default auto_retry_on_exceptions
+        if self.auto_retry_on_exceptions is None:
+            self._auto_retry_on_exceptions = (HTTPError, NetworkError)
+        else:
+            self._auto_retry_on_exceptions = auto_retry_on_exceptions
 
+    # high level API
     def retry_call(self, *args, **kwargs):
+        """Perform raw query and handle auto_retry if necessary."""
         if self._auto_retry is None:
             return self.call(*args, **kwargs)
         else:
-            return backoff.on_exception(backoff.expo, APIError, max_tries=self._auto_retry)(self.call)(*args, **kwargs)
-
+            return backoff.on_exception(backoff.expo,
+                                        self._auto_retry_on_exceptions,
+                                        max_tries=self._auto_retry)(self.call)(*args, **kwargs)
 
     @property
     def time_delta(self):
@@ -425,7 +434,6 @@ class Client(object):
         return self.retry_call('DELETE', _target, None, _need_auth)
 
     # low level helpers
-
 
     def call(self, method, path, data=None, need_auth=True):
         """
