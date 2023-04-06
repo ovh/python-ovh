@@ -32,4 +32,6 @@ jobs:
       - name: Lint with flake8
         run: flake8
       - name: Test with pytest
-        run: pytest --junitxml=junit/test-results.xml --cov=ovh --cov-report=xml --cov-report=html
+        run: pytest --junitxml=junit/test-results.xml --cov=ovh --cov-report=xml --cov-report=html --cov-report=lcov:coverage/cov.info
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2.0.0
