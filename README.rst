@@ -17,9 +17,9 @@ credential creation and requests signing.
 .. image:: https://img.shields.io/pypi/wheel/ovh.svg
            :alt: PyPi Wheel status
            :target: https://pypi.python.org/pypi/ovh
-.. image:: https://travis-ci.org/ovh/python-ovh.svg?branch=master
+.. image:: https://github.com/ovh/python-ovh/actions/workflows/test.yaml/badge.svg?branch=master
            :alt: Build Status
-           :target: https://travis-ci.org/ovh/python-ovh
+           :target: https://github.com/ovh/python-ovh/actions/workflows/test.yaml
 .. image:: https://coveralls.io/repos/github/ovh/python-ovh/badge.svg
            :alt: Coverage Status
            :target: https://coveralls.io/github/ovh/python-ovh
@@ -149,7 +149,6 @@ customer's information:
     # Print nice welcome message
     print("Welcome", client.get('/me')['firstname'])
     print("Btw, your 'consumerKey' is '%s'" % validation['consumerKey'])
-
 
 Returned ``consumerKey`` should then be kept to avoid re-authenticating your
 end-user on each use.
@@ -414,6 +413,31 @@ Example usage:
 
     client = ovh.Client()
 
+Use v1 and v2 API versions
+--------------------------
+
+When using OVHcloud APIs (not So you Start or Kimsufi ones), you are given the
+opportunity to aim for two API versions. For the European API, for example:
+
+- the v1 is reachable through https://eu.api.ovh.com/v1
+- the v2 is reachable through https://eu.api.ovh.com/v2
+- the legacy URL is https://eu.api.ovh.com/1.0
+
+ Calling ``client.get``, you can target the API version you want:
+
+.. code:: python
+
+    client = ovh.Client(endpoint="ovh-eu")
+
+    # Call to https://eu.api.ovh.com/v1/xdsl/xdsl-yourservice
+    client.get("/v1/xdsl/xdsl-yourservice")
+
+    # Call to https://eu.api.ovh.com/v2/xdsl/xdsl-yourservice
+    client.get("/v2/xdsl/xdsl-yourservice")
+
+    # Legacy call to https://eu.api.ovh.com/1.0/xdsl/xdsl-yourservice
+    client.get("/xdsl/xdsl-yourservice")
+
 Custom configuration file
 -------------------------
 
@@ -424,7 +448,6 @@ Example usage:
 .. code:: python
 
     client = ovh.Client(config_file='/my/config.conf')
-
 
 Passing parameters
 ==================
@@ -495,21 +518,20 @@ Get the sources
     cd python-ovh
     python setup.py develop
 
-You've developed a new cool feature ? Fixed an annoying bug ? We'd be happy
-to hear from you !
+You've developed a new cool feature? Fixed an annoying bug? We'd be happy
+to hear from you!
 
 Run the tests
 -------------
 
-Simply run ``nosetests``. It will automatically load its configuration from
+Simply run ``pytest``. It will automatically load its configuration from
 ``setup.cfg`` and output full coverage status. Since we all love quality, please
 note that we do not accept contributions with test coverage under 100%.
 
 .. code:: bash
 
     pip install -e .[dev]
-    nosetests # 100% coverage is a hard minimum
-
+    pytest
 
 Build the documentation
 -----------------------
