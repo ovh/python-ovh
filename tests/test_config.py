@@ -1,6 +1,4 @@
-# -*- encoding: utf-8 -*-
-#
-# Copyright (c) 2013-2018, OVH SAS.
+# Copyright (c) 2013-2023, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,82 +25,103 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
-import unittest
-from unittest import mock
+from pathlib import Path
+from unittest.mock import patch
 
-from ovh import config
+import pytest
 
-M_CONFIG_PATH = [
-    "tests/fixtures/etc_ovh.conf",
-    "tests/fixtures/home_ovh.conf",
-    "tests/fixtures/pwd_ovh.conf",
-]
+import ovh
 
-M_CUSTOM_CONFIG_PATH = "tests/fixtures/custom_ovh.conf"
-
-M_ENVIRON = {
-    "OVH_ENDPOINT": "endpoint from environ",
-    "OVH_APPLICATION_KEY": "application key from environ",
-    "OVH_APPLICATION_SECRET": "application secret from environ",
-    "OVH_CONSUMER_KEY": "consumer key from from environ",
-}
+TEST_DATA = str(Path(__file__).resolve().parent / "data")
+systemConf = TEST_DATA + "/system.ini"
+userPartialConf = TEST_DATA + "/userPartial.ini"
+userConf = TEST_DATA + "/user.ini"
+localPartialConf = TEST_DATA + "/localPartial.ini"
+doesNotExistConf = TEST_DATA + "/doesNotExist.ini"
+invalidINIConf = TEST_DATA + "/invalid.ini"
+errorConf = TEST_DATA
 
 
-class testConfig(unittest.TestCase):
-    def setUp(self):
-        """Overload configuration lookup path"""
-        self._orig_CONFIG_PATH = config.CONFIG_PATH
-        config.CONFIG_PATH = M_CONFIG_PATH
-
-    def tearDown(self):
-        """Restore configuration lookup path"""
-        config.CONFIG_PATH = self._orig_CONFIG_PATH
-
+class TestConfig:
     def test_real_lookup_path(self):
         home = os.environ["HOME"]
         pwd = os.environ["PWD"]
 
-        self.assertEqual(
-            [
-                "/etc/ovh.conf",
-                home + "/.ovh.conf",
-                pwd + "/ovh.conf",
-            ],
-            self._orig_CONFIG_PATH,
+        assert ovh.config.CONFIG_PATH == [
+            "/etc/ovh.conf",
+            home + "/.ovh.conf",
+            pwd + "/ovh.conf",
+        ]
+
+    @patch("ovh.config.CONFIG_PATH", [systemConf, userPartialConf, localPartialConf])
+    def test_config_from_files(self):
+        client = ovh.Client(endpoint="ovh-eu")
+        assert client._application_key == "system"
+        assert client._application_secret == "user"
+        assert client._consumer_key == "local"
+
+    @patch("ovh.config.CONFIG_PATH", [userConf])
+    def test_config_from_given_config_file(self):
+        client = ovh.Client(endpoint="ovh-eu", config_file=systemConf)
+        assert client._application_key == "system"
+        assert client._application_secret == "system"
+        assert client._consumer_key == "system"
+
+    @patch("ovh.config.CONFIG_PATH", [userConf])
+    def test_config_from_only_one_file(self):
+        client = ovh.Client(endpoint="ovh-eu")
+        assert client._application_key == "user"
+        assert client._application_secret == "user"
+        assert client._consumer_key == "user"
+
+    @patch("ovh.config.CONFIG_PATH", [doesNotExistConf])
+    def test_config_from_non_existing_file(self):
+        client = ovh.Client(endpoint="ovh-eu")
+        assert client._application_key is None
+        assert client._application_secret is None
+        assert client._consumer_key is None
+
+    @patch("ovh.config.CONFIG_PATH", [invalidINIConf])
+    def test_config_from_invalid_ini_file(self):
+        from configparser import MissingSectionHeaderError
+
+        with pytest.raises(MissingSectionHeaderError):
+            ovh.Client(endpoint="ovh-eu")
+
+    @patch("ovh.config.CONFIG_PATH", [errorConf])
+    def test_config_from_invalid_file(self):
+        client = ovh.Client(endpoint="ovh-eu")
+        assert client._application_key is None
+        assert client._application_secret is None
+        assert client._consumer_key is None
+
+    @patch("ovh.config.CONFIG_PATH", [userConf])
+    @patch.dict(
+        "os.environ",
+        {
+            "OVH_ENDPOINT": "ovh-eu",
+            "OVH_APPLICATION_KEY": "env",
+            "OVH_APPLICATION_SECRET": "env",
+            "OVH_CONSUMER_KEY": "env",
+        },
+    )
+    def test_config_from_env(self):
+        client = ovh.Client(endpoint="ovh-eu")
+        assert client._application_key == "env"
+        assert client._application_secret == "env"
+        assert client._consumer_key == "env"
+
+    @patch("ovh.config.CONFIG_PATH", [userConf])
+    def test_config_from_args(self):
+        client = ovh.Client(
+            endpoint="ovh-eu", application_key="param", application_secret="param", consumer_key="param"
         )
+        assert client._application_key == "param"
+        assert client._application_secret == "param"
+        assert client._consumer_key == "param"
 
-    def test_config_get_conf(self):
-        conf = config.ConfigurationManager()
+    def test_invalid_endpoint(self):
+        from ovh.exceptions import InvalidRegion
 
-        self.assertEqual("soyoustart-ca", conf.get("default", "endpoint"))
-        self.assertEqual("This is a *fake* global application key", conf.get("ovh-eu", "application_key"))
-        self.assertEqual("This is a *real* global application secret", conf.get("ovh-eu", "application_secret"))
-        self.assertEqual("I am kidding at home", conf.get("ovh-eu", "consumer_key"))
-        self.assertEqual("This is a fake local application key", conf.get("soyoustart-ca", "application_key"))
-        self.assertEqual("This is a *real* local application key", conf.get("soyoustart-ca", "application_secret"))
-        self.assertEqual("I am locally kidding", conf.get("soyoustart-ca", "consumer_key"))
-
-        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)
-        self.assertTrue(conf.get("ovh-ca", "application_key") is None)
-        self.assertTrue(conf.get("ovh-laponie", "application_key") is None)
-
-    def test_config_get_conf_env_rules_them_all(self):
-        conf = config.ConfigurationManager()
-
-        with mock.patch.dict("os.environ", M_ENVIRON):
-            self.assertEqual(M_ENVIRON["OVH_ENDPOINT"], conf.get("wathever", "endpoint"))
-            self.assertEqual(M_ENVIRON["OVH_APPLICATION_KEY"], conf.get("wathever", "application_key"))
-            self.assertEqual(M_ENVIRON["OVH_APPLICATION_SECRET"], conf.get("wathever", "application_secret"))
-            self.assertEqual(M_ENVIRON["OVH_CONSUMER_KEY"], conf.get("wathever", "consumer_key"))
-
-        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)
-
-    def test_config_get_custom_conf(self):
-        conf = config.ConfigurationManager()
-        conf.read(M_CUSTOM_CONFIG_PATH)
-
-        self.assertEqual("ovh-ca", conf.get("default", "endpoint"))
-        self.assertEqual("This is a fake custom application key", conf.get("ovh-ca", "application_key"))
-        self.assertEqual("This is a *real* custom application key", conf.get("ovh-ca", "application_secret"))
-        self.assertEqual("I am customingly kidding", conf.get("ovh-ca", "consumer_key"))
-        self.assertTrue(conf.get("ovh-eu", "non-existent") is None)
+        with pytest.raises(InvalidRegion):
+            ovh.Client(endpoint="not_existing")
