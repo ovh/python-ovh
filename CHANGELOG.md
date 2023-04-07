@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 1.1.0 (2023-04-07)
+
+- [feature]: add support for v2 routes (#115)
+- [buildsystem]: move to github actions, using unittest (#112, #114, #117, #113)
+
 ## 1.0.1 (2023-03-07)
 
 - [buildsystem] missing changelog entry for 1.0.0
