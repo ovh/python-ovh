@@ -43,7 +43,7 @@ credential creation and requests signing.
 Installation
 ============
 
-The python wrapper works with Python 3.6+.
+The python wrapper works with Python 3.7+.
 
 The easiest way to get the latest stable release is to grab it from `pypi
 <https://pypi.python.org/pypi/ovh>`_ using ``pip``.
