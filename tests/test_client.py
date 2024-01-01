@@ -27,7 +27,7 @@
 from unittest import mock
 
 import pytest
-import requests
+import niquests
 
 from ovh.client import ENDPOINTS, Client
 from ovh.exceptions import (
@@ -213,7 +213,7 @@ class TestClient:
         api = Client("ovh-eu", application_key=MockApplicationKey)
 
         # request fails, somehow
-        m_req.side_effect = requests.RequestException
+        m_req.side_effect = niquests.RequestException
         with pytest.raises(HTTPError):
             api.call("GET", "/unauth", None, False)
         m_req.side_effect = None

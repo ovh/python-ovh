@@ -38,8 +38,8 @@ import keyword
 import time
 from urllib.parse import urlencode
 
-from requests import Session
-from requests.exceptions import RequestException
+from niquests import Session
+from niquests.exceptions import RequestException
 
 from . import config
 from .consumer_key import ConsumerKeyRequest
@@ -115,6 +115,8 @@ class Client:
         consumer_key=None,
         timeout=TIMEOUT,
         config_file=None,
+        resolver=None,
+        source_address=None,
     ):
         """
         Creates a new Client. No credential check is done at this point.
@@ -134,7 +136,7 @@ class Client:
         ``timeout`` can either be a float or a tuple. If it is a float it
         sets the same timeout for both connection and read. If it is a tuple
         connection and read timeout will be set independently. To use the
-        latter approach you need at least requests v2.4.0. Default value is
+        latter approach you need at least niquests v3.0.0. Default value is
         180 seconds for connection and 180 seconds for read.
 
         :param str endpoint: API endpoint to use. Valid values in ``ENDPOINTS``
@@ -177,8 +179,8 @@ class Client:
         # lazy load time delta
         self._time_delta = None
 
-        # use a requests session to reuse HTTPS connections between requests
-        self._session = Session()
+        # use a niquests session to reuse HTTPS connections between requests
+        self._session = Session(resolver=resolver, source_address=source_address)
 
         # Override default timeout
         self._timeout = timeout
@@ -490,8 +492,8 @@ class Client:
         """
         Lowest level call helper. If ``consumer_key`` is not ``None``, inject
         authentication headers and sign the request.
-        Will return ``requests.Response`` object or let any
-        ``requests`` exception pass through.
+        Will return ``niquests.Response`` object or let any
+        ``niquests`` exception pass through.
 
         Request signature is a sha1 hash on following fields, joined by '+'
          - application_secret
