@@ -61,7 +61,7 @@ class ConsumerKeyRequest(object):
         self._client = client
         self._access_rules = []
 
-    def request(self, redirect_url=None):
+    def request(self, redirect_url=None, allowedIPs=None):
         """
         Create the consumer key with the configures autorizations. The user will
         need to validate it before it can be used with the API
@@ -73,7 +73,7 @@ class ConsumerKeyRequest(object):
             'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
         }
         """  # noqa: E501
-        return self._client.request_consumerkey(self._access_rules, redirect_url)
+        return self._client.request_consumerkey(self._access_rules, redirect_url, allowedIPs)
 
     def add_rule(self, method, path):
         """

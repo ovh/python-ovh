@@ -86,4 +86,4 @@ class TestConsumerKey:
         ck._access_rules = []
         ck.add_recursive_rules(ovh.API_READ_WRITE, "/")
         assert ck.request() is m_client.request_consumerkey.return_value
-        m_client.request_consumerkey.assert_called_once_with(ck._access_rules, None)
+        m_client.request_consumerkey.assert_called_once_with(ck._access_rules, None, None)
