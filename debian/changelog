@@ -1,3 +1,9 @@
+python-ovh (1.1.2) trusty; urgency=medium
+
+  * fix: debian packaging: remove file MIGRATION.rst
+
+ -- Romain Beuque <romain.beuque@ovhcloud.com>  Fri, 07 Jun 2024 16:10:04 +0000
+
 python-ovh (1.1.1) trusty; urgency=medium
 
   * feat: handle allowedIPs parameters in CK building

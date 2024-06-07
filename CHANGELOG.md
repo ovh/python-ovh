@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.2 (2024-06-07)
+
+- [fix]: debian packaging: remove MIGRATION.rst
+
 ## 1.1.1 (2024-06-07)
 
 - [feature]: handle allowedIPs parameters in CK building
