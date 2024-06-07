@@ -77,7 +77,7 @@ class TestClient:
     @mock.patch.object(Client, "call", return_value={"consumerKey": "CK"})
     def test_request_consumerkey(self, m_call):
         api = Client("ovh-eu")
-        ret = api.request_consumerkey([{"method": "GET", "path": "/"}], "https://example.com")
+        ret = api.request_consumerkey([{"method": "GET", "path": "/"}], "https://example.com", ["127.0.0.1/32"])
 
         m_call.assert_called_once_with(
             "POST",
@@ -85,6 +85,7 @@ class TestClient:
             {
                 "redirection": "https://example.com",
                 "accessRules": [{"method": "GET", "path": "/"}],
+                "allowedIPs": ["127.0.0.1/32"],
             },
             False,
         )

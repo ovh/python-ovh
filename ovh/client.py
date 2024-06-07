@@ -228,14 +228,15 @@ class Client:
         """  # noqa:E501
         return ConsumerKeyRequest(self)
 
-    def request_consumerkey(self, access_rules, redirect_url=None):
+    def request_consumerkey(self, access_rules, redirect_url=None, allowedIPs=None):
         """
         Create a new "consumer key" identifying this application's end user. API
         will return a ``consumerKey`` and a ``validationUrl``. The end user must
         visit the ``validationUrl``, authenticate and validate the requested
         ``access_rules`` to link his account to the ``consumerKey``. Once this
         is done, he may optionally be redirected to ``redirect_url`` and the
-        application can start using the ``consumerKey``.
+        application can start using the ``consumerKey``. If adding an ``allowedIPs``
+        parameter, the generated credentials will only be usable from these IPs.
 
         The new ``consumerKey`` is automatically loaded into
         ``self._consumer_key`` and is ready to used as soon as validated.
@@ -270,7 +271,7 @@ class Client:
             ]
 
             # Request token
-            validation = client.request_consumerkey(access_rules)
+            validation = client.request_consumerkey(access_rules, redirect_url="https://optional-redirect-url.example.org", allowedIPs=["127.0.0.1/32"])
 
             print("Please visit", validation['validationUrl'], "to authenticate")
             input("and press Enter to continue...")
@@ -280,12 +281,19 @@ class Client:
 
 
         :param list access_rules: Mapping specifying requested privileges.
-        :param str redirect_url: Where to redirect end user upon validation.
+        :param str redirect_url: Where to redirect end user upon validation (optional).
+        :param list allowedIPs: CIDRs that will be allowed to use these credentials (optional).
         :raises APIError: When ``self.call`` fails.
         :returns: dict with ``consumerKey`` and ``validationUrl`` keys
         :rtype: dict
-        """
-        res = self.post("/auth/credential", _need_auth=False, accessRules=access_rules, redirection=redirect_url)
+        """  # noqa:E501
+        res = self.post(
+            "/auth/credential",
+            _need_auth=False,
+            accessRules=access_rules,
+            redirection=redirect_url,
+            allowedIPs=allowedIPs,
+        )
         self._consumer_key = res["consumerKey"]
         return res
 
