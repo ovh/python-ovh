@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.1 (2024-06-07)
+
+- [feature]: handle allowedIPs parameters in CK building
+
 ## 1.1.0 (2023-04-07)
 
 - [feature]: add support for v2 routes (#115)
