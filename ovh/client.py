@@ -33,6 +33,7 @@ It handles requesting credential, signing queries...
  https://help.ovhcloud.com/csm/en-gb-api-getting-started-ovhcloud-api?id=kb_article_view&sysparm_article=KB0042784
 """
 
+import backoff
 import hashlib
 import json
 import keyword
@@ -116,6 +117,8 @@ class Client:
         consumer_key=None,
         timeout=TIMEOUT,
         config_file=None,
+        auto_retry=None,
+        auto_retry_on_exceptions=None,
     ):
         """
         Creates a new Client. No credential check is done at this point.
@@ -144,6 +147,8 @@ class Client:
         :param str consumer_key: uniquely identifies
         :param tuple timeout: Connection and read timeout for each request
         :param float timeout: Same timeout for both connection and read
+        :param int auto_retry: Number of times backoff will retry if a call fail
+        :param tuple auto_retry_on_exceptions: Exceptions that need to perform an auto_retry
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
         """
 
@@ -184,7 +189,24 @@ class Client:
         # Override default timeout
         self._timeout = timeout
 
+        # Set default auto_retry
+        self._auto_retry = auto_retry
+
+        # Set default auto_retry_on_exceptions
+        if self.auto_retry_on_exceptions is None:
+            self._auto_retry_on_exceptions = (HTTPError, NetworkError)
+        else:
+            self._auto_retry_on_exceptions = auto_retry_on_exceptions
+
     # high level API
+    def retry_call(self, *args, **kwargs):
+        """Perform raw query and handle auto_retry if necessary."""
+        if self._auto_retry is None:
+            return self.call(*args, **kwargs)
+        else:
+            return backoff.on_exception(backoff.expo,
+                                        self._auto_retry_on_exceptions,
+                                        max_tries=self._auto_retry)(self.call)(*args, **kwargs)
 
     @property
     def time_delta(self):
@@ -357,7 +379,7 @@ class Client:
                 else:
                     _target = "%s?%s" % (_target, query_string)
 
-        return self.call("GET", _target, None, _need_auth)
+        return self.retry_call('GET', _target, None, _need_auth)
 
     def put(self, _target, _need_auth=True, **kwargs):
         """
@@ -374,7 +396,7 @@ class Client:
         kwargs = self._canonicalize_kwargs(kwargs)
         if not kwargs:
             kwargs = None
-        return self.call("PUT", _target, kwargs, _need_auth)
+        return self.retry_call('PUT', _target, kwargs, _need_auth)
 
     def post(self, _target, _need_auth=True, **kwargs):
         """
@@ -391,7 +413,7 @@ class Client:
         kwargs = self._canonicalize_kwargs(kwargs)
         if not kwargs:
             kwargs = None
-        return self.call("POST", _target, kwargs, _need_auth)
+        return self.retry_call('POST', _target, kwargs, _need_auth)
 
     def delete(self, _target, _need_auth=True, **kwargs):
         """
@@ -414,7 +436,7 @@ class Client:
                 else:
                     _target = "%s?%s" % (_target, query_string)
 
-        return self.call("DELETE", _target, None, _need_auth)
+        return self.retry_call('DELETE', _target, None, _need_auth)
 
     # low level helpers
 
