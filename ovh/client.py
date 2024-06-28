@@ -49,6 +49,7 @@ from .exceptions import (
     BadParametersError,
     Forbidden,
     HTTPError,
+    InvalidConfiguration,
     InvalidCredential,
     InvalidKey,
     InvalidRegion,
@@ -60,8 +61,9 @@ from .exceptions import (
     ResourceExpiredError,
     ResourceNotFoundError,
 )
+from .oauth2 import OAuth2
 
-#: Mapping between OVH API region names and corresponding endpoints
+# Mapping between OVH API region names and corresponding endpoints
 ENDPOINTS = {
     "ovh-eu": "https://eu.api.ovh.com/1.0",
     "ovh-us": "https://api.us.ovhcloud.com/1.0",
@@ -72,8 +74,15 @@ ENDPOINTS = {
     "soyoustart-ca": "https://ca.api.soyoustart.com/1.0",
 }
 
-#: Default timeout for each request. 180 seconds connect, 180 seconds read.
+# Default timeout for each request. 180 seconds connect, 180 seconds read.
 TIMEOUT = 180
+
+# OAuth2 token provider URLs
+OAUTH2_TOKEN_URLS = {
+    "ovh-eu": "https://www.ovh.com/auth/oauth2/token",
+    "ovh-ca": "https://ca.ovh.com/auth/oauth2/token",
+    "ovh-us": "https://us.ovhcloud.com/auth/oauth2/token",
+}
 
 
 class Client:
@@ -116,18 +125,24 @@ class Client:
         consumer_key=None,
         timeout=TIMEOUT,
         config_file=None,
+        client_id=None,
+        client_secret=None,
     ):
         """
         Creates a new Client. No credential check is done at this point.
 
-        The ``application_key`` identifies your application while
-        ``application_secret`` authenticates it. On the other hand, the
-        ``consumer_key`` uniquely identifies your application's end user without
-        requiring his personal password.
+        When using OAuth2 authentication, ``client_id`` and ``client_secret``
+        will be used to initiate a Client Credential OAuth2 flow.
 
-        If any of ``endpoint``, ``application_key``, ``application_secret``
-        or ``consumer_key`` is not provided, this client will attempt to locate
-        from them from environment, ~/.ovh.cfg or /etc/ovh.cfg.
+        When using the OVHcloud authentication method, the ``application_key``
+        identifies your application while ``application_secret`` authenticates
+        it. On the other hand, the ``consumer_key`` uniquely identifies your
+        application's end user without requiring his personal password.
+
+        If any of ``endpoint``, ``application_key``, ``application_secret``,
+        ``consumer_key``, ``client_id`` or ``client_secret`` is not provided,
+        this client will attempt to locate from them from environment,
+        ``~/.ovh.cfg`` or ``/etc/ovh.cfg``.
 
         See :py:mod:`ovh.config` for more information on supported
         configuration mechanisms.
@@ -139,9 +154,11 @@ class Client:
         180 seconds for connection and 180 seconds for read.
 
         :param str endpoint: API endpoint to use. Valid values in ``ENDPOINTS``
-        :param str application_key: Application key as provided by OVH
-        :param str application_secret: Application secret key as provided by OVH
+        :param str application_key: Application key as provided by OVHcloud
+        :param str application_secret: Application secret key as provided by OVHcloud
         :param str consumer_key: uniquely identifies
+        :param str client_id: OAuth2 client ID
+        :param str client_secret: OAuth2 client secret
         :param tuple timeout: Connection and read timeout for each request
         :param float timeout: Same timeout for both connection and read
         :raises InvalidRegion: if ``endpoint`` can't be found in ``ENDPOINTS``.
@@ -174,6 +191,50 @@ class Client:
         if consumer_key is None:
             consumer_key = configuration.get(endpoint, "consumer_key")
         self._consumer_key = consumer_key
+
+        # load OAuth2 data
+        if client_id is None:
+            client_id = configuration.get(endpoint, "client_id")
+        self._client_id = client_id
+
+        if client_secret is None:
+            client_secret = configuration.get(endpoint, "client_secret")
+        self._client_secret = client_secret
+
+        # configuration validation
+        if bool(self._client_id) is not bool(self._client_secret):
+            raise InvalidConfiguration("Invalid OAuth2 config, both client_id and client_secret must be given")
+
+        if bool(self._application_key) is not bool(self._application_secret):
+            raise InvalidConfiguration(
+                "Invalid authentication config, both application_key and application_secret must be given"
+            )
+
+        if self._client_id is not None and self._application_key is not None:
+            raise InvalidConfiguration(
+                "Can't use both application_key/application_secret and OAuth2 client_id/client_secret"
+            )
+        if self._client_id is None and self._application_key is None:
+            raise InvalidConfiguration(
+                "Missing authentication information, you need to provide at least an application_key/application_secret"
+                " or a client_id/client_secret"
+            )
+        if self._client_id and endpoint not in OAUTH2_TOKEN_URLS:
+            raise InvalidConfiguration(
+                "OAuth2 authentication is not compatible with endpoint "
+                + endpoint
+                + " (it can only be used with ovh-eu, ovh-ca and ovh-us)"
+            )
+
+        # when in OAuth2 mode, instantiate the oauthlib client
+        if self._client_id:
+            self._oauth2 = OAuth2(
+                client_id=self._client_id,
+                client_secret=self._client_secret,
+                token_url=OAUTH2_TOKEN_URLS[endpoint],
+            )
+        else:
+            self._oauth2 = None
 
         # lazy load time delta
         self._time_delta = None
@@ -524,7 +585,6 @@ class Client:
 
         if headers is None:
             headers = {}
-        headers["X-Ovh-Application"] = self._application_key
 
         # include payload
         if data is not None:
@@ -533,6 +593,9 @@ class Client:
 
         # sign request. Never sign 'time' or will recurse infinitely
         if need_auth:
+            if self._oauth2:
+                return self._oauth2.session.request(method, target, headers=headers, data=body, timeout=self._timeout)
+
             if not self._application_secret:
                 raise InvalidKey("Invalid ApplicationSecret '%s'" % self._application_secret)
 
@@ -551,4 +614,5 @@ class Client:
             headers["X-Ovh-Timestamp"] = now
             headers["X-Ovh-Signature"] = "$1$" + signature.hexdigest()
 
+        headers["X-Ovh-Application"] = self._application_key
         return self._session.request(method, target, headers=headers, data=body, timeout=self._timeout)

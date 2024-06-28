@@ -24,6 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import time
 from unittest import mock
 
 import pytest
@@ -41,6 +42,7 @@ from ovh.exceptions import (
     NetworkError,
     NotCredential,
     NotGrantedCall,
+    OAuth2FailureError,
     ResourceConflictError,
     ResourceExpiredError,
     ResourceNotFoundError,
@@ -57,7 +59,7 @@ class TestClient:
     @mock.patch("time.time", return_value=1457018875.467238)
     @mock.patch.object(Client, "call", return_value=1457018881)
     def test_time_delta(self, m_call, m_time):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         assert api._time_delta is None
         assert m_call.called is False
         assert m_time.called is False
@@ -76,7 +78,7 @@ class TestClient:
 
     @mock.patch.object(Client, "call", return_value={"consumerKey": "CK"})
     def test_request_consumerkey(self, m_call):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         ret = api.request_consumerkey([{"method": "GET", "path": "/"}], "https://example.com", ["127.0.0.1/32"])
 
         m_call.assert_called_once_with(
@@ -92,14 +94,14 @@ class TestClient:
         assert ret == {"consumerKey": "CK"}
 
     def test_new_consumer_key_request(self):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         ck = api.new_consumer_key_request()
         assert ck._client == api
 
     # test wrappers
 
     def test__canonicalize_kwargs(self):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         assert api._canonicalize_kwargs({}) == {}
         assert api._canonicalize_kwargs({"from": "value"}) == {"from": "value"}
         assert api._canonicalize_kwargs({"_to": "value"}) == {"_to": "value"}
@@ -107,7 +109,7 @@ class TestClient:
 
     @mock.patch.object(Client, "call")
     def test_query_string(self, m_call):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
 
         for method, call in (("GET", api.get), ("DELETE", api.delete)):
             m_call.reset_mock()
@@ -128,7 +130,7 @@ class TestClient:
 
     @mock.patch.object(Client, "call")
     def test_body(self, m_call):
-        api = Client("ovh-eu")
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
 
         for method, call in (("POST", api.post), ("PUT", api.put)):
             m_call.reset_mock()
@@ -202,7 +204,7 @@ class TestClient:
         m_res.status_code = 99
         m_res.headers = {"X-OVH-QUERYID": "FR.test1"}
 
-        api = Client("ovh-eu", application_key=MockApplicationKey)
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         with pytest.raises(APIError) as e:
             api.call("GET", "/unit/test", None, False)
         assert e.value.query_id == "FR.test1"
@@ -211,7 +213,7 @@ class TestClient:
     def test_call_errors(self, m_req):
         m_res = m_req.return_value
 
-        api = Client("ovh-eu", application_key=MockApplicationKey)
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
 
         # request fails, somehow
         m_req.side_effect = requests.RequestException
@@ -246,16 +248,13 @@ class TestClient:
                 api.call("GET", "/unauth", None, False)
 
         # errors
-        api = Client("ovh-eu", MockApplicationKey, None, MockConsumerKey)
-        with pytest.raises(InvalidKey):
-            api.call("GET", "/unit/test", None, True)
         api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret, None)
         with pytest.raises(InvalidKey):
             api.call("GET", "/unit/test", None, True)
 
     @mock.patch("ovh.client.Session.request", return_value="Let's assume requests will return this")
     def test_raw_call_with_headers(self, m_req):
-        api = Client("ovh-eu", MockApplicationKey)
+        api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret)
         r = api.raw_call("GET", "/unit/path", None, False, headers={"Custom-Header": "1"})
         assert r == "Let's assume requests will return this"
         assert m_req.call_args_list == [
@@ -274,7 +273,7 @@ class TestClient:
     # Perform real API tests.
     def test_endpoints(self):
         for endpoint in ENDPOINTS.keys():
-            auth_time = Client(endpoint).get("/auth/time", _need_auth=False)
+            auth_time = Client(endpoint, MockApplicationKey, MockApplicationSecret).get("/auth/time", _need_auth=False)
             assert auth_time > 0
 
     @mock.patch("time.time", return_value=1457018875.467238)
@@ -308,3 +307,104 @@ class TestClient:
             mock.call("GET", "https://eu.api.ovh.com/v1/call", headers=_h("v1"), data="", timeout=180),
             mock.call("GET", "https://eu.api.ovh.com/v2/call", headers=_h("v2"), data="", timeout=180),
         ]
+
+    @mock.patch("ovh.client.Session.request")
+    def test_oauth2(self, m_req):
+        def resp(*args, **kwargs):
+            if args[0] == "POST" and args[1] == "https://www.ovh.com/auth/oauth2/token":
+                resp = mock.Mock()
+                resp.status_code = 200
+                resp.text = """{
+  "access_token":"MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3",
+  "token_type":"Bearer",
+  "expires_in":3,
+  "scope":"all"
+}"""
+                return resp
+
+            if args[0] == "GET" and args[1] == "https://eu.api.ovh.com/1.0/call":
+                resp = mock.Mock()
+                resp.status_code = 200
+                resp.text = "{}"
+                return resp
+
+            raise NotImplementedError("FIXME")
+
+        m_req.side_effect = resp
+
+        call_oauth = mock.call(
+            "POST",
+            "https://www.ovh.com/auth/oauth2/token",
+            headers={"Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"},
+            data={"grant_type": "client_credentials", "scope": "all"},
+            files=None,
+            timeout=None,
+            auth=mock.ANY,
+            verify=None,
+            proxies=None,
+            cert=None,
+        )
+        call_api = mock.call(
+            "GET",
+            "https://eu.api.ovh.com/1.0/call",
+            headers={"Authorization": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"},
+            data="",
+            files=None,
+            timeout=180,
+        )
+
+        # First call triggers the fetch of a token, then the real call
+        api = Client("ovh-eu", client_id="oauth2_id", client_secret="oauth2_secret")
+        api.call("GET", "/call", None, True)
+        assert m_req.call_args_list == [call_oauth, call_api]
+
+        # Calling the API again does not trigger the fetch of a new token
+        api.call("GET", "/call", None, True)
+        assert m_req.call_args_list == [call_oauth, call_api, call_api]
+
+        # The fetched token had an `expires_in` set to 3, sleep more than that, which makes us fetch a now token
+        time.sleep(4)
+        api.call("GET", "/call", None, True)
+        assert m_req.call_args_list == [call_oauth, call_api, call_api, call_oauth, call_api]
+
+    @mock.patch("ovh.client.Session.request")
+    def test_oauth2_503(self, m_req):
+        m_res = m_req.return_value
+        m_res.status_code = 503
+        m_res.text = "<html><body><p>test</p></body></html>"
+
+        api = Client("ovh-eu", client_id="oauth2_id", client_secret="oauth2_secret")
+
+        with pytest.raises(OAuth2FailureError) as e:
+            api.call("GET", "/call", None, True)
+        assert str(e.value) == (
+            "OAuth2 failure: Missing access token parameter. Token creation failed with status_code=503, "
+            "body=<html><body><p>test</p></body></html>"
+        )
+
+    @mock.patch("ovh.client.Session.request")
+    def test_oauth2_bad_json(self, m_req):
+        m_res = m_req.return_value
+        m_res.status_code = 200
+        m_res.text = "<html><body><p>test</p></body></html>"
+
+        api = Client("ovh-eu", client_id="oauth2_id", client_secret="oauth2_secret")
+
+        with pytest.raises(OAuth2FailureError) as e:
+            api.call("GET", "/call", None, True)
+        assert str(e.value) == (
+            "OAuth2 failure: Missing access token parameter. Received invalid body: "
+            "<html><body><p>test</p></body></html>"
+        )
+
+    @mock.patch("ovh.client.Session.request")
+    def test_oauth2_unknown_client(self, m_req):
+        m_res = m_req.return_value
+        m_res.status_code = 200
+        m_res.text = '{"error":"invalid_client", "error_description":"ovhcloud oauth2 client does not exists"}'
+
+        api = Client("ovh-eu", client_id="oauth2_id", client_secret="oauth2_secret")
+
+        with pytest.raises(OAuth2FailureError) as e:
+            api.call("GET", "/call", None, True)
+        assert str(e.value) == "OAuth2 failure: (invalid_client) ovhcloud oauth2 client does not exists"

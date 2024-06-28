@@ -59,6 +59,10 @@ class InvalidCredential(APIError):
     """Raised when trying to sign request with invalid consumer key"""
 
 
+class InvalidConfiguration(APIError):
+    """Raised when trying to load an invalid configuration into a client"""
+
+
 class InvalidResponse(APIError):
     """Raised when api response is not valid json"""
 
@@ -101,3 +105,7 @@ class Forbidden(APIError):
 
 class ResourceExpiredError(APIError):
     """Raised when requested resource expired."""
+
+
+class OAuth2FailureError(APIError):
+    """Raised when the OAuth2 workflow fails"""

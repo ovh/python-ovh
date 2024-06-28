@@ -24,6 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from configparser import MissingSectionHeaderError
 import os
 from pathlib import Path
 from unittest.mock import patch
@@ -31,11 +32,16 @@ from unittest.mock import patch
 import pytest
 
 import ovh
+from ovh.exceptions import InvalidConfiguration, InvalidRegion
 
 TEST_DATA = str(Path(__file__).resolve().parent / "data")
 systemConf = TEST_DATA + "/system.ini"
 userPartialConf = TEST_DATA + "/userPartial.ini"
 userConf = TEST_DATA + "/user.ini"
+userOAuth2Conf = TEST_DATA + "/user_oauth2.ini"
+userOAuth2InvalidConf = TEST_DATA + "/user_oauth2_invalid.ini"
+userOAuth2IncompatibleConfig = TEST_DATA + "/user_oauth2_incompatible.ini"
+userBothConf = TEST_DATA + "/user_both.ini"
 localPartialConf = TEST_DATA + "/localPartial.ini"
 doesNotExistConf = TEST_DATA + "/doesNotExist.ini"
 invalidINIConf = TEST_DATA + "/invalid.ini"
@@ -76,24 +82,58 @@ class TestConfig:
 
     @patch("ovh.config.CONFIG_PATH", [doesNotExistConf])
     def test_config_from_non_existing_file(self):
-        client = ovh.Client(endpoint="ovh-eu")
-        assert client._application_key is None
-        assert client._application_secret is None
-        assert client._consumer_key is None
+        with pytest.raises(InvalidConfiguration) as e:
+            ovh.Client(endpoint="ovh-eu")
+
+        assert str(e.value) == (
+            "Missing authentication information, you need to provide at least an "
+            "application_key/application_secret or a client_id/client_secret"
+        )
 
     @patch("ovh.config.CONFIG_PATH", [invalidINIConf])
     def test_config_from_invalid_ini_file(self):
-        from configparser import MissingSectionHeaderError
-
         with pytest.raises(MissingSectionHeaderError):
             ovh.Client(endpoint="ovh-eu")
 
     @patch("ovh.config.CONFIG_PATH", [errorConf])
     def test_config_from_invalid_file(self):
+        with pytest.raises(InvalidConfiguration) as e:
+            ovh.Client(endpoint="ovh-eu")
+
+        assert str(e.value) == (
+            "Missing authentication information, you need to provide at least an "
+            "application_key/application_secret or a client_id/client_secret"
+        )
+
+    @patch("ovh.config.CONFIG_PATH", [userOAuth2Conf])
+    def test_config_oauth2(self):
         client = ovh.Client(endpoint="ovh-eu")
-        assert client._application_key is None
-        assert client._application_secret is None
-        assert client._consumer_key is None
+        assert client._client_id == "foo"
+        assert client._client_secret == "bar"
+
+    @patch("ovh.config.CONFIG_PATH", [userBothConf])
+    def test_config_invalid_both(self):
+        with pytest.raises(InvalidConfiguration) as e:
+            ovh.Client(endpoint="ovh-eu")
+
+        assert str(e.value) == "Can't use both application_key/application_secret and OAuth2 client_id/client_secret"
+
+    @patch("ovh.config.CONFIG_PATH", [userOAuth2InvalidConf])
+    def test_config_invalid_oauth2(self):
+        with pytest.raises(InvalidConfiguration) as e:
+            ovh.Client(endpoint="ovh-eu")
+
+        assert str(e.value) == "Invalid OAuth2 config, both client_id and client_secret must be given"
+
+    @patch("ovh.config.CONFIG_PATH", [userOAuth2IncompatibleConfig])
+    def test_config_incompatible_oauth2(self):
+        with pytest.raises(InvalidConfiguration) as e:
+            ovh.Client(endpoint="kimsufi-eu")
+
+        assert str(e.value) == (
+            "OAuth2 authentication is not compatible with endpoint kimsufi-eu "
+            + "(it can only be used with ovh-eu, ovh-ca and ovh-us)"
+        )
 
     @patch("ovh.config.CONFIG_PATH", [userConf])
     @patch.dict(
@@ -121,7 +161,5 @@ class TestConfig:
         assert client._consumer_key == "param"
 
     def test_invalid_endpoint(self):
-        from ovh.exceptions import InvalidRegion
-
         with pytest.raises(InvalidRegion):
             ovh.Client(endpoint="not_existing")
