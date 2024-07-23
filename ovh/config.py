@@ -49,6 +49,8 @@ provided, it will look for a configuration file of the form:
     application_key=my_app_key
     application_secret=my_application_secret
     consumer_key=my_consumer_key
+    client_id=my_client_id
+    client_secret=my_client_secret
 
 The client will successively attempt to locate this configuration file in
 

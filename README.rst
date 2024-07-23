@@ -1,5 +1,5 @@
 .. image:: https://github.com/ovh/python-ovh/raw/master/docs/img/logo.png
-           :alt: Python & OVH APIs
+           :alt: Python & OVHcloud APIs
            :target: https://pypi.python.org/pypi/ovh
 
 Lightweight wrapper around OVHcloud's APIs. Handles all the hard work including
@@ -73,9 +73,9 @@ To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
 to register your application. Depending the API you plan to use, visit:
 
-- `OVH Europe <https://eu.api.ovh.com/createApp/>`_
-- `OVH US <https://api.us.ovhcloud.com/createApp/>`_
-- `OVH North-America <https://ca.api.ovh.com/createApp/>`_
+- `OVHcloud Europe <https://eu.api.ovh.com/createApp/>`_
+- `OVHcloud US <https://api.us.ovhcloud.com/createApp/>`_
+- `OVHcloud North-America <https://ca.api.ovh.com/createApp/>`_
 - `So you Start Europe <https://eu.api.soyoustart.com/createApp/>`_
 - `So you Start North America <https://ca.api.soyoustart.com/createApp/>`_
 - `Kimsufi Europe <https://eu.api.kimsufi.com/createApp/>`_
@@ -104,12 +104,15 @@ it looks like:
     ; uncomment following line when writing a script application
     ; with a single consumer key.
     ;consumer_key=my_consumer_key
+    ; uncomment to enable oauth2 authentication
+    ;client_id=my_client_id
+    ;client_secret=my_client_secret
 
 Depending on the API you want to use, you may set the ``endpoint`` to:
 
-* ``ovh-eu`` for OVH Europe API
-* ``ovh-us`` for OVH US API
-* ``ovh-ca`` for OVH North-America API
+* ``ovh-eu`` for OVHcloud Europe API
+* ``ovh-us`` for OVHcloud US API
+* ``ovh-ca`` for OVHcloud North-America API
 * ``soyoustart-eu`` for So you Start Europe API
 * ``soyoustart-ca`` for So you Start North America API
 * ``kimsufi-eu`` for Kimsufi Europe API
@@ -120,8 +123,21 @@ See Configuration_ for more information on available configuration mechanisms.
 .. note:: When using a versioning system, make sure to add ``ovh.conf`` to ignored
           files. It contains confidential/security-sensitive information!
 
-3. Authorize your application to access a customer account
-**********************************************************
+3. Authorize your application to access a customer account using OAuth2
+***********************************************************************
+
+``python-ovh`` supports two forms of authentication:
+* OAuth2, using scopped service accounts, and compatible with OVHcloud IAM
+* application key & application secret & consumer key (covered in the next chapter)
+
+For OAuth2, first, you need to generate a pair of valid ``client_id`` and ``client_secret``: you
+can proceed by [following this documentation](https://help.ovhcloud.com/csm/en-manage-service-account?id=kb_article_view&sysparm_article=KB0059343)
+
+Once you have retrieved your ``client_id`` and ``client_secret``, you can create and edit
+a configuration file that will be used by ``python-ovh``.
+
+4. Authorize your application to access a customer account using custom OVHcloud authentication
+***********************************************************************************************
 
 To allow your application to access a customer account using the API on your
 behalf, you need a **consumer key (CK)**.
@@ -164,7 +180,7 @@ Install a new mail redirection
 ------------------------------
 
 e-mail redirections may be freely configured on domains and DNS zones hosted by
-OVH to an arbitrary destination e-mail using API call
+OVHcloud to an arbitrary destination e-mail using API call
 ``POST /email/domain/{domain}/redirection``.
 
 For this call, the api specifies that the source address shall be given under the
@@ -195,7 +211,7 @@ is only supported with reserved keywords.
 Grab bill list
 --------------
 
-Let's say you want to integrate OVH bills into your own billing system, you
+Let's say you want to integrate OVHcloud bills into your own billing system, you
 could just script around the ``/me/bills`` endpoints and even get the details
 of each bill lines using ``/me/bill/{billId}/details/{billDetailId}``.
 
@@ -359,7 +375,7 @@ You have 3 ways to provide configuration to the client:
 Embed the configuration in the code
 -----------------------------------
 
-The straightforward way to use OVH's API keys is to embed them directly in the
+The straightforward way to use OVHcloud's API keys is to embed them directly in the
 application code. While this is very convenient, it lacks of elegance and
 flexibility.
 
@@ -547,8 +563,8 @@ build HTML documentation:
 Supported APIs
 ==============
 
-OVH Europe
-----------
+OVHcloud Europe
+---------------
 
 - **Documentation**: https://eu.api.ovh.com/
 - **Community support**: api-subscribe@ml.ovh.net
@@ -556,16 +572,16 @@ OVH Europe
 - **Create application credentials**: https://eu.api.ovh.com/createApp/
 - **Create script credentials** (all keys at once): https://eu.api.ovh.com/createToken/
 
-OVH US
-----------
+OVHcloud US
+-----------
 
 - **Documentation**: https://api.us.ovhcloud.com/
 - **Console**: https://api.us.ovhcloud.com/console/
 - **Create application credentials**: https://api.us.ovhcloud.com/createApp/
 - **Create script credentials** (all keys at once): https://api.us.ovhcloud.com/createToken/
 
-OVH North America
------------------
+OVHcloud North America
+---------------------
 
 - **Documentation**: https://ca.api.ovh.com/
 - **Community support**: api-subscribe@ml.ovh.net
