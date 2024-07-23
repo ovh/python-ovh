@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 1.2.0 (2024-07-23)
+
+- [buildsystem] add project URLs to setup.cfg by @florianvazelle in #131
+- [buildsystem] update CODEOWNERS to maintainer group by @deathiop in #135
+- [feature] handle Client Credential OAuth2 authentication method by @deathiop in #134
+
 ## 1.1.2 (2024-06-07)
 
 - [fix]: debian packaging: remove MIGRATION.rst

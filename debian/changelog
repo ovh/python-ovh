@@ -1,3 +1,9 @@
+python-ovh (1.2.0) trusty; urgency=medium
+
+  *  build: add project URLs to setup.cfg (#131)
+  *  chore: update CODEOWNERS to maintainer group (#135)
+  *  feat: handle Client Credential OAuth2 authentication method (#134)
+
 python-ovh (1.1.2) trusty; urgency=medium
 
   * fix: debian packaging: remove file MIGRATION.rst
