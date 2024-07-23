@@ -581,7 +581,7 @@ OVHcloud US
 - **Create script credentials** (all keys at once): https://api.us.ovhcloud.com/createToken/
 
 OVHcloud North America
----------------------
+----------------------
 
 - **Documentation**: https://ca.api.ovh.com/
 - **Community support**: api-subscribe@ml.ovh.net
