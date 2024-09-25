@@ -127,6 +127,7 @@ See Configuration_ for more information on available configuration mechanisms.
 ***********************************************************************
 
 ``python-ovh`` supports two forms of authentication:
+
 * OAuth2, using scopped service accounts, and compatible with OVHcloud IAM
 * application key & application secret & consumer key (covered in the next chapter)
 
