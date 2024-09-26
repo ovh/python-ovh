@@ -116,7 +116,7 @@ class ConfigurationManager:
 
     def read(self, config_file):
         # Read an other config file
-        self.config.read(config_file)
+        self.config.read(os.path.realpath(os.path.expanduser(config_file)))
 
 
 #: System wide instance :py:class:`ConfigurationManager` instance
