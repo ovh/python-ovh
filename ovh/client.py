@@ -28,7 +28,7 @@
 This module provides a simple python wrapper over the OVH REST API.
 It handles requesting credential, signing queries...
 
- - To get your API keys: https://eu.api.ovh.com/createApp/
+ - To get your API keys: https://api.eu.ovhcloud.com/createApp/
  - To get started with API:
  https://help.ovhcloud.com/csm/en-gb-api-getting-started-ovhcloud-api?id=kb_article_view&sysparm_article=KB0042784
 """
@@ -65,9 +65,9 @@ from .oauth2 import OAuth2
 
 # Mapping between OVH API region names and corresponding endpoints
 ENDPOINTS = {
-    "ovh-eu": "https://eu.api.ovh.com/1.0",
+    "ovh-eu": "https://api.eu.ovhcloud.com/1.0",
     "ovh-us": "https://api.us.ovhcloud.com/1.0",
-    "ovh-ca": "https://ca.api.ovh.com/1.0",
+    "ovh-ca": "https://api.ca.ovhcloud.com/1.0",
     "kimsufi-eu": "https://eu.api.kimsufi.com/1.0",
     "kimsufi-ca": "https://ca.api.kimsufi.com/1.0",
     "soyoustart-eu": "https://eu.api.soyoustart.com/1.0",
@@ -79,8 +79,8 @@ TIMEOUT = 180
 
 # OAuth2 token provider URLs
 OAUTH2_TOKEN_URLS = {
-    "ovh-eu": "https://www.ovh.com/auth/oauth2/token",
-    "ovh-ca": "https://ca.ovh.com/auth/oauth2/token",
+    "ovh-eu": "https://auth.eu.ovhcloud.com/oauth2/token",
+    "ovh-ca": "https://auth.ca.ovhcloud.com/oauth2/token",
     "ovh-us": "https://us.ovhcloud.com/auth/oauth2/token",
 }
 
@@ -284,7 +284,7 @@ class Client:
         {
             'state': 'pendingValidation',
             'consumerKey': 'TnpZAd5pYNqxk4RhlPiSRfJ4WrkmII2i',
-            'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
+            'validationUrl': 'https://api.eu.ovhcloud.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
         }
         """  # noqa:E501
         return ConsumerKeyRequest(self)

@@ -17,7 +17,7 @@ pip install tabulate ovh
 
 ## Create a new token
 
-You can create a new token using this url: [https://api.ovh.com/createToken/?GET=/*](https://api.ovh.com/createToken/?GET=/*).
+You can create a new token using this url: [https://api.eu.ovhcloud.com/createToken/?GET=/*](https://api.eu.ovhcloud.com/createToken/?GET=/*).
 Keep application key, application secret and consumer key and replace default values in ```ovh.conf``` file.
 
 ```ini
@@ -60,5 +60,5 @@ router                   router-rbx-1-sdr-1337             expired   2016-01-31
 
 ## What's more?
 
-You can discover all OVH possibilities by using API console to show all available endpoints: [https://api.ovh.com/console](https://api.ovh.com/console)
+You can discover all OVH possibilities by using API console to show all available endpoints: [https://api.eu.ovhcloud.com/console](https://api.eu.ovhcloud.com/console)
 

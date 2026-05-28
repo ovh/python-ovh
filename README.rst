@@ -28,7 +28,7 @@ credential creation and requests signing.
 
     import ovh
 
-    # Instantiate. Visit https://api.ovh.com/createToken/?GET=/me
+    # Instantiate. Visit https://api.eu.ovhcloud.com/createToken/?GET=/me
     # to get your credentials
     client = ovh.Client(
         endpoint='ovh-eu',
@@ -73,9 +73,9 @@ To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
 to register your application. Depending the API you plan to use, visit:
 
-- `OVHcloud Europe <https://eu.api.ovh.com/createApp/>`_
+- `OVHcloud Europe <https://api.eu.ovhcloud.com/createApp/>`_
 - `OVHcloud US <https://api.us.ovhcloud.com/createApp/>`_
-- `OVHcloud North-America <https://ca.api.ovh.com/createApp/>`_
+- `OVHcloud North-America <https://api.ca.ovhcloud.com/createApp/>`_
 - `So you Start Europe <https://eu.api.soyoustart.com/createApp/>`_
 - `So you Start North America <https://ca.api.soyoustart.com/createApp/>`_
 - `Kimsufi Europe <https://eu.api.kimsufi.com/createApp/>`_
@@ -436,9 +436,9 @@ Use v1 and v2 API versions
 When using OVHcloud APIs (not So you Start or Kimsufi ones), you are given the
 opportunity to aim for two API versions. For the European API, for example:
 
-- the v1 is reachable through https://eu.api.ovh.com/v1
-- the v2 is reachable through https://eu.api.ovh.com/v2
-- the legacy URL is https://eu.api.ovh.com/1.0
+- the v1 is reachable through https://api.eu.ovhcloud.com/v1
+- the v2 is reachable through https://api.eu.ovhcloud.com/v2
+- the legacy URL is https://api.eu.ovhcloud.com/1.0
 
  Calling ``client.get``, you can target the API version you want:
 
@@ -446,13 +446,13 @@ opportunity to aim for two API versions. For the European API, for example:
 
     client = ovh.Client(endpoint="ovh-eu")
 
-    # Call to https://eu.api.ovh.com/v1/xdsl/xdsl-yourservice
+    # Call to https://api.eu.ovhcloud.com/v1/xdsl/xdsl-yourservice
     client.get("/v1/xdsl/xdsl-yourservice")
 
-    # Call to https://eu.api.ovh.com/v2/xdsl/xdsl-yourservice
+    # Call to https://api.eu.ovhcloud.com/v2/xdsl/xdsl-yourservice
     client.get("/v2/xdsl/xdsl-yourservice")
 
-    # Legacy call to https://eu.api.ovh.com/1.0/xdsl/xdsl-yourservice
+    # Legacy call to https://api.eu.ovhcloud.com/1.0/xdsl/xdsl-yourservice
     client.get("/xdsl/xdsl-yourservice")
 
 Custom configuration file
@@ -567,11 +567,11 @@ Supported APIs
 OVHcloud Europe
 ---------------
 
-- **Documentation**: https://eu.api.ovh.com/
+- **Documentation**: https://api.eu.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
-- **Console**: https://eu.api.ovh.com/console
-- **Create application credentials**: https://eu.api.ovh.com/createApp/
-- **Create script credentials** (all keys at once): https://eu.api.ovh.com/createToken/
+- **Console**: https://api.eu.ovhcloud.com/console
+- **Create application credentials**: https://api.eu.ovhcloud.com/createApp/
+- **Create script credentials** (all keys at once): https://api.eu.ovhcloud.com/createToken/
 
 OVHcloud US
 -----------
@@ -584,11 +584,11 @@ OVHcloud US
 OVHcloud North America
 ----------------------
 
-- **Documentation**: https://ca.api.ovh.com/
+- **Documentation**: https://api.ca.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
-- **Console**: https://ca.api.ovh.com/console
-- **Create application credentials**: https://ca.api.ovh.com/createApp/
-- **Create script credentials** (all keys at once): https://ca.api.ovh.com/createToken/
+- **Console**: https://api.ca.ovhcloud.com/console
+- **Create application credentials**: https://api.ca.ovhcloud.com/createApp/
+- **Create script credentials** (all keys at once): https://api.ca.ovhcloud.com/createToken/
 
 So you Start Europe
 -------------------
