@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2025, OVH SAS.
+# Copyright (c) 2013-2026, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -114,18 +114,18 @@ class TestClient:
         for method, call in (("GET", api.get), ("DELETE", api.delete)):
             m_call.reset_mock()
 
-            assert call("https://eu.api.ovh.com/") == m_call.return_value
-            assert call("https://eu.api.ovh.com/", param="test") == m_call.return_value
-            assert call("https://eu.api.ovh.com/?query=string", param="test") == m_call.return_value
-            assert call("https://eu.api.ovh.com/?query=string", checkbox=True) == m_call.return_value
-            assert call("https://eu.api.ovh.com/", _from="start", to="end") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/", param="test") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/?query=string", param="test") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/?query=string", checkbox=True) == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/", _from="start", to="end") == m_call.return_value
 
             assert m_call.call_args_list == [
-                mock.call(method, "https://eu.api.ovh.com/", None, True),
-                mock.call(method, "https://eu.api.ovh.com/?param=test", None, True),
-                mock.call(method, "https://eu.api.ovh.com/?query=string&param=test", None, True),
-                mock.call(method, "https://eu.api.ovh.com/?query=string&checkbox=true", None, True),
-                mock.call(method, "https://eu.api.ovh.com/?from=start&to=end", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?param=test", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?query=string&param=test", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?query=string&checkbox=true", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?from=start&to=end", None, True),
             ]
 
     @mock.patch.object(Client, "call")
@@ -135,18 +135,18 @@ class TestClient:
         for method, call in (("POST", api.post), ("PUT", api.put)):
             m_call.reset_mock()
 
-            assert call("https://eu.api.ovh.com/") == m_call.return_value
-            assert call("https://eu.api.ovh.com/", param="test") == m_call.return_value
-            assert call("https://eu.api.ovh.com/?query=string", param="test") == m_call.return_value
-            assert call("https://eu.api.ovh.com/?query=string", checkbox=True) == m_call.return_value
-            assert call("https://eu.api.ovh.com/", _from="start", to="end") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/", param="test") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/?query=string", param="test") == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/?query=string", checkbox=True) == m_call.return_value
+            assert call("https://api.eu.ovhcloud.com/", _from="start", to="end") == m_call.return_value
 
             assert m_call.call_args_list == [
-                mock.call(method, "https://eu.api.ovh.com/", None, True),
-                mock.call(method, "https://eu.api.ovh.com/", {"param": "test"}, True),
-                mock.call(method, "https://eu.api.ovh.com/?query=string", {"param": "test"}, True),
-                mock.call(method, "https://eu.api.ovh.com/?query=string", {"checkbox": True}, True),
-                mock.call(method, "https://eu.api.ovh.com/", {"from": "start", "to": "end"}, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/", None, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/", {"param": "test"}, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?query=string", {"param": "test"}, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/?query=string", {"checkbox": True}, True),
+                mock.call(method, "https://api.eu.ovhcloud.com/", {"from": "start", "to": "end"}, True),
             ]
 
     # test core function
@@ -163,18 +163,18 @@ class TestClient:
         j_body = '{"a":"b","c":"d"}'
 
         api = Client("ovh-eu", MockApplicationKey, MockApplicationSecret, MockConsumerKey)
-        urlUnauth = "https://eu.api.ovh.com/1.0/unauth"
-        urlAuth = "https://eu.api.ovh.com/1.0/auth"
+        urlUnauth = "https://api.eu.ovhcloud.com/1.0/unauth"
+        urlAuth = "https://api.eu.ovhcloud.com/1.0/auth"
 
         for method in "GET", "POST", "PUT", "DELETE":
             assert api.call(method, "/unauth", None if method in ("GET", "DELETE") else body, False) == m_json
             assert api.call(method, "/auth", None if method in ("GET", "DELETE") else body, True) == m_json
 
         signatures = {
-            "GET": "$1$e9556054b6309771395efa467c22e627407461ad",
-            "POST": "$1$ec2fb5c7a81f64723c77d2e5b609ae6f58a84fc1",
-            "PUT": "$1$8a75a9e7c8e7296c9dbeda6a2a735eb6bd58ec4b",
-            "DELETE": "$1$a1eecd00b3b02b6cf5708b84b9ff42059a950d85",
+            "GET": "$1$52992e595b398f6aba591ee5925b379081614ced",
+            "POST": "$1$ea0e0d82447373a3ddf5947065f1d519ca0bcaf2",
+            "PUT": "$1$0fdc3ed192ffbf3d1be414dbb733bbb7729500ee",
+            "DELETE": "$1$f685c165fa9da88b294b5fd2504588588105f994",
         }
 
         def _h(m, auth):
@@ -260,7 +260,7 @@ class TestClient:
         assert m_req.call_args_list == [
             mock.call(
                 "GET",
-                "https://eu.api.ovh.com/1.0/unit/path",
+                "https://api.eu.ovhcloud.com/1.0/unit/path",
                 headers={
                     "Custom-Header": "1",
                     "X-Ovh-Application": MockApplicationKey,
@@ -289,9 +289,9 @@ class TestClient:
         api.call("GET", "/v2/call", None, True)
 
         signatures = {
-            "1.0": "$1$7f2db49253edfc41891023fcd1a54cf61db05fbb",
-            "v1": "$1$e6e7906d385eb28adcbfbe6b66c1528a42d741ad",
-            "v2": "$1$bb63b132a6f84ad5433d0c534d48d3f7c3804285",
+            "1.0": "$1$4f3e3e887cc2ce88a0078801d849b8e2c482e997",
+            "v1": "$1$35654374999e2e09ef148973c54279a68f15e0a2",
+            "v2": "$1$85b6382fc0cca761b193007763c908bc68ca4a50",
         }
 
         def _h(prefix):
@@ -303,15 +303,15 @@ class TestClient:
             }
 
         assert m_req.call_args_list == [
-            mock.call("GET", "https://eu.api.ovh.com/1.0/call", headers=_h("1.0"), data="", timeout=180),
-            mock.call("GET", "https://eu.api.ovh.com/v1/call", headers=_h("v1"), data="", timeout=180),
-            mock.call("GET", "https://eu.api.ovh.com/v2/call", headers=_h("v2"), data="", timeout=180),
+            mock.call("GET", "https://api.eu.ovhcloud.com/1.0/call", headers=_h("1.0"), data="", timeout=180),
+            mock.call("GET", "https://api.eu.ovhcloud.com/v1/call", headers=_h("v1"), data="", timeout=180),
+            mock.call("GET", "https://api.eu.ovhcloud.com/v2/call", headers=_h("v2"), data="", timeout=180),
         ]
 
     @mock.patch("ovh.client.Session.request")
     def test_oauth2(self, m_req):
         def resp(*args, **kwargs):
-            if args[0] == "POST" and args[1] == "https://www.ovh.com/auth/oauth2/token":
+            if args[0] == "POST" and args[1] == "https://auth.eu.ovhcloud.com/oauth2/token":
                 resp = mock.Mock()
                 resp.status_code = 200
                 resp.text = """{
@@ -322,7 +322,7 @@ class TestClient:
 }"""
                 return resp
 
-            if args[0] == "GET" and args[1] == "https://eu.api.ovh.com/1.0/call":
+            if args[0] == "GET" and args[1] == "https://api.eu.ovhcloud.com/1.0/call":
                 resp = mock.Mock()
                 resp.status_code = 200
                 resp.text = "{}"
@@ -334,7 +334,7 @@ class TestClient:
 
         call_oauth = mock.call(
             "POST",
-            "https://www.ovh.com/auth/oauth2/token",
+            "https://auth.eu.ovhcloud.com/oauth2/token",
             headers={"Accept": "application/json", "Content-Type": "application/x-www-form-urlencoded"},
             data={"grant_type": "client_credentials", "scope": "all"},
             files=None,
@@ -346,7 +346,7 @@ class TestClient:
         )
         call_api = mock.call(
             "GET",
-            "https://eu.api.ovh.com/1.0/call",
+            "https://api.eu.ovhcloud.com/1.0/call",
             headers={"Authorization": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI3"},
             data="",
             files=None,

@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2025, OVH SAS.
+# Copyright (c) 2013-2026, OVH SAS.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ class ConsumerKeyRequest(object):
         {
             'state': 'pendingValidation',
             'consumerKey': 'TnpZAd5pYNqxk4RhlPiSRfJ4WrkmII2i',
-            'validationUrl': 'https://eu.api.ovh.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
+            'validationUrl': 'https://api.eu.ovhcloud.com/auth/?credentialToken=now2OOAVO4Wp6t7bemyN9DMWIobhGjFNZSHmixtVJM4S7mzjkN2L5VBfG96Iy1i0'
         }
         """  # noqa: E501
         return self._client.request_consumerkey(self._access_rules, redirect_url, allowedIPs)
