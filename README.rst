@@ -28,7 +28,7 @@ credential creation and requests signing.
 
     import ovh
 
-    # Instantiate. Visit https://api.eu.ovhcloud.com/createToken/?GET=/me
+    # Instantiate. Visit https://auth.eu.ovhcloud.com/api/createToken/?GET=/me
     # to get your credentials
     client = ovh.Client(
         endpoint='ovh-eu',
@@ -73,9 +73,9 @@ To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
 to register your application. Depending the API you plan to use, visit:
 
-- `OVHcloud Europe <https://api.eu.ovhcloud.com/createApp/>`_
+- `OVHcloud Europe <https://auth.eu.ovhcloud.com/api/createApp/>`_
 - `OVHcloud US <https://api.us.ovhcloud.com/createApp/>`_
-- `OVHcloud North-America <https://api.ca.ovhcloud.com/createApp/>`_
+- `OVHcloud North-America <https://auth.ca.ovhcloud.com/api/createApp/>`_
 - `So you Start Europe <https://eu.api.soyoustart.com/createApp/>`_
 - `So you Start North America <https://ca.api.soyoustart.com/createApp/>`_
 - `Kimsufi Europe <https://eu.api.kimsufi.com/createApp/>`_
@@ -570,8 +570,8 @@ OVHcloud Europe
 - **Documentation**: https://api.eu.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://api.eu.ovhcloud.com/console
-- **Create application credentials**: https://api.eu.ovhcloud.com/createApp/
-- **Create script credentials** (all keys at once): https://api.eu.ovhcloud.com/createToken/
+- **Create application credentials**: https://auth.eu.ovhcloud.com/api/createApp/
+- **Create script credentials** (all keys at once): https://auth.eu.ovhcloud.com/api/createToken/
 
 OVHcloud US
 -----------
@@ -587,8 +587,8 @@ OVHcloud North America
 - **Documentation**: https://api.ca.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://api.ca.ovhcloud.com/console
-- **Create application credentials**: https://api.ca.ovhcloud.com/createApp/
-- **Create script credentials** (all keys at once): https://api.ca.ovhcloud.com/createToken/
+- **Create application credentials**: https://auth.ca.ovhcloud.com/api/createApp/
+- **Create script credentials** (all keys at once): https://auth.ca.ovhcloud.com/api/createToken/
 
 So you Start Europe
 -------------------

@@ -13,7 +13,7 @@ creation and requests signing.
 
     import ovh
 
-    # Instantiate. Visit https://api.eu.ovhcloud.com/createToken/index.cgi?GET=/me
+    # Instantiate. Visit https://auth.eu.ovhcloud.com/api/createToken/index.cgi?GET=/me
     # to get your credentials
     client = ovh.Client(
         endpoint='ovh-eu',
@@ -63,8 +63,8 @@ To interact with the APIs, the SDK needs to identify itself using an
 ``application_key`` and an ``application_secret``. To get them, you need
 to register your application. Depending the API you plan yo use, visit:
 
-- `OVH Europe <https://api.eu.ovhcloud.com/createApp/>`_
-- `OVH North-America <https://api.ca.ovhcloud.com/createApp/>`_
+- `OVH Europe <https://auth.eu.ovhcloud.com/api/createApp/>`_
+- `OVH North-America <https://auth.ca.ovhcloud.com/api/createApp/>`_
 
 Once created, you will obtain an **application key (AK)** and an **application
 secret (AS)**.
@@ -423,7 +423,7 @@ OVH Europe
 - **Documentation**: https://api.eu.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://api.eu.ovhcloud.com/console
-- **Create application credentials**: https://api.eu.ovhcloud.com/createApp/
+- **Create application credentials**: https://auth.eu.ovhcloud.com/api/createApp/
 
 OVH North America
 -----------------
@@ -431,7 +431,7 @@ OVH North America
 - **Documentation**: https://api.ca.ovhcloud.com/
 - **Community support**: api-subscribe@ml.ovh.net
 - **Console**: https://api.ca.ovhcloud.com/console
-- **Create application credentials**: https://api.ca.ovhcloud.com/createApp/
+- **Create application credentials**: https://auth.ca.ovhcloud.com/api/createApp/
 
 Related links
 =============

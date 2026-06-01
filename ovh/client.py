@@ -28,7 +28,7 @@
 This module provides a simple python wrapper over the OVH REST API.
 It handles requesting credential, signing queries...
 
- - To get your API keys: https://api.eu.ovhcloud.com/createApp/
+ - To get your API keys: https://auth.eu.ovhcloud.com/api/createApp/
  - To get started with API:
  https://help.ovhcloud.com/csm/en-gb-api-getting-started-ovhcloud-api?id=kb_article_view&sysparm_article=KB0042784
 """

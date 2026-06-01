@@ -17,7 +17,7 @@ pip install tabulate ovh
 
 ## Create a new token
 
-You can create a new token using this url: [https://api.eu.ovhcloud.com/createToken/?GET=/*](https://api.eu.ovhcloud.com/createToken/?GET=/*).
+You can create a new token using this url: [https://auth.eu.ovhcloud.com/api/createToken/?GET=/*](https://auth.eu.ovhcloud.com/api/createToken/?GET=/*).
 Keep application key, application secret and consumer key and replace default values in ```ovh.conf``` file.
 
 ```ini
