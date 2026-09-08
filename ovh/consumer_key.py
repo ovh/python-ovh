@@ -105,7 +105,12 @@ class ConsumerKeyRequest(object):
 
         >>> ck.add_recursive_rules(["GET", "POST", "PUT", "DELETE"], "/sms")
         """
-        path = path.rstrip("*/ ")
+        # trim one explicit "/*" or "/" tail, nothing more. rstrip("*/ ") ate
+        # any run of those characters and could quietly widen what was granted.
+        path = path.strip()
+        if path.endswith("/*"):
+            path = path[:-2]
+        path = path.rstrip("/")
         if path:
             self.add_rules(methods, path)
         self.add_rules(methods, path + "/*")
